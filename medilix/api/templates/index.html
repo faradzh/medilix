@@ -1,0 +1,182 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block js %}
+    {{ block.super }}
+    <script src="{% static 'js/dist/main.bundle.js' %}"></script>
+{% endblock %}
+{% block content %}
+
+{#    <!--Start Preloader-->#}
+{#    <div id="preloader" class="pre3">#}
+{##}
+{#        <div class="preloader-container">#}
+{##}
+{#            <!--<h4 class="preload-logo">Matashi</h4>#}
+{##}
+{#                <h4 class="back-logo">Matashi</h4>-->#}
+{##}
+{#            <img src="images/logo.png" class="preload-logo1" alt=""><br><br><br>#}
+{##}
+{#            <img src="images/Preloader_2.gif" alt="" class="preload-gif">#}
+{##}
+{#        </div>#}
+{##}
+{#    </div>#}
+{#    <!--End Preloader-->#}
+
+    <div id="root-container"></div>
+
+{#            {% include 'home/_header.html' %}#}
+{##}
+{#            {% include 'home/_main_slider.html' %}#}
+{##}
+{#            {% include 'home/_info-container-1.html' %}#}
+{##}
+{#            {% include 'home/_info-icons.html' %}#}
+
+{#            {% include 'home/_show-case.html' %}#}
+{#    #}
+{#            {% include 'home/_info-container-2.html' %}#}
+{#    #}
+{#            {% include 'home/_articles.html' %}#}
+{#    #}
+{#            {% include 'home/_testimonials.html' %}#}
+{#    #}
+{#            {% include 'home/_partners.html' %}#}
+{#    #}
+{#            {% include 'home/_main_footer.html' %}#}
+
+
+
+{##}
+{#    <!-- Appointment Modal Window -->#}
+{##}
+{#    <div class="modal fade" id="app-modal" tabindex="-1" role="dialog">#}
+{##}
+{#        <div class="modal-dialog modal-lg" role="document">#}
+{##}
+{#            <div class="modal-content">#}
+{##}
+{##}
+{#                <div class="modal-body">#}
+{##}
+{#                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span#}
+{#                            aria-hidden="true">&times;</span></button>#}
+{##}
+{##}
+{#                    <div>#}
+{##}
+{#                        <div class="content-style-text">#}
+{##}
+{##}
+{#                            <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12 padding-spacer-right">#}
+{##}
+{##}
+{#                                <h4 class="border-title">Get In <span class="theme-color-text">Touch</span></h4>#}
+{##}
+{##}
+{#                                <!--Form Start-->#}
+{##}
+{#                                <form id="appointment_Form" class="appointment-frm"#}
+{#                                      action="http://meditreat.itwebservice.in/php/app-form.php">#}
+{##}
+{##}
+{#                                    <div class="alert alert-success hidden" id="appSuccess" role="alert">Your message is#}
+{#                                        sent succssfully.#}
+{#                                    </div>#}
+{##}
+{##}
+{#                                    <div class="alert alert-danger hidden" id="appError" role="alert">Sorry, Your#}
+{#                                        message is not sent successfully.#}
+{#                                    </div>#}
+{##}
+{##}
+{#                                    <div class="form-group">#}
+{##}
+{#                                        <div class="input-group">#}
+{##}
+{#                                            <div class="input-group-addon"><i class="ion-person"></i></div>#}
+{##}
+{#                                            <input type="text" class="form-control" name="appointment_name"#}
+{#                                                   id="appointment_name" placeholder="Name" required>#}
+{##}
+{#                                        </div>#}
+{##}
+{#                                    </div>#}
+{##}
+{##}
+{#                                    <div class="form-group">#}
+{##}
+{#                                        <div class="input-group">#}
+{##}
+{#                                            <div class="input-group-addon"><i class="ion-email"></i></div>#}
+{##}
+{#                                            <input type="email" class="form-control" name="appointment_email"#}
+{#                                                   id="appointment_email" placeholder="Email" required>#}
+{##}
+{#                                        </div>#}
+{##}
+{#                                    </div>#}
+{##}
+{##}
+{#                                    <div class="form-group">#}
+{##}
+{#                                        <div class="input-group">#}
+{##}
+{#                                            <div class="input-group-addon"><i class="ion-edit"></i></div>#}
+{##}
+{#                                            <input type="text" class="form-control" name="appointment_reason"#}
+{#                                                   id="appointment_reason" placeholder="Reason For Appointment"#}
+{#                                                   required>#}
+{##}
+{#                                        </div>#}
+{##}
+{#                                    </div>#}
+{##}
+{##}
+{#                                    <div class="form-group">#}
+{#                                        <div class="input-group">#}
+{#                                            <div class="input-group-addon"><i class="ion-calendar"></i></div>#}
+{#                                            <input type="text" class="form-control" name="appointment_date"#}
+{#                                                   id="appointment_date" placeholder="Select Date" required>#}
+{#                                        </div>#}
+{#                                    </div>#}
+{##}
+{#                                    <div class="form-group">#}
+{#                                        <textarea class="form-control" rows="3" name="appointment_message"#}
+{#                                                  id="appointment_message" placeholder="Message" required></textarea>#}
+{#                                    </div>#}
+{#                                    <div class="form-group">#}
+{#                                        <button class="mcare-button-dark button2 pull-right mcare-button-med"#}
+{#                                                data-loading-text="Loading..." type="submit">Send Message#}
+{#                                        </button>#}
+{#                                    </div>#}
+{#                                </form><!-- Form End -->#}
+{#                            </div>#}
+{##}
+{#                            <div class="col-md-6 col-lg-6 col-sm-6 col-xs-12">#}
+{#                                <h4 class="border-title">View our <span class="theme-color-text">Schedule</span></h4>#}
+{#                                <div class="ser-listing-wrap">#}
+{#                                    <ul class="ser-listing">#}
+{#                                        <li><i class="mcare-flaticon-injection"></i>MON - FRI#}
+{#                                            <span>10:00 AM - 5:00 PM</span></li>#}
+{#                                        <li><i class="mcare-flaticon-injection"></i>MON - FRI#}
+{#                                            <span>10:00 AM - 5:00 PM</span></li>#}
+{#                                        <li><i class="mcare-flaticon-injection"></i>MON - FRI#}
+{#                                            <span>10:00 AM - 5:00 PM</span></li>#}
+{#                                    </ul>#}
+{#                                </div>#}
+{#                                <div class="app-address">#}
+{#                                    <p class="text-content"><i class="ion-ios-home"></i>123 Folsom Ave, Suite 600, San#}
+{#                                        Francis, CA 94107</p>#}
+{#                                    <p class="text-content"><i class="ion-android-call"></i>Phone: (123) 456-7890</p>#}
+{#                                    <p class="text-content"><i class="ion-ios-email"></i>Mobile: (098) 765-4321</p>#}
+{#                                </div>#}
+{#                            </div>#}
+{#                        </div>#}
+{#                    </div>#}
+{#                </div>#}
+{#            </div>#}
+{#        </div>#}
+{#    </div>#}
+{% endblock %}
