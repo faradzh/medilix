@@ -1,36 +1,9 @@
 import React from "react";
-import InfoContainer from "../../components/home/info-container";
 
-const data = {
-    column1: {
-        title1: 'Medilix',
-        title2: '- личный ассистент',
-        content: 'Medilix - это система по онлайн бронированию визита к врачу, с полной автоматизацией процесса' +
-        ' начиная от записи, до постановки диагноза и выписывания медикаментов.'
-    },
-    column2: {
-        title1: '100+ квалифицированных врачей',
-        title2: 'со всего Кыргызстана',
-        content: 'В нашей базе хранятся данные более 100 квалифицированных врачей Кыргызстана, которые ' +
-        'отображают их опыт, знания, сертификаты, успешные кейсы, отзывы пациентов и самое главное, общий рейтинг ' +
-        ' врача.'
-    },
-    column3: {
-        title1: 'Онлайн бронирование визита',
-        title2: '+ все в электронном виде',
-        content: 'Система позволяет хранить личные данные о визите к каждому врачу на основе электронной ' +
-        'медицинской карточки, которая запоминает все ваши визиты, поставленные диагнозы и выписанные лекарста ' +
-        'преобразую это все в удобную историю болезни.'
-    }
-};
-class Home extends React.Component {
+export default class Home extends React.Component {
     render(){
         return(
-            <div className="mcare-main-container content-wrap content home">
-                <InfoContainer data={data} format={'columns'}/>
-            </div>
+           <div></div>
         )
     }
-}
-
-export default Home;
+};

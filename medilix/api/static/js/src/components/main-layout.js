@@ -1,5 +1,5 @@
 import React from 'react';
-import Header from './home/header';
+import Header from './common/header';
 
 export default class MainLayout extends React.Component {
     render () {
