@@ -15,7 +15,7 @@ import auth from './auth';
 import Login from './login';
 import Dashboard from './components/dashboard/dashboard';
 import DoctorProfile from './components/doctors/doctor-profile';
-import SignUp from "./authorization/sign-up";
+import SignUpContainer from "./containers/authorization/signUpContainer";
 
 const history = syncHistoryWithStore(browserHistory, store);
 
@@ -39,7 +39,7 @@ ReactDOM.render(
                 </Route>
             </Route>
             <Route path='/app/login' component={Login}/>
-            <Route path='/app/signup' component={SignUp}/>
+            <Route path='/app/signup' component={SignUpContainer}/>
             <Route path='/app/dashboard' component={Dashboard}/>
         </Router>
     </Provider>, document.getElementById('root-container')
