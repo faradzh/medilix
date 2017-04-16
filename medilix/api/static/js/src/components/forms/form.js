@@ -18,3 +18,7 @@ Form.propTypes = {
     id: React.PropTypes.string,
     className: React.PropTypes.string
 };
+
+Form.defaultProps = {
+    method: 'post'
+};
