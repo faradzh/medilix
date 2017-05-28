@@ -1,4 +1,4 @@
-# from django.db import models
+from django.db import models
 #
 # from users.models import UserProfile
 #
@@ -14,10 +14,15 @@
 #     comment = models.TextField()
 #
 #
-# class Hospital(models.Model):
-#     name = models.CharField()
-#     address = models.TextField()
-#     photo = models.ImageField()
+
+class Hospital(models.Model):
+    name = models.CharField(max_length=255)
+    address = models.CharField(max_length=255, null=True)
+    # photo = models.ImageField()
+
+    def __str__(self):
+        return self.name
+
 #
 #
 # class Prescription(models.Model):
