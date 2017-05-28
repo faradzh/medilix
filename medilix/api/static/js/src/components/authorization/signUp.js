@@ -1,16 +1,11 @@
 import React from 'react';
 import Form from '../forms/form';
 import TextField from '../forms/textField';
+import RadioButtonGroup from './../../components/forms/radioButtonGroup';
 import SubmitField from '../forms/submitField';
-import { ruleRunner, check } from '../validations/ruleRunner';
-import { required, minLength, mustMatch } from '../validations/rules';
+import { check } from '../../components/validations/ruleRunner';
+import FormGroup from '../../components/dashboard/profile/formGroup';
 
-const fieldValidations = [
-    ruleRunner('username', 'Username', required),
-    ruleRunner('email', 'Email', required),
-    ruleRunner('password', 'Password', required, minLength(6)),
-    ruleRunner('password2', 'Password confirm', required, minLength(6), mustMatch('password', 'Password'))
-];
 export default class SignUp extends React.Component {
 
     constructor (props) {
@@ -19,14 +14,23 @@ export default class SignUp extends React.Component {
             showErrors: false,
             validationErrors: {}
         };
-        this.state.validationErrors = check(this.state, fieldValidations);
+        this.state.validationErrors = check(this.state, this.props.fieldValidations);
     }
 
     handleFieldChanged = (field) => {
         return (e) => {
             const newState = Object.assign({}, this.state, {[field]: e.target.value});
-            newState.validationErrors = check(newState, fieldValidations);
+            newState.validationErrors = check(newState, this.props.fieldValidations);
             this.props.onTextChange({[field]: e.target.value});
+            this.setState(newState);
+        }
+    };
+
+    handleRadioButtonChanged = (field) => {
+        return (e) => {
+            const newState = Object.assign({}, this.state, {[field]: e.target.id});
+            newState.validationErrors = check(newState, this.props.fieldValidations);
+            this.props.onTextChange({[field]: e.target.id});
             this.setState(newState);
         }
     };
@@ -45,6 +49,7 @@ export default class SignUp extends React.Component {
     };
 
     render () {
+        const buttons = [{id: 'patient', text: 'Patient'}, {id: 'doctor', text: 'Doctor'}];
         return (
             <div className="bg-white pulldown">
                 <div className="content content-boxed overflow-hidden">
@@ -53,15 +58,26 @@ export default class SignUp extends React.Component {
                             <div className="push-30-t push-20 animated fadeIn">
 
                                 <div className="text-center">
-                                    <i className="fa fa-2x fa-circle-o-notch text-primary"/>
+                                    <i className="fa fa-2x fa-medium text-primary"/>
                                     <h1 className="h3 push-10-t">Create Account</h1>
                                 </div>
 
                                 <Form onSubmit={this.handleSubmitClicked} className="js-validation-register form-horizontal push-50-t push-50">
-                                    <TextField type='text' placeholder='Please enter a username' showError={this.state.showErrors}
+                                    <TextField id='register-username' type='text' placeholder='Please enter a username' showError={this.state.showErrors}
                                                errorText={this.errorFor('username')} text='Username' onFieldChanged={this.handleFieldChanged('username')}/>
                                     <TextField type='email' placeholder='Please enter an email' showError={this.state.showErrors}
                                                errorText={this.errorFor('email')} text='Email' onFieldChanged={this.handleFieldChanged('email')}/>
+                                    <FormGroup>
+                                        <RadioButtonGroup buttons={buttons} 
+                                                          columnClassName="col-xs-12"
+                                                          mainLabelClassName="col-xs-12"
+                                                          mainLabelText="Role"
+                                                          showError={this.state.showErrors}
+                                                          errorText={this.errorFor('role')} 
+                                                          name="role" 
+                                                          onChange={this.handleRadioButtonChanged('role')}/>
+                                    </FormGroup>
+
                                     <TextField type='password' placeholder='Choose a strong password' showError={this.state.showErrors}
                                                errorText={this.errorFor('password')} text='Password' onFieldChanged={this.handleFieldChanged('password')}/>
                                     <TextField type='password' placeholder='and confirm it' showError={this.state.showErrors}
@@ -76,7 +92,3 @@ export default class SignUp extends React.Component {
         )
     }
 }
-
-SignUp.defaultProps = {
-
-};
