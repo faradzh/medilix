@@ -2,6 +2,7 @@
  * Created by faradj on 4/16/17.
  */
 import React from 'react';
+import { Link } from 'react-router';
 
 export default class Header extends React.Component {
     render () {
@@ -11,22 +12,21 @@ export default class Header extends React.Component {
                     <li>
                         <div className="btn-group">
                             <button className="btn btn-default btn-image dropdown-toggle" data-toggle="dropdown" type="button">
-                                <img src="assets/img/avatars/avatar10.jpg" alt="Avatar"/>
                                 <span className="caret"/>
                             </button>
                             <ul className="dropdown-menu dropdown-menu-right">
                                 <li className="dropdown-header">Profile</li>
                                 <li>
-                                    <a tabIndex="-1" href="base_pages_inbox.html">
-                                        <i className="si si-envelope-open pull-right"/>
-                                        <span className="badge badge-primary pull-right">3</span>Inbox
-                                    </a>
+                                    <Link tabIndex="-1" to="/app/dashboard/profile/edit">
+                                        <i className="si si-user pull-right"/>
+                                        Edit Profile
+                                    </Link>
                                 </li>
                                 <li>
-                                    <a tabIndex="-1" href="base_pages_profile.html">
+                                    <Link tabIndex="-1" to="/app/dashboard/profile">
                                         <i className="si si-user pull-right"/>
-                                        <span className="badge badge-success pull-right">1</span>Profile
-                                    </a>
+                                        Profile
+                                    </Link>
                                 </li>
                                 <li>
                                     <a tabIndex="-1" href="javascript:void(0)">
@@ -41,17 +41,12 @@ export default class Header extends React.Component {
                                     </a>
                                 </li>
                                 <li>
-                                    <a tabIndex="-1" href="base_pages_login.html">
+                                    <a tabIndex="-1" href="" onClick={this.props.logout}>
                                         <i className="si si-logout pull-right"/>Log out
                                     </a>
                                 </li>
                             </ul>
                         </div>
-                    </li>
-                    <li>
-                        <button className="btn btn-default" data-toggle="layout" data-action="side_overlay_toggle" type="button">
-                            <i className="fa fa-tasks"/>
-                        </button>
                     </li>
                 </ul>
 
