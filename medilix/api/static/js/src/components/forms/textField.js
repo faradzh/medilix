@@ -17,17 +17,19 @@ export default class TextField extends React.Component {
 
     render () {
         const onFieldChanged = this.props.onFieldChanged;
-        const { id, type, text, name, errorText, placeholder } = this.props;
+        const { id, type, text, name, errorText, placeholder, inputClassName } = this.props;
         return (
             <div className={this.renderClassName()}>
                 <div className="col-xs-12">
                     <div className="form-material form-material-success">
-                        <input id={id} type={type} placeholder={placeholder} name={name} className="form-control" onChange={onFieldChanged}/>
+                        <input id={id} type={type} placeholder={placeholder} name={name} className={inputClassName} onChange={onFieldChanged}/>
                         <ErrorMessage display={this.shouldDisplayError()} errorText={errorText} />
                         <label htmlFor="register-username">{text}</label>
                     </div>
                 </div>
             </div>
+
+            
         )
     }
 }
@@ -35,4 +37,8 @@ export default class TextField extends React.Component {
 TextField.propTypes = {
     showError: React.PropTypes.bool.isRequired,
     onFieldChanged: React.PropTypes.func.isRequired
+};
+
+TextField.defaultProps = {
+    inputClassName: 'form-control'
 };
