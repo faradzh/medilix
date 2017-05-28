@@ -5,9 +5,11 @@
     <head>
         <title>Medilix</title>
         <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet" />
+        <link href="{% static 'css/select2.min.css' %}" rel="stylesheet" />
         <link href="{% static 'css/oneui.css' %}" rel="stylesheet" />
     </head>
     <body>
+        <div id="page-loader"></div>
         {% block content %}
         {% endblock %}
 
