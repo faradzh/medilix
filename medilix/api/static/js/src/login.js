@@ -17,8 +17,8 @@ export default class Login extends React.Component {
         const username = this.refs.username.value;
         const password = this.refs.password.value;
 
-        auth.login(username, password, (loggedIn) => {
-            this.props.router.push('/app/');
+        auth.login(username, password, () => {
+            this.props.router.push('/app/dashboard');
         });
     };
 
@@ -30,8 +30,8 @@ export default class Login extends React.Component {
                         <div className="col-sm-8 col-sm-offset-2 col-md-6 col-md-offset-3 col-lg-4 col-lg-offset-4">
                             <div className="push-30-t push-50 animated fadeIn">
                                 <div className="text-center">
-                                    <i className="fa fa-2x fa-circle-o-notch text-primary"/>
-                                    <p className="text-muted push-15-t">A perfect match for your project</p>
+                                    <i className="fa fa-2x fa-medium text-primary"/>
+                                    <p className="text-muted push-15-t">A perfect tool for your medical history</p>
                                 </div>
 
                                 <form className="js-validation-login form-horizontal push-30-t" onSubmit={this.handleSubmit}>
