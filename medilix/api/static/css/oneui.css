@@ -6988,7 +6988,6 @@ a.block.block-link-hover3:active {
   display: inline-block !important;
   width: 64px;
   height: 64px;
-  border-radius: 50%;
 }
 .img-avatar.img-avatar16 {
   width: 16px;
@@ -7003,8 +7002,8 @@ a.block.block-link-hover3:active {
   height: 48px;
 }
 .img-avatar.img-avatar96 {
-  width: 96px;
-  height: 96px;
+  width: 170px;
+  height: 175px;
 }
 .img-avatar.img-avatar128 {
   width: 128px;
@@ -11706,4 +11705,29 @@ div.tagsinput span.tag a:hover {
 }
 .editor-preview {
   z-index: 1050;
+}
+
+#profile-card-list{
+  display:inline-block;
+  float:right;
+}
+
+#num-of-feedbacks{
+  padding-left:10px;
+}
+
+#appointment-button{
+  float:right;
+}
+
+#timetable-button {
+  float:right;
+}
+
+#edu-buttons{
+  float:right;
+}
+
+.rbc-month-view{
+  flex: 500px 0 0!important;
 }
