@@ -3,4 +3,6 @@
 .idea/
 venv/
 medilix/static
+wsgi.py
+
 config/__pycache__/
