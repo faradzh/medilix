@@ -2,4 +2,5 @@
 *.sqlite3
 .idea/
 venv/
+medilix/static
 config/__pycache__/
