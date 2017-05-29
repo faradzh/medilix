@@ -24,7 +24,7 @@ SECRET_KEY = '$ep@_(&s@1u0l2xmo(*^e29+zu@%8*q-_d3js9^)g#(x5j3+mj'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['medilix.kg']
 
 
 # Application definition

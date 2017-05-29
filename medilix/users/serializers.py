@@ -20,7 +20,7 @@ class UserSerializer(serializers.ModelSerializer):
         password = validated_data.pop('password')
         user = User.objects.create_user(username, email)
         user.set_password(password)
-        group = Group.objects.get(name=role)
+        group = Group.objects.get(name_iexact=role)
         user.groups.add(group)
         user.save()
 
