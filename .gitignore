@@ -4,5 +4,6 @@
 venv/
 medilix/static
 wsgi.py
+medilix/config/local_settings.py
 
 config/__pycache__/
