@@ -18,11 +18,16 @@ class UserSerializer(serializers.ModelSerializer):
         email = validated_data.pop('email')
         role = validated_data.pop('role')
         password = validated_data.pop('password')
+
+        group = Group.objects.get(name__iexact=role)
         user = User.objects.create_user(username, email)
         user.set_password(password)
-        group = Group.objects.get(name__iexact=role)
         user.groups.add(group)
         user.save()
+        if group.name == 'doctor':
+            DoctorProfile.objects.create(user=user)
+        elif group.name == 'patient':
+            PatientProfile.objects.create(user=user)
 
 
 class DoctorProfileSerializer(serializers.ModelSerializer):

@@ -22,6 +22,7 @@ urlpatterns += [
     url(r'^approve-notification$', views.approve_notification),
     url(r'^decline-notification$', views.decline_notification),
     url(r'^get-appointments$', views.get_appointments),
+    url(r'^get-current-appointment$', views.get_current_appointment),
     url(r'^get-specializations$', views.get_specializations),
     url(r'^get-hospitals$', views.get_hospitals),
     url(r'^submit-feedback$', views.submit_feedback),

@@ -1,3 +1,5 @@
+import datetime
+
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
 from django.http import JsonResponse
@@ -6,7 +8,7 @@ from rest_framework import viewsets, permissions, response
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
-
+from django.utils import timezone
 from health.models import Hospital
 from users.models import EventCard, DoctorProfile, Notification, PatientProfile, Appointment, Specialization, Feedback
 from users.serializers import UserSerializer, DoctorProfileSerializer, PatientProfileSerializer, EventCardSerializer
@@ -164,8 +166,8 @@ def return_doctor_data(doctor, hospitals, education):
             'gender': doctor.gender,
             'phoneNumber': doctor.phone_number,
             'experience': doctor.experience,
-            'specializationId': doctor.specialization.id,
-            'specializationName': doctor.specialization.name,
+            'specializationId': doctor.specialization.id if doctor.specialization else None,
+            'specializationName': doctor.specialization.name if doctor.specialization else None,
             'hospitals': hospitals,
             'education': education
     }
@@ -239,10 +241,12 @@ def decline_notification(request):
 def create_appointment(notification):
     patient_profile = notification.patient_profile
     doctor_profile = notification.doctor_profile
-    date = notification.date
+    date_from = notification.date
+    date_to = date_from + datetime.timedelta(hours=1)
     Appointment.objects.create(patient=patient_profile,
                                doctor=doctor_profile,
-                               date=date)
+                               date_from=date_from,
+                               date_to=date_to)
 
 
 @csrf_exempt
@@ -319,9 +323,31 @@ def get_appointments(request):
             appointments_list.append({
                 "id": appointment.id,
                 "title": appointment.patient.lastname,
-                "date": appointment.date
+                "dateFrom": appointment.date_from,
+                "dateTo": appointment.date_to
             })
     return JsonResponse(appointments_list, status=200, safe=False)
+
+
+@csrf_exempt
+def get_current_appointment(request):
+    current_appointment = dict()
+    if request.method == 'GET':
+        doctor_id = request.GET.get('doctor_id')
+        doctor_profile = DoctorProfile.objects.get(user_id=doctor_id)
+        now = timezone.now()
+        appointments = Appointment.objects.filter(doctor=doctor_profile)
+
+        for appointment in appointments:
+            if appointment.date_from <= now and now <= appointment.date_to:
+                current_appointment["fullname"] = '%s %s' % (appointment.patient.lastname, appointment.patient.firstname)
+                current_appointment["gender"] = appointment.patient.gender
+                current_appointment["age"] = appointment.patient.age
+                current_appointment["address"] = appointment.patient.address
+                current_appointment["visitNumber"] = 1
+                current_appointment["status"] = appointment.status
+
+    return JsonResponse(current_appointment, status=200, safe=False)
 
 
 @csrf_exempt
@@ -344,8 +370,8 @@ def get_hospitals(request):
         hospitals = Hospital.objects.all()
         for hospital in hospitals:
             hospitals_list.append({
-                "id": hospital.id,
-                "name": hospital.name,
+                "value": hospital.id,
+                "label": hospital.name,
             })
     return JsonResponse(hospitals_list, status=200, safe=False)
 
