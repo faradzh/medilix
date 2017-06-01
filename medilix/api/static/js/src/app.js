@@ -51,7 +51,7 @@ ReactDOM.render(
                         <Route path='edit' component={UserProfileEditContainer}/>
                     </Route>
                     <Route path='notifications' component={NotificationsContainer}/>
-                    <Route path='appointments' component={AppointmentsContainer}/>
+                    <Route path='appointment' component={AppointmentsContainer}/>
                 </Route>
             </Route>
         </Router>
