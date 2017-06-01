@@ -7,6 +7,9 @@ import jQuery from 'jquery';
 import 'select2/dist/js/select2.min.js';
 import 'bootstrap-notify/bootstrap-notify.min';
 import 'sweetalert/dist/sweetalert.min';
+import Select from 'react-select';
+require('react-select/dist/react-select.css');
+
 import EducationRow from './educationRow';
 import Title from './title';
 import ProfileStats from './profileStats';
@@ -24,7 +27,8 @@ export default class UserProfileEdit extends React.Component {
         super(props);
         this.state = {
             numOfEducationRows: 1,
-            removeBtnShow: false
+            removeBtnShow: false,
+            active: []
         }
     }
 
@@ -37,23 +41,8 @@ export default class UserProfileEdit extends React.Component {
 
     componentDidMount () {
         jQuery('#hospitals').select2();
-        jQuery.fn.select2.defaults.set("1", "URFA");
     }
 
-
-    componentDidUpdate () {
-        // const userProfileCreated = this.props.profileStatus.created;
-        // const userProfileRejected = this.props.profileStatus.rejected;
-        //
-        // if (userProfileCreated) {
-        //     return this.showSuccessAlert();
-        //
-        // }
-        // if (userProfileRejected) {
-        //     return this.showErrorAlert();
-        //
-        // }
-    }
 
     showSuccessAlert = () => {
         swal('Success', 'Your profile updated perfectly!', 'success');
@@ -94,7 +83,13 @@ export default class UserProfileEdit extends React.Component {
         return Object.keys(object).length != 0
     };
 
+    onChange = (val) => {
+        const updated = this.state.active.slice();
+        this.setState({active: updated.push(val)});
+    };
+
     render () {
+        console.log("Active", this.state.active);
         const specializationOptions = this.props.specializations;
         const hospitalOptions = this.props.hospitals;
         const profileData = this.props.profileData;
@@ -255,7 +250,7 @@ export default class UserProfileEdit extends React.Component {
                                         <FormGroup>
                                             <TextareaField display={this.displayComponent('bio')}
                                                            value={this.props.profileData.bio}
-                                                           columnNameClass="col-xs-12" htmlFor="profile-bio"
+                                                           columnClassName="col-xs-12" htmlFor="profile-bio"
                                                            textareaClassName="form-control input-lg"
                                                            onChange={this.props.changeProfileData}
                                                            textareaId="profile-bio"
@@ -278,20 +273,14 @@ export default class UserProfileEdit extends React.Component {
                                                 </button>
                                             </div> : ''
                                         }
+                                        <label htmlFor="hospitals">Hospitals</label>
                                         <FormGroup>
-                                            <SelectField display={this.displayComponent('hospitals')}
-                                                         defaultOption={hospitalIds}
-                                                         options={hospitalOptions}
-                                                         columnClassName="col-xs-12"
-                                                         selectClassName="js-select2 form-control select2-hidden-accessible"
-                                                         htmlFor="profile-hospitals"
-                                                         selectId="hospitals"
-                                                         selectName="hospitals"
-                                                         style={{width: 100 + '%'}}
-                                                         dataPlaceholder="Choose hospitals.."
-                                                         multiple="multiple" tabIndex="-1" ariaHidden="true">
-                                                Hospitals in which you work:
-                                            </SelectField>
+                                            <Select name="hospitals"
+                                                    multi={true}
+                                                    value={this.state.active}
+                                                    options={hospitalOptions}
+                                                    onChange={this.onChange}
+                                                    placeholder={"Выберете больницы в которых вы работаете..."}/>
                                         </FormGroup>
                                         <FormGroup>
                                             <InputField display={this.displayComponent('age')}
@@ -426,3 +415,17 @@ export default class UserProfileEdit extends React.Component {
         )
     }
 }
+
+// <SelectField display={this.displayComponent('hospitals')}
+//                                                      defaultOption={hospitalIds}
+//                                                      options={hospitalOptions}
+//                                                      columnClassName="col-xs-12"
+//                                                      selectClassName="js-select2 form-control select2-hidden-accessible"
+//                                                      htmlFor="profile-hospitals"
+//                                                      selectId="hospitals"
+//                                                      selectName="hospitals"
+//                                                      style={{width: 100 + '%'}}
+//                                                      dataPlaceholder="Choose hospitals.."
+//                                                      multiple="multiple" tabIndex="-1" ariaHidden="true">
+//                                             Hospitals in which you work:
+//                                         </SelectField>
