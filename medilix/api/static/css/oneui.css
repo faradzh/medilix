@@ -11731,3 +11731,11 @@ div.tagsinput span.tag a:hover {
 .rbc-month-view{
   flex: 500px 0 0!important;
 }
+
+.prescription-btns{
+  float:left;
+}
+
+.complete-blank-btns{
+  float:right;
+}
