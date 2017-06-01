@@ -7,7 +7,46 @@ import Menu from './menu';
 import MenuItem from './menuItem';
 
 export default class Sidebar extends React.Component {
+
     render () {
+        const currentUserGroup = this.props.currentUserGroup;
+        const menuItems = {
+            doctor: [<MenuItem link="/app" icon="si si-speedometer" className="sidebar-mini-hide">
+                        Dashboard
+                    </MenuItem>,
+                    <li className="nav-main-heading"><span className="sidebar-mini-hide">User Interface</span></li>,
+                    <MenuItem link="/app/dashboard/timetable" icon="si si-calendar" className="nav-submenu">
+                        Timetable
+                    </MenuItem>,
+                    <MenuItem link="/app/dashboard/notifications" icon="si si-envelope" className="nav-submenu">
+                        Notifications
+                    </MenuItem>,
+                    <MenuItem link="/app/dashboard/appointment" icon="fa fa-leanpub" className="nav-submenu">
+                        Appointment
+                    </MenuItem>,
+                    <MenuItem link="/app/dashboard/patients" icon="si si-users" className="nav-submenu">
+                        Patients
+                    </MenuItem>
+            ],
+            patient: [
+                <MenuItem link="/app" icon="si si-speedometer" className="sidebar-mini-hide">
+                        Dashboard
+                    </MenuItem>,
+                    <li className="nav-main-heading"><span className="sidebar-mini-hide">User Interface</span></li>,
+                    <MenuItem link="/app/dashboard/timetable" icon="si si-calendar" className="nav-submenu">
+                        Timetable
+                    </MenuItem>,
+                    <MenuItem link="/app/dashboard/notifications" icon="si si-envelope" className="nav-submenu">
+                        Notifications
+                    </MenuItem>,
+                    <MenuItem link="/app/dashboard/doctors" icon="si si-users" className="nav-submenu">
+                        Doctors
+                    </MenuItem>,
+                    <MenuItem link="/app/dashboard/medical-card" icon="fa fa-id-card-o" className="nav-submenu">
+                        Medical Card
+                    </MenuItem>
+            ]
+        };
         return (
             <nav id="sidebar">
                 <div id="sidebar-scroll">
@@ -23,22 +62,7 @@ export default class Sidebar extends React.Component {
 
                         <div className="side-content">
                             <Menu>
-                                <MenuItem link="/app" icon="si si-speedometer" className="sidebar-mini-hide">
-                                    Dashboard
-                                </MenuItem>
-                                <li className="nav-main-heading"><span className="sidebar-mini-hide">User Interface</span></li>
-                                <MenuItem link="/app/dashboard/timetable" icon="si si-calendar" className="nav-submenu">
-                                    Timetable
-                                </MenuItem>
-                                <MenuItem link="/app/dashboard/notifications" icon="si si-envelope" className="nav-submenu">
-                                    Notifications
-                                </MenuItem>
-                                <MenuItem link="/app/dashboard/appointments" icon="fa fa-leanpub" className="nav-submenu">
-                                    Appointments
-                                </MenuItem>
-                                <MenuItem link="/app/dashboard/notifications" icon="si si-users" className="nav-submenu">
-                                    Patients
-                                </MenuItem>
+                                {menuItems[currentUserGroup]}
                             </Menu>
                         </div>
                     </div>

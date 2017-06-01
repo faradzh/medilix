@@ -1,5 +1,5 @@
 import React from 'react';
-import Sidebar from './sidebar';
+import SidebarContainer from '../../containers/dashboard/sidebarContainer';
 import HeaderContainer from '../../containers/dashboard/headerContainer';
 
 export default class Dashboard extends React.Component {
@@ -8,7 +8,7 @@ export default class Dashboard extends React.Component {
         return (
            <div id="page-container" className="sidebar-l sidebar-o side-scroll header-navbar-fixed">
 
-                <Sidebar />
+                <SidebarContainer />
                 <HeaderContainer />
 
                 <main id="main-container">

@@ -11,20 +11,53 @@ export default class Notifications extends React.Component {
         this.props.fetchNotifications()
     }
 
+    generateCells = (row) => {
+         const cells = {
+             doctor: {
+                 img: {label: 'avatar', className: 'text-center'},
+                 fullname: {label: `${row.profile.lastname} ${row.profile.firstname}`, className: 'font-w600' },
+                 complaints: {label: row.complaints, className: ''},
+                 hospital: {label: row.hospital, className: ''},
+                 date: {label: row.date, className: ''},
+                 status: {label: row.status, className: ''},
+                 actions: {label: [
+                     {
+                         handler: this.props.approveNotification,
+                         icon: 'fa fa-thumbs-o-up',
+                         label: 'Approve Notification'
+                     },
+                     {
+                         handler: this.props.declineNotification,
+                         icon: 'fa fa-times',
+                         label: 'Decline Notification'
+                     }
+                 ], className: 'text-center'}
+             },
+             patient: {
+                img: {label: 'avatar', className: 'text-center'},
+                 fullname: {label: `${row.profile.lastname} ${row.profile.firstname}`, className: 'font-w600' },
+                 hospital: {label: row.hospital, className: ''},
+                 date: {label: row.date, className: ''},
+                 status: {label: row.status, className: ''},
+                 actions: {label: [
+                     {
+                         handler: '',
+                         icon: 'fa fa-remove',
+                         label: 'Delete Notification'
+                     }
+                 ], className: 'text-center'}
+             }
+         };
+        return cells[this.props.currentUserGroup];
+    };
 
     render () {
         const rows = this.props.notifications.map((notification) => {
-            return <Row id={notification.id}
-                    key={notification.id}
-                    fullname={`${notification.profile.lastname}
-                    ${notification.profile.firstname}`}
-                    complaints={notification.complaints}
-                    hospital={notification.hospital}
-                    date={notification.date}
-                    status={notification.status}
-                    onApproveClick={this.props.approveNotification}
-                    onDeclineClick={this.props.declineNotification}
-                    currentUserGroup={this.props.currentUserGroup}/>
+            const cells = this.generateCells(notification);
+            return <Row key={notification.id}
+                        cells={cells}
+                        id={notification.id}
+                        currentUserGroup={this.props.currentUserGroup} />
         });
         return (
             <div className="content">
