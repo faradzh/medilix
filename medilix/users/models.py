@@ -26,10 +26,10 @@ class DoctorProfile(models.Model):
     lastname = models.CharField(max_length=255, null=True)
     middlename = models.CharField(max_length=255, null=True)
     bio = models.TextField(max_length=1000)
-    age = models.IntegerField()
+    age = models.IntegerField(null=True)
     gender = models.CharField(max_length=10, null=True)
-    phone_number = models.CharField(max_length=255)
-    experience = models.FloatField()
+    phone_number = models.CharField(max_length=255, null=True)
+    experience = models.FloatField(null=True)
     specialization = models.OneToOneField(Specialization, null=True)
     hospitals = models.ManyToManyField(Hospital)
 
@@ -86,7 +86,8 @@ class EventCard(models.Model):
 class Appointment(models.Model):
     patient = models.ForeignKey(PatientProfile)
     doctor = models.ForeignKey(DoctorProfile)
-    date = models.DateTimeField()
+    date_from = models.DateTimeField()
+    date_to = models.DateTimeField()
     status = models.CharField(max_length=100, default='pending')
 
 

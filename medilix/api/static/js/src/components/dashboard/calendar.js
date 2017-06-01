@@ -38,8 +38,8 @@ export default class Calendar extends React.Component {
              events = this.props.appointments.map((appointment) => {
                 return {
                     title: appointment.title,
-                    start: new Date(appointment.date),
-                    end: new Date(appointment.date)
+                    start: new Date(appointment.dateFrom),
+                    end: new Date(appointment.dateTo)
                 }
             });
         }
