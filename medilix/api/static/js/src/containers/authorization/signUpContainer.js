@@ -26,7 +26,6 @@ class SignUpContainer extends React.Component {
     };
 
     getValidation = () => {
-        console.log("get validation");
         return [
             ruleRunner('username', 'Username', required),
             ruleRunner('email', 'Email', required),

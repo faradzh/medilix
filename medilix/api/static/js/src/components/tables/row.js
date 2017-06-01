@@ -6,37 +6,39 @@ import RowCell from './rowCell';
 
 export default class NotificationRow extends React.Component {
     render () {
-        const {
-            id,
-            fullname,
-            complaints,
-            hospital,
-            date,
-            status,
-            currentUserGroup
-        } = this.props;
-
+        const cells = this.props.cells;
         return (
             <tr>
-                <RowCell className="text-center">
-                    <img className="img-avatar img-avatar48" src="assets/img/avatars/avatar7.jpg" alt=""/>
+                <RowCell className={cells.img.className}>
+                    <img className="img-avatar img-avatar48" src={cells.img.label} alt=""/>
                 </RowCell>
-                <td className="font-w600">{fullname}</td>
+                <RowCell className={cells.fullname.className}>
+                    {cells.fullname.label}
+                </RowCell>
                 {
-                    currentUserGroup == 'doctor' ?
-                        <td>{complaints}</td> : null
+                    cells.complaints ?
+                        <RowCell className={cells.complaints.className}>
+                            {cells.complaints.label}
+                        </RowCell> : null
                 }
-                <td>{hospital}</td>
-                <td>{date}</td>
-                <td>
-                    <span className="label label-warning">{status}</span>
-                </td>
+                <RowCell className={cells.hospital.className}>
+                    {cells.hospital.label}
+                </RowCell>
+                <RowCell className={cells.date.className}>
+                    {cells.date.label}
+                </RowCell>
+                <RowCell className={cells.date.className}>
+                    <span className="label label-warning">{cells.status.label}</span>
+                </RowCell>
                 {
-                    currentUserGroup == 'doctor' ?
-                    <td className="text-center">
+                    cells.actions ?
+                    <td className={cells.actions.className}>
                         <div className="btn-group">
-                            <button className="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Approve Notification"><i id={id} onClick={this.props.onApproveClick} className="fa fa-thumbs-o-up"/></button>
-                            <button className="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title="Remove Notification"><i id={id} onClick={this.props.onDeclineClick} className="fa fa-times"/></button>
+                            {cells.actions.label.map((action) => {
+                                return <button className="btn btn-xs btn-default" type="button" data-toggle="tooltip" title="" data-original-title={action.label}>
+                                            <i id={this.props.id} onClick={action.handler} className={action.icon}/>
+                                       </button>
+                            })}
                         </div>
                     </td> : null
                 }
