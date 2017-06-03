@@ -5,7 +5,15 @@ import React from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import Appointments from '../../components/dashboard/appointments';
-import { fetchCurrentAppointment, showBlank } from '../../actions/appointmentActions';
+import {
+    fetchCurrentAppointment,
+    showBlank,
+    fillBlank,
+    fillExamination,
+    addExaminationRow,
+    removeExaminationRow,
+    saveBlank
+} from '../../actions/appointmentActions';
 
 const headers = {
     doctor: [
@@ -25,12 +33,22 @@ const mapStateToProps = (state) => {
         currentUserGroup: state.userReducer.currentUser.group,
         headers: headers[state.userReducer.currentUser.group],
         currentAppointment: state.appointmentReducer.currentAppointment,
-        blank: state.appointmentReducer.showBlank
+        blank: state.appointmentReducer.showBlank,
+        fillBlank: state.appointmentReducer.fillBlank,
+        blankData: state.appointmentReducer.blank
     }
 };
 
 const matchDispatchToProps = (dispatch) => {
-    return bindActionCreators({fetchCurrentAppointment, showBlank}, dispatch)
+    return bindActionCreators({
+        fetchCurrentAppointment,
+        showBlank,
+        fillBlank,
+        fillExamination,
+        addExaminationRow,
+        removeExaminationRow,
+        saveBlank
+    }, dispatch)
 };
 
 export default connect(mapStateToProps, matchDispatchToProps)(Appointments);

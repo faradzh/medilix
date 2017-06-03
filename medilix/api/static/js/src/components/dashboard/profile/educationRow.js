@@ -16,7 +16,7 @@ export default class EducationRow extends React.Component {
             name: e.target.name,
             value: e.target.value
         };
-        this.props.changeEducationData(educationObj)
+        this.props.changeData(educationObj)
     };
 
     handleStartDateChange = (date) => {
@@ -26,7 +26,7 @@ export default class EducationRow extends React.Component {
             name: 'dateFrom',
             value: formattedDate
         };
-        this.props.changeEducationData(educationObj)
+        this.props.changeData(educationObj)
     };
 
     handleEndDateChange = (date) => {
@@ -36,7 +36,7 @@ export default class EducationRow extends React.Component {
             name: 'dateTo',
             value: formattedDate
         };
-        this.props.changeEducationData(educationObj)
+        this.props.changeData(educationObj)
     };
 
     render () {

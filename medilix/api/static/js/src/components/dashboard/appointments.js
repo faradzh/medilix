@@ -14,8 +14,8 @@ export default class Appointments extends React.Component {
 
     render () {
         const currentAppointment = this.props.currentAppointment;
+        const blank = currentAppointment.blank;
         const headers = this.props.headers;
-        console.log("CurrentAppointment", this.props.currentAppointment);
         return (
             <div className="content">
                 <div className="block-content">
@@ -53,7 +53,13 @@ export default class Appointments extends React.Component {
                     </Table>
                 </div>
                 <div className="block-content">
-                    { this.props.blank ? <Blank /> : null }
+                    { this.props.blank ? <Blank
+                        fill={this.props.fillBlank}
+                        data={blank}
+                        fillExamination={this.props.fillExamination}
+                        addExaminationRow={this.props.addExaminationRow}
+                        removeExaminationRow={this.props.removeExaminationRow}
+                        save={this.props.saveBlank}/> : null }
                 </div>
             </div>
         )

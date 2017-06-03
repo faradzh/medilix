@@ -3,14 +3,10 @@
  */
 import React from 'react';
 import Form from '../../forms/form';
-import jQuery from 'jquery';
-import 'select2/dist/js/select2.min.js';
 import 'bootstrap-notify/bootstrap-notify.min';
 import 'sweetalert/dist/sweetalert.min';
 import Select from 'react-select';
 require('react-select/dist/react-select.css');
-
-import EducationRow from './educationRow';
 import Title from './title';
 import ProfileStats from './profileStats';
 import InputField from './inputField';
@@ -18,19 +14,11 @@ import FormGroup from './formGroup';
 import SelectField from './selectField';
 import TextareaField from './textAreaField';
 import RadioButtonGroup from '../../forms/radioButtonGroup';
+import Education from '../../dashboard/profile/education';
 
 require('sweetalert/dist/sweetalert.css');
 
 export default class UserProfileEdit extends React.Component {
-
-    constructor (props) {
-        super(props);
-        this.state = {
-            numOfEducationRows: 1,
-            removeBtnShow: false,
-            active: []
-        }
-    }
 
     componentWillMount () {
         this.props.getProfileData();
@@ -39,30 +27,25 @@ export default class UserProfileEdit extends React.Component {
         this.profileConstructor();
     }
 
-    componentDidMount () {
-        jQuery('#hospitals').select2();
-    }
-
-
-    showSuccessAlert = () => {
-        swal('Success', 'Your profile updated perfectly!', 'success');
-    };
-
-    showErrorAlert = () => {
-        swal('Error', 'Your profile update failed!', 'error');
-    };
-
-    uiLoader = (action) => {
-        const pageLoader = jQuery('#page-loader');
-        switch (action) {
-            case 'show':
-                pageLoader.show();
-                break;
-            case 'hide':
-                pageLoader.hide();
-                break;
-        }
-    };
+    // showSuccessAlert = () => {
+    //     swal('Success', 'Your profile updated perfectly!', 'success');
+    // };
+    //
+    // showErrorAlert = () => {
+    //     swal('Error', 'Your profile update failed!', 'error');
+    // };
+    //
+    // uiLoader = (action) => {
+    //     const pageLoader = jQuery('#page-loader');
+    //     switch (action) {
+    //         case 'show':
+    //             pageLoader.show();
+    //             break;
+    //         case 'hide':
+    //             pageLoader.hide();
+    //             break;
+    //     }
+    // };
 
     profileConstructor = () => {
         const componentsToRender = {
@@ -83,44 +66,26 @@ export default class UserProfileEdit extends React.Component {
         return Object.keys(object).length != 0
     };
 
-    onChange = (val) => {
-        const updated = this.state.active.slice();
-        this.setState({active: updated.push(val)});
-    };
-
     render () {
-        console.log("Active", this.state.active);
         const specializationOptions = this.props.specializations;
         const hospitalOptions = this.props.hospitals;
         const profileData = this.props.profileData;
         const specializationId = this.notEmpty(profileData) ? profileData.specializationId : '';
         const specializationName = this.notEmpty(profileData) ? profileData.specializationName : '';
-        const fullname = this.notEmpty(profileData) ? `${profileData.lastname} ${profileData.firstname} ${profileData.middlename}` : '';
+        let fullname = this.notEmpty(profileData) ? `${profileData.lastname ? profileData.lastname : ''} ${profileData.firstname ? profileData.firstname : ''} ${profileData.middlename ? profileData.middlename : ''}` : '';
+        fullname = fullname.length > 2 ? fullname : 'Имя отсутствует';
 
-        let educationRows = [];
-        let educationObjectsLength = 0;
-        const educationObjects = this.notEmpty(profileData) ? profileData.education : [];
 
-        let hospitalIds = [];
-        if (this.notEmpty(profileData)){
-            if (profileData.education != undefined){
-                 hospitalIds = profileData.hospitals.map((hospitalObject) => {
-                    return hospitalObject.id
-                });
-            }
-        }
 
-        if (educationObjects){
-            for (var i=0; i<educationObjects.length; i++){
-                let educationObject = educationObjects[i];
-                educationRows.push(<EducationRow id={this.notEmpty(profileData) ? educationObject.id : ''}
-                                                 changeEducationData={this.props.changeEducationData}
-                                                 data={this.notEmpty(profileData) ? educationObject : ''}
-                                                 key={i}
-                                                 display={this.displayComponent('education')}/>);
-            }
-            educationObjectsLength = educationObjects.length;
-        }
+        // let hospitalIds = [];
+        // if (this.notEmpty(profileData)){
+        //     if (profileData.education != undefined){
+        //          hospitalIds = profileData.hospitals.map((hospitalObject) => {
+        //             return hospitalObject.id
+        //         });
+        //     }
+        // }
+
         const buttons = [{id: 'male', text: 'Male'}, {id: 'female', text: 'Female'}];
         console.log("ProfileData", profileData);
         return (
@@ -232,7 +197,7 @@ export default class UserProfileEdit extends React.Component {
                                                          selectClassName="form-control input-lg"
                                                          onChange={this.props.changeProfileData}
                                                          selectId="profile-specialization"
-                                                         selectName="specialization_id">
+                                                         selectName="specializationId">
                                                 Specialization
                                             </SelectField>
                                         </FormGroup>
@@ -260,28 +225,27 @@ export default class UserProfileEdit extends React.Component {
                                                 Bio
                                             </TextareaField>
                                         </FormGroup>
-                                        {educationRows}
-                                        {educationObjects ?
-                                            <div id="edu-buttons">
-                                                {
-                                                    educationObjectsLength > 1 ? <button onClick={this.props.removeEducationRow} className="btn btn-danger push-5-r push-5" type="button">
-                                                        <i className="fa fa-times"/> Delete
-                                                    </button> : null
-                                                }
-                                                <button onClick={this.props.addEducationRow} className="btn btn-success push-5-r push-5" type="button">
-                                                        <i className="fa fa-plus"/> Add
-                                                </button>
-                                            </div> : ''
+
+                                        <Education data={this.props.profileData.education}
+                                                   changeData={this.props.changeEducationData}
+                                                   addRow={this.props.addEducationRow}
+                                                   removeRow={this.props.removeEducationRow}
+                                                   display={this.displayComponent('education')} />
+
+                                        {
+                                            this.displayComponent('hospitals') ?
+                                                <div>
+                                                    <label htmlFor="hospitals">Hospitals</label>
+                                                    <FormGroup>
+                                                        <Select name="hospitals"
+                                                                multi={true}
+                                                                value={this.props.profileData.hospitals}
+                                                                options={hospitalOptions}
+                                                                onChange={this.props.changeHospitalsData}
+                                                                placeholder={"Выберете больницы в которых вы работаете..."}/>
+                                                    </FormGroup>
+                                                </div> : ''
                                         }
-                                        <label htmlFor="hospitals">Hospitals</label>
-                                        <FormGroup>
-                                            <Select name="hospitals"
-                                                    multi={true}
-                                                    value={this.state.active}
-                                                    options={hospitalOptions}
-                                                    onChange={this.onChange}
-                                                    placeholder={"Выберете больницы в которых вы работаете..."}/>
-                                        </FormGroup>
                                         <FormGroup>
                                             <InputField display={this.displayComponent('age')}
                                                         value={this.props.profileData.age}
