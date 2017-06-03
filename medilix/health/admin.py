@@ -1,7 +1,5 @@
 from django.contrib import admin
-
-from health.models import Hospital
-from users.models import Specialization, Procedure
+from users.models import Specialization, Procedure, Hospital
 
 
 class SpecializationAdmin(admin.ModelAdmin):

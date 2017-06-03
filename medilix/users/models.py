@@ -1,11 +1,19 @@
 from django.contrib.auth.models import User, Group
 from django.db import models
-from health.models import Hospital
 
 
 class Procedure(models.Model):
     name = models.CharField(max_length=255)
     description = models.TextField(max_length=1000, null=True)
+
+    def __str__(self):
+        return self.name
+
+
+class Hospital(models.Model):
+    name = models.CharField(max_length=255)
+    address = models.CharField(max_length=255, null=True)
+    # photo = models.ImageField()
 
     def __str__(self):
         return self.name
@@ -88,6 +96,7 @@ class Appointment(models.Model):
     doctor = models.ForeignKey(DoctorProfile)
     date_from = models.DateTimeField()
     date_to = models.DateTimeField()
+    hospital = models.OneToOneField(Hospital, null=True)
     status = models.CharField(max_length=100, default='pending')
 
 

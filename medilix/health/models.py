@@ -1,41 +1,43 @@
 from django.db import models
-#
-# from users.models import UserProfile
-#
-#
-# class Dose(models.Model):
-#     dosage = models.CharField()
-#     limit = models.IntegerField()
-#     timing = models.CharField()
-#
-#
-# class Medication(models.Model):
-#     name = models.CharField()
-#     comment = models.TextField()
-#
-#
+from users.models import Appointment
 
-class Hospital(models.Model):
+
+class Dose(models.Model):
+    dosage = models.CharField(max_length=255)
+    limit = models.IntegerField()
+    timing = models.CharField(max_length=255)
+
+
+class Medication(models.Model):
     name = models.CharField(max_length=255)
-    address = models.CharField(max_length=255, null=True)
-    # photo = models.ImageField()
+    comment = models.TextField()
 
-    def __str__(self):
-        return self.name
 
-#
-#
-# class Prescription(models.Model):
-#     dose = models.OneToOneField(Dose)
-#     medication = models.ForeignKey(Medication)
-#     from_date = models.DateField()
-#     to_date = models.DateField()
-#     comment = models.TextField()
-#
-#
-# class Appointments(models.Model):
-#     patient = models.ForeignKey(UserProfile)
-#     doctor = models.ForeignKey(UserProfile)
-#     prescription = models.OneToOneField(Prescription)
-#     date = models.DateTimeField()
-#     comment = models.TextField()
+class Blank(models.Model):
+    appointment = models.OneToOneField(Appointment, on_delete=models.CASCADE)
+    complaints = models.TextField()
+    prov_diagnosis = models.CharField(max_length=255, null=True)
+    final_diagnosis = models.CharField(max_length=255, null=True)
+
+
+class Prescription(models.Model):
+    dose = models.OneToOneField(Dose)
+    medication = models.ForeignKey(Medication)
+    from_date = models.DateField()
+    to_date = models.DateField()
+    comment = models.TextField()
+    blank = models.ForeignKey(Blank)
+
+
+class Examination(models.Model):
+    content = models.TextField()
+    results = models.TextField(null=True)
+    blank = models.ForeignKey(Blank)
+
+
+class MedicalRecord(models.Model):
+    doctor_fullname = models.CharField(max_length=255)
+    date = models.DateTimeField()
+    blank = models.OneToOneField(Blank)
+    hospital_name = models.CharField(max_length=255)
+
