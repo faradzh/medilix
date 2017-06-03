@@ -1,4 +1,5 @@
 import datetime
+import json
 
 from django.contrib.auth.models import User
 from django.core.exceptions import PermissionDenied
@@ -9,7 +10,9 @@ from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
 from django.utils import timezone
-from health.models import Hospital
+
+from health.models import Blank, MedicalRecord, Examination
+from users.models import Hospital
 from users.models import EventCard, DoctorProfile, Notification, PatientProfile, Appointment, Specialization, Feedback
 from users.serializers import UserSerializer, DoctorProfileSerializer, PatientProfileSerializer, EventCardSerializer
 
@@ -132,8 +135,8 @@ def get_profile_data(request):
 
             for hospital in hospitals:
                 hospitals_list.append({
-                    "id": hospital.id,
-                    "name": hospital.name
+                    "value": hospital.id,
+                    "label": hospital.name
                 })
 
             education = profile.education_set.all()
@@ -145,6 +148,8 @@ def get_profile_data(request):
                     "dateTo": entry.date_to,
                     "address": entry.address
                 })
+            if len(education_list) == 0:
+                education_list.append({"id": 0})
             profile_dict = return_doctor_data(profile, hospitals_list, education_list)
         if user_group == 'patient':
             profile = PatientProfile.objects.get(user_id=user_id)
@@ -218,7 +223,8 @@ def approve_notification(request):
         notification = Notification.objects.get(pk=notification_id)
 
         if notification.status != 'approved':
-            create_appointment(notification)
+            appointment = create_appointment(notification)
+            create_blank(notification, appointment)
             notification.status = 'approved'
             notification.save()
 
@@ -243,10 +249,18 @@ def create_appointment(notification):
     doctor_profile = notification.doctor_profile
     date_from = notification.date
     date_to = date_from + datetime.timedelta(hours=1)
-    Appointment.objects.create(patient=patient_profile,
-                               doctor=doctor_profile,
-                               date_from=date_from,
-                               date_to=date_to)
+    appointment = Appointment.objects.create(patient=patient_profile,
+                                             doctor=doctor_profile,
+                                             date_from=date_from,
+                                             date_to=date_to,
+                                             hospital=notification.hospital)
+
+    return appointment
+
+
+def create_blank(notification, appointment):
+    Blank.objects.create(complaints=notification.complaints,
+                         appointment=appointment)
 
 
 @csrf_exempt
@@ -332,6 +346,7 @@ def get_appointments(request):
 @csrf_exempt
 def get_current_appointment(request):
     current_appointment = dict()
+    blank = dict()
     if request.method == 'GET':
         doctor_id = request.GET.get('doctor_id')
         doctor_profile = DoctorProfile.objects.get(user_id=doctor_id)
@@ -339,15 +354,46 @@ def get_current_appointment(request):
         appointments = Appointment.objects.filter(doctor=doctor_profile)
 
         for appointment in appointments:
-            if appointment.date_from <= now and now <= appointment.date_to:
+            if appointment.date_from <= now <= appointment.date_to:
+                current_appointment["id"] = appointment.id
                 current_appointment["fullname"] = '%s %s' % (appointment.patient.lastname, appointment.patient.firstname)
                 current_appointment["gender"] = appointment.patient.gender
                 current_appointment["age"] = appointment.patient.age
                 current_appointment["address"] = appointment.patient.address
                 current_appointment["visitNumber"] = 1
                 current_appointment["status"] = appointment.status
+                blank["id"] = appointment.blank.id
+                blank["complaints"] = appointment.blank.complaints
+                blank["analyses"] = []
+                    # if not appointment.blank.examinations else appointment.blank.examinations
+                current_appointment["blank"] = blank
 
     return JsonResponse(current_appointment, status=200, safe=False)
+
+
+@csrf_exempt
+def save_blank(request):
+    if request.method == 'POST':
+        blank_id = request.POST.get('blankId')
+        appointment_id = request.POST.get('appointmentId')
+        prov_diagnosis = request.POST.get('provDiagnosis')
+        examinations = request.POST.getlist('examinations[]')
+
+        appointment = Appointment.objects.get(pk=appointment_id)
+        doctor_fullname = '%s %s %s' % (appointment.doctor.lastname, appointment.doctor.firstname, appointment.doctor.middlename)
+        for examination in examinations:
+            native_object = json.loads(examination)
+            key = list(native_object.keys())[0]
+            Examination.objects.create(content=native_object[key], blank_id=blank_id)
+
+        blank = Blank.objects.get(pk=blank_id)
+        blank.prov_diagnosis = prov_diagnosis
+        blank.save()
+        MedicalRecord.objects.create(doctor_fullname=doctor_fullname,
+                                     date=appointment.date_from,
+                                     hospital_name=appointment.hospital.name,
+                                     blank=blank)
+        return JsonResponse({"message": "OK"}, status=201)
 
 
 @csrf_exempt
@@ -402,3 +448,19 @@ def submit_feedback(request):
             raise PermissionDenied
 
     return JsonResponse('', status=200, safe=False)
+
+
+@csrf_exempt
+def get_permission_for_feedback(request):
+    if request.method == 'GET':
+        user_id = request.GET.get('userId')
+        doctor_id = request.GET.get('doctorId')
+        doctor = DoctorProfile.objects.get(user_id=doctor_id)
+        try:
+            patient = PatientProfile.objects.get(pk=user_id)
+            Appointment.objects.get(doctor=doctor, patient=patient, status='completed')
+            allowed = True
+        except (Appointment.DoesNotExist, PatientProfile.DoesNotExist):
+            allowed = False
+
+        return JsonResponse(allowed, status=200, safe=False)

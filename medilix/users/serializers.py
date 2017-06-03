@@ -2,8 +2,8 @@ import json
 from django.core.exceptions import ObjectDoesNotExist
 from rest_framework import serializers
 from django.contrib.auth.models import User, Group
-from health.models import Hospital
-from users.models import DoctorProfile, PatientProfile, Procedure, Specialization, Education, EventCard
+from users.models import Hospital
+from users.models import DoctorProfile, PatientProfile, Specialization, Education, EventCard
 
 
 class UserSerializer(serializers.ModelSerializer):
@@ -34,14 +34,14 @@ class DoctorProfileSerializer(serializers.ModelSerializer):
     id = serializers.CharField()
     group = serializers.CharField()
     email = serializers.CharField()
-    specialization = serializers.CharField()
+    specialization_id = serializers.CharField()
     education = serializers.CharField()
     hospitals = serializers.CharField()
 
     class Meta:
         model = DoctorProfile
         fields = ('id', 'group', 'firstname', 'lastname', 'middlename', 'email', 'bio', 'age', 'gender', 'phone_number',
-                  'experience', 'specialization', 'education', 'hospitals')
+                  'experience', 'specialization_id', 'education', 'hospitals')
 
     def create(self, validated_data):
         user_id = validated_data.pop('id')
@@ -54,9 +54,9 @@ class DoctorProfileSerializer(serializers.ModelSerializer):
         gender = validated_data.pop('gender')
         phone_number = validated_data.pop('phone_number')
         experience = validated_data.pop('experience')
-        specialization = validated_data.pop('specialization')
+        specialization_id = validated_data.pop('specialization_id')
         education = json.loads(validated_data.pop('education'))
-        hospitals = validated_data.pop('hospitals').split(',')
+        hospitals = validated_data.pop('hospitals')
 
         try:
             user = User.objects.get(pk=user_id)
@@ -89,7 +89,7 @@ class DoctorProfileSerializer(serializers.ModelSerializer):
                                                     address=entry['address']
                 )
 
-            specialization = Specialization.objects.get(pk=specialization)
+            specialization = Specialization.objects.get(pk=specialization_id)
             doctor_profile.specialization = specialization
 
             user.doctor_profile = doctor_profile
@@ -97,7 +97,8 @@ class DoctorProfileSerializer(serializers.ModelSerializer):
 
             doctor_profile.hospitals.clear()
 
-            hospitals = Hospital.objects.filter(pk__in=hospitals)
+            hospital_ids = [hospital['value'] for hospital in json.loads(hospitals)]
+            hospitals = Hospital.objects.filter(pk__in=hospital_ids)
 
             for hospital in hospitals:
                 doctor_profile.hospitals.add(hospital)
