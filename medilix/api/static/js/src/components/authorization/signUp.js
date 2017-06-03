@@ -49,7 +49,7 @@ export default class SignUp extends React.Component {
     };
 
     render () {
-        const buttons = [{id: 'patient', text: 'Patient'}, {id: 'doctor', text: 'Doctor'}];
+        const buttons = [{id: 'patient', text: 'Пациент'}, {id: 'doctor', text: 'Врач'}];
         return (
             <div className="bg-white pulldown">
                 <div className="content content-boxed overflow-hidden">
@@ -59,29 +59,29 @@ export default class SignUp extends React.Component {
 
                                 <div className="text-center">
                                     <i className="fa fa-2x fa-medium text-primary"/>
-                                    <h1 className="h3 push-10-t">Create Account</h1>
+                                    <h1 className="h3 push-10-t">Создайте аккаунт</h1>
                                 </div>
 
                                 <Form onSubmit={this.handleSubmitClicked} className="js-validation-register form-horizontal push-50-t push-50">
-                                    <TextField id='register-username' type='text' placeholder='Please enter a username' showError={this.state.showErrors}
-                                               errorText={this.errorFor('username')} text='Username' onFieldChanged={this.handleFieldChanged('username')}/>
-                                    <TextField type='email' placeholder='Please enter an email' showError={this.state.showErrors}
-                                               errorText={this.errorFor('email')} text='Email' onFieldChanged={this.handleFieldChanged('email')}/>
+                                    <TextField id='register-username' type='text' placeholder='Введите имя пользователя' showError={this.state.showErrors}
+                                               errorText={this.errorFor('username')} text='Имя пользователя' onFieldChanged={this.handleFieldChanged('username')}/>
+                                    <TextField type='email' placeholder='Введите почтовый адрес' showError={this.state.showErrors}
+                                               errorText={this.errorFor('email')} text='Почтовый адрес' onFieldChanged={this.handleFieldChanged('email')}/>
                                     <FormGroup>
                                         <RadioButtonGroup buttons={buttons} 
                                                           columnClassName="col-xs-12"
                                                           mainLabelClassName="col-xs-12"
-                                                          mainLabelText="Role"
+                                                          mainLabelText="Роль"
                                                           showError={this.state.showErrors}
                                                           errorText={this.errorFor('role')} 
                                                           name="role" 
                                                           onChange={this.handleRadioButtonChanged('role')}/>
                                     </FormGroup>
 
-                                    <TextField type='password' placeholder='Choose a strong password' showError={this.state.showErrors}
-                                               errorText={this.errorFor('password')} text='Password' onFieldChanged={this.handleFieldChanged('password')}/>
-                                    <TextField type='password' placeholder='and confirm it' showError={this.state.showErrors}
-                                               errorText={this.errorFor('password2')} text='Password confirm' onFieldChanged={this.handleFieldChanged('password2')}/>
+                                    <TextField type='password' placeholder='Выберите надежный пароль' showError={this.state.showErrors}
+                                               errorText={this.errorFor('password')} text='Пароль' onFieldChanged={this.handleFieldChanged('password')}/>
+                                    <TextField type='password' placeholder='и подтвердите его' showError={this.state.showErrors}
+                                               errorText={this.errorFor('password2')} text='Подтверждение пароля' onFieldChanged={this.handleFieldChanged('password2')}/>
                                     <SubmitField />
                                 </Form>
                             </div>

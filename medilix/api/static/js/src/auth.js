@@ -2,6 +2,9 @@
  * Created by faradj on 3/5/17.
  */
 import fetch from 'isomorphic-fetch';
+import { setErrors } from './actions/authActions';
+import Store from './store';
+const { dispatch } = Store;
 
 module.exports = {
     login: function (username, password, callback) {
@@ -50,6 +53,7 @@ module.exports = {
             })
             .then((response) => {
                 if (response.status >= 400){
+                    dispatch(setErrors(response));
                     throw new Error('Bad response from server.');
                 }
                 return response.json()

@@ -27,11 +27,11 @@ class SignUpContainer extends React.Component {
 
     getValidation = () => {
         return [
-            ruleRunner('username', 'Username', required),
-            ruleRunner('email', 'Email', required),
-            ruleRunner('role', 'Role', required),
-            ruleRunner('password', 'Password', required, minLength(6)),
-            ruleRunner('password2', 'Password confirm', required, minLength(6), mustMatch('password', 'Password'))
+            ruleRunner('username', 'Имя пользователя', required),
+            ruleRunner('email', 'Почтовый адрес', required),
+            ruleRunner('role', 'Роль', required),
+            ruleRunner('password', 'Пароль', required, minLength(6)),
+            ruleRunner('password2', 'Подтверждение пароля', required, minLength(6), mustMatch('password', 'Пароль'))
         ];
     };
 

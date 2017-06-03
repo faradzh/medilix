@@ -18,11 +18,24 @@ export default class Login extends React.Component {
         const password = this.refs.password.value;
 
         auth.login(username, password, () => {
-            this.props.router.push('/app/dashboard');
+            this.props.router.push('/app/dashboard/timetable');
         });
     };
 
+    hasErrors = () => {
+        return this.props.errors;
+    };
+
+    className = () => {
+        let className = 'form-group ';
+        if (this.hasErrors()){
+            className += 'has-error';
+        }
+        return className;
+    };
+
     render () {
+        console.log("Errors", this.props.errors);
         return (
             <div className="bg-white pulldown">
                 <div className="content content-boxed overflow-hidden">
@@ -31,35 +44,24 @@ export default class Login extends React.Component {
                             <div className="push-30-t push-50 animated fadeIn">
                                 <div className="text-center">
                                     <i className="fa fa-2x fa-medium text-primary"/>
-                                    <p className="text-muted push-15-t">A perfect tool for your medical history</p>
+                                    <p className="text-muted push-15-t">Ваша личная медицинская карта онлайн</p>
                                 </div>
 
                                 <form className="js-validation-login form-horizontal push-30-t" onSubmit={this.handleSubmit}>
-                                    <div className="form-group">
+                                    <div className={this.className()}>
                                         <div className="col-xs-12">
                                             <div className="form-material form-material-primary floating">
                                                 <input className="form-control" type="text" ref="username" id="login-username" name="login-username"/>
-                                                <label htmlFor="login-username">Username</label>
+                                                <label htmlFor="login-username">Имя пользователя</label>
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="form-group">
+                                    <div className={this.className()}>
                                         <div className="col-xs-12">
                                             <div className="form-material form-material-primary floating">
                                                 <input className="form-control" type="password" ref="password" id="login-password" name="login-password"/>
-                                                <label htmlFor="login-password">Password</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div className="form-group">
-                                        <div className="col-xs-6">
-                                            <label className="css-input switch switch-sm switch-primary">
-                                                <input type="checkbox" id="login-remember-me" name="login-remember-me"/><span/> Remember Me?
-                                            </label>
-                                        </div>
-                                        <div className="col-xs-6">
-                                            <div className="font-s13 text-right push-5-t">
-                                                <a href="base_pages_reminder_v2.html">Forgot Password?</a>
+                                                {this.hasErrors() ? <div id="val-username-error" className="help-block animated fadeInDown">Имя пользователя или пароль неверны!</div> : ''}
+                                                <label htmlFor="login-password">Пароль</label>
                                             </div>
                                         </div>
                                     </div>
@@ -77,3 +79,16 @@ export default class Login extends React.Component {
         )
     }
 }
+
+// <div className="form-group">
+//     <div className="col-xs-6">
+//         <label className="css-input switch switch-sm switch-primary">
+//             <input type="checkbox" id="login-remember-me" name="login-remember-me"/><span/> Remember Me?
+//         </label>
+//     </div>
+//     <div className="col-xs-6">
+//         <div className="font-s13 text-right push-5-t">
+//             <a href="base_pages_reminder_v2.html">Forgot Password?</a>
+//         </div>
+//     </div>
+// </div>
