@@ -8,6 +8,7 @@ import UserProfileEdit from '../../../components/dashboard/profile/userProfileEd
 import { 
     getProfileData, 
     changeProfileData,
+    changeHospitalsData,
     changeEducationData,
     addEducationRow,
     resetProfileData,
@@ -32,7 +33,8 @@ const mapStateToProps = (state) => {
 };
 const matchDispatchToProps = (dispatch) => {
     return bindActionCreators({
-        changeProfileData, 
+        changeProfileData,
+        changeHospitalsData,
         changeEducationData,
         addEducationRow,
         resetProfileData,

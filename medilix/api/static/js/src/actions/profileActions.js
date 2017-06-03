@@ -12,6 +12,13 @@ export function changeProfileData(payload) {
     }
 }
 
+export function changeHospitalsData(payload) {
+    return {
+        type: 'CHANGE_HOSPITALS_DATA',
+        payload: payload
+    }
+}
+
 export function changeEducationData(payload) {
     return {
         type: 'CHANGE_EDUCATION_DATA',
@@ -39,20 +46,10 @@ export function resetProfileData(){
 
 export function submitProfileData(e) {
     e.preventDefault();
-    const constructDoctorForm = function (id,
-                                        group,
-                                        firstname,
-                                        lastname,
-                                        middlename,
-                                        email,
-                                        specialization_id,
-                                        bio,
-                                        age,
-                                        gender,
-                                        phoneNumber,
-                                        experience,
-                                        educationJson,
-                                        hospitals) {
+    const constructDoctorForm = function (id, group, firstname, lastname, middlename,
+                                          email, specializationId, bio, age, gender,
+                                          phoneNumber, experience, educationJson, hospitals) {
+        console.log("Hospitals", hospitals);
         const formData = new FormData();
         formData.append('id', id);
         formData.append('group', group);
@@ -60,7 +57,7 @@ export function submitProfileData(e) {
         formData.append('lastname', lastname);
         formData.append('middlename', middlename);
         formData.append('email', email);
-        formData.append('specialization', specialization_id);
+        formData.append('specialization_id', specializationId);
         formData.append('bio', bio);
         formData.append('age', age);
         formData.append('gender', gender);
@@ -71,16 +68,8 @@ export function submitProfileData(e) {
         return formData;
     };
 
-    const constructPatientForm = function (id,
-                                        group,
-                                        firstname,
-                                        lastname,
-                                        middlename,
-                                        email,
-                                        address,
-                                        age,
-                                        gender,
-                                        phoneNumber) {
+    const constructPatientForm = function (id, group, firstname, lastname, middlename,
+                                           email, address, age, gender, phoneNumber) {
         const formData = new FormData();
         formData.append('id', id);
         formData.append('group', group);
@@ -97,54 +86,20 @@ export function submitProfileData(e) {
 
     return (dispatch, getState) => {
         dispatch(createUserProfile);
-        const {
-            firstname,
-            lastname,
-            middlename,
-            email,
-            specialization_id,
-            bio,
-            age,
-            address,
-            gender,
-            phoneNumber,
-            experience,
-            education
-        } = getState().profileReducer.profileData;
+        const { firstname, lastname, middlename, email, specializationId,
+                bio, age, address, gender, phoneNumber, experience, education, hospitals } = getState().profileReducer.profileData;
         const educationJson = JSON.stringify(education);
-        const hospitals = jQuery('#hospitals').val();
+        const hospitalsJson = JSON.stringify(hospitals);
         const { id, group } = getState().userReducer.currentUser;
         let formData = null;
         if (group == 'doctor'){
-            formData = constructDoctorForm(
-                id,
-                group,
-                firstname,
-                lastname,
-                middlename,
-                email,
-                specialization_id,
-                bio,
-                age,
-                gender,
-                phoneNumber,
-                experience,
-                educationJson,
-                hospitals);
+            formData = constructDoctorForm(id, group, firstname, lastname, middlename,
+                                           email, specializationId, bio, age, gender,
+                                           phoneNumber, experience, educationJson, hospitalsJson);
         } else if (group == 'patient'){
-            formData = constructPatientForm(
-                id,
-                group,
-                firstname,
-                lastname,
-                middlename,
-                email,
-                address,
-                age,
-                gender,
-                phoneNumber);
+            formData = constructPatientForm(id, group, firstname, lastname, middlename,
+                                            email, address, age, gender, phoneNumber);
         }
-
 
         fetch('/users/update-user-profile', {
                 method: 'POST',
@@ -197,6 +152,7 @@ export function getProfileData(id, group) {
         const url = '/users/get-profile-data';
         const params = {userId: userId, userGroup: userGroup};
         jQuery.get(url, params, (response) => {
+            console.log("Response", response);
             dispatch(setProfileData(response))
         })
     };

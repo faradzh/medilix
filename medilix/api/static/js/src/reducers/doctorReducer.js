@@ -1,7 +1,7 @@
 /**
  * Created by faradj on 5/12/17.
  */
-const INITIAL_STATE = {doctors:[], doctorData:{}, feedback:{}};
+const INITIAL_STATE = {doctors:[], doctorData:{}, feedback:{}, feedbackPermission:false};
 
 export default function reducer (state=INITIAL_STATE, action) {
     switch (action.type){
@@ -22,6 +22,11 @@ export default function reducer (state=INITIAL_STATE, action) {
             const updatedFeedback = Object.assign({}, state.feedback, {[name]: value});
             return Object.assign({}, state, {feedback: updatedFeedback});
             break;
+
+        case 'SET_FEEDBACK_PERMISSION':
+            return Object.assign({}, state, {feedbackPermission: action.payload});
+            break;
+
     }
     return state;
 }

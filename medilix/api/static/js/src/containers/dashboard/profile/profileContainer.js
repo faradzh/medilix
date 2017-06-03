@@ -20,6 +20,19 @@ const matchDispatchToProps = (dispatch) => {
     return bindActionCreators({getProfileData}, dispatch)
 };
 
+const profileTabs = [
+    {
+        id: 0,
+        name: 'about',
+        title: 'О враче'
+    },
+    {
+        id: 1,
+        name: 'feedback',
+        title: 'Все отзывы'
+    }
+];
+
 class ProfileContainer extends React.Component {
 
     componentWillMount () {
@@ -29,7 +42,7 @@ class ProfileContainer extends React.Component {
     render () {
         const currentUserGroup = this.props.currentUserGroup;
         const patientComponent = !this.props.children ? <PatientProfile data={this.props.profileData} children={this.props.children}/> : this.props.children;
-        const doctorComponent = !this.props.children ? <DoctorProfile data={this.props.profileData} children={this.props.children}/> : this.props.children;
+        const doctorComponent = !this.props.children ? <DoctorProfile data={this.props.profileData} children={this.props.children} profileTabs={profileTabs} /> : this.props.children;
         const profile = {patient: patientComponent, doctor: doctorComponent};
         return (
             <div>

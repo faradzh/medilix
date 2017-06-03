@@ -6,7 +6,7 @@ import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import DoctorProfile from '../../../components/doctors/doctorProfile';
 import { getProfileData } from '../../../actions/profileActions';
-import { setFeedback, submitFeedback } from '../../../actions/doctorActions';
+import { setFeedback, submitFeedback, getPermissionForFeedback } from '../../../actions/doctorActions';
 
 const profileTabs = [
     {
@@ -24,12 +24,13 @@ const mapStateToProps = (state) => {
     return {
         profileData: state.profileReducer.profileData,
         profileTabs: profileTabs,
-        feedback: state.doctorReducer.feedback
+        feedback: state.doctorReducer.feedback,
+        feedbackPermission: state.doctorReducer.feedbackPermission
     }
 };
 
 const matchDispatchToProps = (dispatch) => {
-    return bindActionCreators({getProfileData, setFeedback, submitFeedback}, dispatch)
+    return bindActionCreators({getProfileData, setFeedback, submitFeedback, getPermissionForFeedback}, dispatch)
 };
 
 class DoctorProfileContainer extends React.Component {
@@ -37,6 +38,7 @@ class DoctorProfileContainer extends React.Component {
         const userId = this.props.params.id;
         const userGroup = 'doctor';
         this.props.getProfileData(userId, userGroup);
+        this.props.getPermissionForFeedback(this.props.params.id);
     }
     
     render () {
@@ -49,6 +51,7 @@ class DoctorProfileContainer extends React.Component {
                     feedback={this.props.feedback}
                     setFeedback={this.props.setFeedback}
                     submitFeedback={this.props.submitFeedback}
+                    feedbackPermission={this.props.feedbackPermission}
                     params={this.props.params}/> : this.props.children}
             </div>
         )

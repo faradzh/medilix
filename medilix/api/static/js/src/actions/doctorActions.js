@@ -12,15 +12,15 @@ export function getDoctorsList() {
     };
 }
 
-export function getDoctorData(payload) {
-    return (dispatch) => {
-        const url = '/users/get-doctor-data';
-        const params = {userId: payload};
-        jQuery.get(url, params, (response) => {
-            dispatch(setDoctorData(response))
-        })
-    };
-}
+// export function getDoctorData(payload) {
+//     return (dispatch) => {
+//         const url = '/users/get-doctor-data';
+//         const params = {userId: payload};
+//         jQuery.get(url, params, (response) => {
+//             dispatch(setDoctorData(response))
+//         })
+//     };
+// }
 
 function setDoctorsList(payload) {
    return {
@@ -29,12 +29,12 @@ function setDoctorsList(payload) {
    }
 }
 
-function setDoctorData(payload) {
-   return {
-        type: 'SET_DOCTOR_DATA',
-        payload: payload
-   }
-}
+// function setDoctorData(payload) {
+//    return {
+//         type: 'SET_DOCTOR_DATA',
+//         payload: payload
+//    }
+// }
 
 export function setFeedback(payload) {
    return {
@@ -58,9 +58,36 @@ export function submitFeedback(payload) {
         jQuery.ajax({
             url,
             type: 'POST',
-            data: params
-        }, (response) => {
-            console.log("Response", response)
+            data: params,
+            success: (response) => {
+            // console.log("Response", response)
+            }
         })
     };
+}
+
+export function getPermissionForFeedback(doctorId) {
+    return (dispatch, getState) => {
+        const userId = JSON.parse(localStorage.currentUser).id;
+        const url = '/users/get-permission-for-feedback';
+        const params = {
+            userId: userId,
+            doctorId: doctorId
+        };
+        jQuery.ajax({
+            url,
+            type: 'GET',
+            data: params,
+            success: (response) => {
+                dispatch(setFeedbackPermission(response));
+            }
+        })
+    }
+}
+
+function setFeedbackPermission(payload) {
+    return {
+        type: 'SET_FEEDBACK_PERMISSION',
+        payload: payload
+    }
 }
