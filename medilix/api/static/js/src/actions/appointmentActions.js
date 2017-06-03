@@ -49,3 +49,58 @@ export function showBlank(payload) {
         payload: payload
     }
 }
+
+export function fillBlank(payload) {
+    return {
+        type: 'FILL_BLANK',
+        payload: payload
+    }
+}
+
+export function fillExamination(payload) {
+    return {
+        type: 'FILL_EXAMINATION',
+        payload: payload
+    }
+}
+
+export function addExaminationRow() {
+    return {
+        type: 'ADD_EXAMINATION_ROW'
+    }
+}
+
+export function removeExaminationRow() {
+    return {
+        type: 'REMOVE_EXAMINATION_ROW'
+    }
+}
+
+function stringifyObjects (list){
+    let stringifiedList = [];
+    list.forEach((exam) => {
+        stringifiedList.push(JSON.stringify(exam))
+    });
+    return stringifiedList;
+}
+
+export function saveBlank() {
+    return (dispatch, getState) => {
+        const url = '/users/save-blank';
+        const params = {
+            blankId: getState().appointmentReducer.currentAppointment.blank.id,
+            appointmentId: getState().appointmentReducer.currentAppointment.id,
+            provDiagnosis: getState().appointmentReducer.currentAppointment.blank.provDiagnosis,
+            'examinations[]': stringifyObjects(getState().appointmentReducer.currentAppointment.blank.analyses)
+        };
+        jQuery.ajax({
+            type: 'POST',
+            url,
+            data: params,
+            success: (response) => {
+                console.log("Response", response);
+                dispatch(showBlank(false))
+            }
+        })
+    }
+}

@@ -10,23 +10,23 @@ export default class Exam extends React.Component {
         return (
             <FormGroup>
                 <TextareaField display={true}
-                               value={''}
+                               value={this.props.data.content}
                                columnClassName="col-xs-6" htmlFor="exam"
                                textareaClassName="form-control input-lg"
-                               onChange={''}
+                               onChange={this.props.fill}
                                textareaId="exam"
-                               textareaName="exam"
+                               textareaName={`content-${this.props.id}`}
                                textareaRows="5"
                                textareaPlaceholder="">
                     Анализы/Обследование
                 </TextareaField>
                 <TextareaField display={true}
-                               value={''}
+                               value={this.props.data.results}
                                columnClassName="col-xs-6" htmlFor="examResults"
                                textareaClassName="form-control input-lg"
-                               onChange={''}
+                               onChange={this.props.fill}
                                textareaId="examResults"
-                               textareaName="examResults"
+                               textareaName={`results-${this.props.id}`}
                                textareaRows="5"
                                textareaPlaceholder="">
                     Результаты
