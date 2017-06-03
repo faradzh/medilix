@@ -8,6 +8,7 @@ import doctorReducer from './doctorReducer';
 import notificationReducer from './notificationReducer';
 import appointmentReducer from './appointmentReducer';
 import authReducer from './authReducer';
+import medicalRecordReducer from './medicalRecordReducer';
 
 export default combineReducers({
     routing,
@@ -18,5 +19,6 @@ export default combineReducers({
     doctorReducer,
     notificationReducer,
     appointmentReducer,
-    authReducer
+    authReducer,
+    medicalRecordReducer
 });

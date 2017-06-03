@@ -28,4 +28,5 @@ urlpatterns += [
     url(r'^submit-feedback$', views.submit_feedback),
     url(r'^get-permission-for-feedback$', views.get_permission_for_feedback),
     url(r'^save-blank$', views.save_blank),
+    url(r'^get-medical-records$', views.get_medical_records)
 ]

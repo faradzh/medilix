@@ -464,3 +464,31 @@ def get_permission_for_feedback(request):
             allowed = False
 
         return JsonResponse(allowed, status=200, safe=False)
+
+
+@csrf_exempt
+def get_medical_records(request):
+    if request.method == 'GET':
+        user_id = request.GET.get('user_id')
+        patient_profile = PatientProfile.objects.get(user_id=user_id)
+        appointments = Appointment.objects.filter(patient=patient_profile)
+        medical_records = []
+        for appointment in appointments:
+            blank = appointment.blank
+            doctor_fullname = blank.medicalrecord.doctor_fullname
+            date = appointment.date_from
+            examinations = blank.examination_set.all()
+            medical_records.append({
+                "id": blank.medicalrecord.id,
+                "doctorId": appointment.doctor.user.id,
+                "doctorFullname": doctor_fullname,
+                "provDiagnosis": blank.prov_diagnosis,
+                "finalDiagnosis": blank.final_diagnosis,
+                "date": date,
+                "examinations": [{"id": exam.id,
+                                  "content": exam.content,
+                                  "results": exam.results} for exam in examinations],
+                "hospital": appointment.hospital.name
+            })
+
+        return JsonResponse(medical_records, safe=False)

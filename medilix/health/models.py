@@ -1,5 +1,5 @@
 from django.db import models
-from users.models import Appointment
+from users.models import Appointment, PatientProfile, DoctorProfile
 
 
 class Dose(models.Model):
@@ -40,4 +40,3 @@ class MedicalRecord(models.Model):
     date = models.DateTimeField()
     blank = models.OneToOneField(Blank)
     hospital_name = models.CharField(max_length=255)
-

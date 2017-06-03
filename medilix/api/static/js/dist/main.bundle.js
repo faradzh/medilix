@@ -55342,6 +55342,10 @@ var _authReducer = __webpack_require__(450);
 
 var _authReducer2 = _interopRequireDefault(_authReducer);
 
+var _medicalRecordReducer = __webpack_require__(806);
+
+var _medicalRecordReducer2 = _interopRequireDefault(_medicalRecordReducer);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = (0, _redux.combineReducers)({
@@ -55353,7 +55357,8 @@ exports.default = (0, _redux.combineReducers)({
     doctorReducer: _doctorReducer2.default,
     notificationReducer: _notificationReducer2.default,
     appointmentReducer: _appointmentReducer2.default,
-    authReducer: _authReducer2.default
+    authReducer: _authReducer2.default,
+    medicalRecordReducer: _medicalRecordReducer2.default
 });
 
 /***/ }),
@@ -87568,17 +87573,21 @@ var _medicalRecord = __webpack_require__(804);
 
 var _medicalRecord2 = _interopRequireDefault(_medicalRecord);
 
+var _medicalRecordActions = __webpack_require__(805);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
-/**
- * Created by faradj on 6/3/17.
- */
 var mapStateToProps = function mapStateToProps(state) {
-    return {};
-};
+    return {
+        medicalRecords: state.medicalRecordReducer.medicalRecords
+    };
+}; /**
+    * Created by faradj on 6/3/17.
+    */
+
 
 var matchDispatchToProps = function matchDispatchToProps(dispatch) {
-    return (0, _redux.bindActionCreators)({}, dispatch);
+    return (0, _redux.bindActionCreators)({ fetchMedicalRecords: _medicalRecordActions.fetchMedicalRecords }, dispatch);
 };
 
 exports.default = (0, _reactRedux.connect)(mapStateToProps, matchDispatchToProps)(_medicalRecord2.default);
@@ -87599,6 +87608,14 @@ var _createClass = function () { function defineProperties(target, props) { for 
 var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
+
+var _medicalRecordRow = __webpack_require__(807);
+
+var _medicalRecordRow2 = _interopRequireDefault(_medicalRecordRow);
+
+var _medicalRecordRowData = __webpack_require__(808);
+
+var _medicalRecordRowData2 = _interopRequireDefault(_medicalRecordRowData);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -87639,8 +87656,26 @@ var MedicalRecord = function (_React$Component) {
     }
 
     _createClass(MedicalRecord, [{
+        key: 'componentWillMount',
+        value: function componentWillMount() {
+            this.props.fetchMedicalRecords();
+        }
+    }, {
         key: 'render',
         value: function render() {
+            var _this2 = this;
+
+            console.log("MedicalRecords", this.props.medicalRecords);
+            var data = this.props.medicalRecords;
+            var medicalRecordRows = [];
+            var medicalRecordRowsData = [];
+            data.forEach(function (row) {
+                medicalRecordRows.push(_react2.default.createElement(_medicalRecordRow2.default, { data: row,
+                    key: row.id,
+                    renderClassName: _this2.renderClassName,
+                    clickHandler: _this2.clickHandler }));
+                medicalRecordRowsData.push(_react2.default.createElement(_medicalRecordRowData2.default, { key: row.id, data: row.examinations }));
+            });
             return _react2.default.createElement(
                 'div',
                 { className: 'content content-boxed' },
@@ -87668,7 +87703,7 @@ var MedicalRecord = function (_React$Component) {
                                 _react2.default.createElement(
                                     'tr',
                                     null,
-                                    _react2.default.createElement('th', { style: { width: '30px' } }),
+                                    _react2.default.createElement('th', { style: { width: '20px' } }),
                                     _react2.default.createElement(
                                         'th',
                                         null,
@@ -87676,168 +87711,23 @@ var MedicalRecord = function (_React$Component) {
                                     ),
                                     _react2.default.createElement(
                                         'th',
+                                        { style: { width: '30%' } },
+                                        '\u0414\u0438\u0430\u0433\u043D\u043E\u0437'
+                                    ),
+                                    _react2.default.createElement(
+                                        'th',
                                         { style: { width: '15%' } },
-                                        'Access'
+                                        '\u0411\u043E\u043B\u044C\u043D\u0438\u0446\u0430'
                                     ),
                                     _react2.default.createElement(
                                         'th',
                                         { className: 'hidden-xs', style: { width: '15%' } },
-                                        'Date'
+                                        '\u0414\u0430\u0442\u0430'
                                     )
                                 )
                             ),
-                            _react2.default.createElement(
-                                'tbody',
-                                { className: this.renderClassName(), onClick: this.clickHandler },
-                                _react2.default.createElement(
-                                    'tr',
-                                    null,
-                                    _react2.default.createElement(
-                                        'td',
-                                        { className: 'text-center' },
-                                        _react2.default.createElement('i', { className: 'fa fa-angle-right' })
-                                    ),
-                                    _react2.default.createElement(
-                                        'td',
-                                        { className: 'font-w600' },
-                                        'Ronald George'
-                                    ),
-                                    _react2.default.createElement(
-                                        'td',
-                                        null,
-                                        _react2.default.createElement(
-                                            'span',
-                                            { className: 'label label-warning' },
-                                            'Trial'
-                                        )
-                                    ),
-                                    _react2.default.createElement(
-                                        'td',
-                                        { className: 'hidden-xs' },
-                                        _react2.default.createElement(
-                                            'em',
-                                            { className: 'text-muted' },
-                                            'June 7, 2015 12:16'
-                                        )
-                                    )
-                                )
-                            ),
-                            _react2.default.createElement(
-                                'tbody',
-                                null,
-                                _react2.default.createElement(
-                                    'tr',
-                                    null,
-                                    _react2.default.createElement('td', { className: 'text-center' }),
-                                    _react2.default.createElement(
-                                        'td',
-                                        { className: 'font-w600 text-success' },
-                                        '+ $70,00'
-                                    ),
-                                    _react2.default.createElement(
-                                        'td',
-                                        null,
-                                        _react2.default.createElement(
-                                            'small',
-                                            null,
-                                            'Paypal'
-                                        )
-                                    ),
-                                    _react2.default.createElement(
-                                        'td',
-                                        { className: 'hidden-xs' },
-                                        _react2.default.createElement(
-                                            'small',
-                                            { className: 'text-muted' },
-                                            'June 19, 2015 12:16'
-                                        )
-                                    )
-                                ),
-                                _react2.default.createElement(
-                                    'tr',
-                                    null,
-                                    _react2.default.createElement('td', { className: 'text-center' }),
-                                    _react2.default.createElement(
-                                        'td',
-                                        { className: 'font-w600 text-success' },
-                                        '+ $51,00'
-                                    ),
-                                    _react2.default.createElement(
-                                        'td',
-                                        null,
-                                        _react2.default.createElement(
-                                            'small',
-                                            null,
-                                            'Paypal'
-                                        )
-                                    ),
-                                    _react2.default.createElement(
-                                        'td',
-                                        { className: 'hidden-xs' },
-                                        _react2.default.createElement(
-                                            'small',
-                                            { className: 'text-muted' },
-                                            'June 27, 2015 12:16'
-                                        )
-                                    )
-                                ),
-                                _react2.default.createElement(
-                                    'tr',
-                                    null,
-                                    _react2.default.createElement('td', { className: 'text-center' }),
-                                    _react2.default.createElement(
-                                        'td',
-                                        { className: 'font-w600 text-success' },
-                                        '+ $68,00'
-                                    ),
-                                    _react2.default.createElement(
-                                        'td',
-                                        null,
-                                        _react2.default.createElement(
-                                            'small',
-                                            null,
-                                            'Paypal'
-                                        )
-                                    ),
-                                    _react2.default.createElement(
-                                        'td',
-                                        { className: 'hidden-xs' },
-                                        _react2.default.createElement(
-                                            'small',
-                                            { className: 'text-muted' },
-                                            'June 24, 2015 12:16'
-                                        )
-                                    )
-                                ),
-                                _react2.default.createElement(
-                                    'tr',
-                                    null,
-                                    _react2.default.createElement('td', { className: 'text-center' }),
-                                    _react2.default.createElement(
-                                        'td',
-                                        { className: 'font-w600 text-success' },
-                                        '+ $42,00'
-                                    ),
-                                    _react2.default.createElement(
-                                        'td',
-                                        null,
-                                        _react2.default.createElement(
-                                            'small',
-                                            null,
-                                            'Paypal'
-                                        )
-                                    ),
-                                    _react2.default.createElement(
-                                        'td',
-                                        { className: 'hidden-xs' },
-                                        _react2.default.createElement(
-                                            'small',
-                                            { className: 'text-muted' },
-                                            'June 8, 2015 12:16'
-                                        )
-                                    )
-                                )
-                            )
+                            medicalRecordRows,
+                            medicalRecordRowsData
                         )
                     )
                 )
@@ -87849,6 +87739,307 @@ var MedicalRecord = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = MedicalRecord;
+
+/***/ }),
+/* 805 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.fetchMedicalRecords = fetchMedicalRecords;
+
+var _jquery = __webpack_require__(24);
+
+var _jquery2 = _interopRequireDefault(_jquery);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function fetchMedicalRecords() {
+    return function (dispatch, getState) {
+        var userId = getState().userReducer.currentUser.id;
+        var url = '/users/get-medical-records';
+        var params = {
+            user_id: userId
+        };
+        _jquery2.default.get(url, params, function (response) {
+            dispatch(setMedicalRecords(response));
+        });
+    };
+} /**
+   * Created by faradj on 6/3/17.
+   */
+
+
+function setMedicalRecords(payload) {
+    return {
+        type: 'SET_MEDICAL_RECORDS',
+        payload: payload
+    };
+}
+
+/***/ }),
+/* 806 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+exports.default = reducer;
+/**
+ * Created by faradj on 6/3/17.
+ */
+
+var INITIAL_STATE = { medicalRecords: [] };
+
+function reducer() {
+    var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : INITIAL_STATE;
+    var action = arguments[1];
+
+    switch (action.type) {
+        case 'SET_MEDICAL_RECORDS':
+            return Object.assign({}, state, { medicalRecords: action.payload });
+            break;
+    }
+    return state;
+}
+
+/***/ }),
+/* 807 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _reactRouter = __webpack_require__(21);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by faradj on 6/4/17.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+var MedicalRecordRow = function (_React$Component) {
+    _inherits(MedicalRecordRow, _React$Component);
+
+    function MedicalRecordRow() {
+        _classCallCheck(this, MedicalRecordRow);
+
+        return _possibleConstructorReturn(this, (MedicalRecordRow.__proto__ || Object.getPrototypeOf(MedicalRecordRow)).apply(this, arguments));
+    }
+
+    _createClass(MedicalRecordRow, [{
+        key: 'render',
+        value: function render() {
+            var data = this.props.data;
+            var doctorFullname = data ? data.doctorFullname : '';
+            var provDiagnosis = data ? data.provDiagnosis : '';
+            var hospital = data ? data.hospital : '';
+            var date = data ? data.date : '';
+            var doctorId = data ? data.doctorId : '';
+            return _react2.default.createElement(
+                'tbody',
+                { className: this.props.renderClassName(), onClick: this.props.clickHandler },
+                _react2.default.createElement(
+                    'tr',
+                    null,
+                    _react2.default.createElement(
+                        'td',
+                        { className: 'text-center' },
+                        _react2.default.createElement('i', { className: 'fa fa-angle-right' })
+                    ),
+                    _react2.default.createElement(
+                        'td',
+                        { className: 'font-w600' },
+                        _react2.default.createElement(
+                            _reactRouter.Link,
+                            { to: '/app/doctors/' + doctorId },
+                            doctorFullname
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'td',
+                        null,
+                        _react2.default.createElement(
+                            'span',
+                            { className: 'label label-primary' },
+                            provDiagnosis
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'td',
+                        { className: 'hidden-xs' },
+                        _react2.default.createElement(
+                            'em',
+                            { className: 'font-w400' },
+                            hospital
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'td',
+                        { className: 'hidden-xs' },
+                        _react2.default.createElement(
+                            'em',
+                            { className: 'text-muted' },
+                            date
+                        )
+                    )
+                )
+            );
+        }
+    }]);
+
+    return MedicalRecordRow;
+}(_react2.default.Component);
+
+exports.default = MedicalRecordRow;
+
+/***/ }),
+/* 808 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _dropdownData = __webpack_require__(809);
+
+var _dropdownData2 = _interopRequireDefault(_dropdownData);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by faradj on 6/4/17.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+var MedicalRecordRowData = function (_React$Component) {
+    _inherits(MedicalRecordRowData, _React$Component);
+
+    function MedicalRecordRowData() {
+        _classCallCheck(this, MedicalRecordRowData);
+
+        return _possibleConstructorReturn(this, (MedicalRecordRowData.__proto__ || Object.getPrototypeOf(MedicalRecordRowData)).apply(this, arguments));
+    }
+
+    _createClass(MedicalRecordRowData, [{
+        key: 'render',
+        value: function render() {
+            var examinations = this.props.data;
+            var objects = [];
+            examinations.forEach(function (exam) {
+                objects.push(_react2.default.createElement(_dropdownData2.default, { key: exam.id, data: exam }));
+            });
+            return _react2.default.createElement(
+                'tbody',
+                null,
+                objects
+            );
+        }
+    }]);
+
+    return MedicalRecordRowData;
+}(_react2.default.Component);
+
+exports.default = MedicalRecordRowData;
+
+/***/ }),
+/* 809 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by faradj on 6/4/17.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+var DropdownData = function (_React$Component) {
+    _inherits(DropdownData, _React$Component);
+
+    function DropdownData() {
+        _classCallCheck(this, DropdownData);
+
+        return _possibleConstructorReturn(this, (DropdownData.__proto__ || Object.getPrototypeOf(DropdownData)).apply(this, arguments));
+    }
+
+    _createClass(DropdownData, [{
+        key: "render",
+        value: function render() {
+            var data = this.props.data;
+            return _react2.default.createElement(
+                "tr",
+                null,
+                _react2.default.createElement("td", { className: "text-center" }),
+                _react2.default.createElement(
+                    "td",
+                    { className: "font-w600 text-success" },
+                    data.content
+                ),
+                _react2.default.createElement(
+                    "td",
+                    { className: "font-w600 text-success" },
+                    data.results
+                )
+            );
+        }
+    }]);
+
+    return DropdownData;
+}(_react2.default.Component);
+
+exports.default = DropdownData;
 
 /***/ })
 /******/ ]);
