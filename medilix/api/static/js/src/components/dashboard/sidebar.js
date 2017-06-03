@@ -42,7 +42,7 @@ export default class Sidebar extends React.Component {
                     <MenuItem link="/app/dashboard/doctors" icon="si si-users" className="nav-submenu">
                         Doctors
                     </MenuItem>,
-                    <MenuItem link="/app/dashboard/medical-card" icon="fa fa-id-card-o" className="nav-submenu">
+                    <MenuItem link="/app/dashboard/medical-record" icon="fa fa-id-card-o" className="nav-submenu">
                         Medical Card
                     </MenuItem>
             ]

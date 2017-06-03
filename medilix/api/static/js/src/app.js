@@ -10,9 +10,9 @@ import Index from './index';
 import MainLayout from './components/mainLayout';
 import store from './store';
 import auth from './auth';
-import Login from './login';
 import DashboardContainer from './containers/dashboard/dashboardContainer';
 import SignUpContainer from "./containers/authorization/signUpContainer";
+import LoginContainer from "./containers/authorization/loginContainer";
 import TimetableContainer from "./containers/dashboard/timetableContainer";
 import CalendarContainer from "./containers/dashboard/calendarContainer";
 import UserProfileEditContainer from "./containers/dashboard/profile/userProfileEditContainer";
@@ -20,6 +20,7 @@ import ProfileContainer from "./containers/dashboard/profile/profileContainer";
 import DoctorProfileContainer from "./containers/home/profile/doctorProfileContainer";
 import NotificationsContainer from "./containers/dashboard/notificationsContainer";
 import AppointmentsContainer from "./containers/dashboard/appointmentsContainer";
+import MedicalRecordContainer from "./containers/dashboard/medicalRecordContainer";
 import DoctorsContainer from './containers/home/doctorsContainer';
 const history = syncHistoryWithStore(browserHistory, store);
 
@@ -42,7 +43,7 @@ ReactDOM.render(
                     <Route path='doctors/:id' component={DoctorProfileContainer}>
                         <Route path='timetable' component={CalendarContainer} onEnter={requireAuth}/>
                     </Route>
-                    <Route path='login' component={Login}/>
+                    <Route path='login' component={LoginContainer}/>
                     <Route path='signup' component={SignUpContainer}/>
                 </Route>
                 <Route path='dashboard' component={DashboardContainer} onEnter={requireAuth}>
@@ -52,6 +53,7 @@ ReactDOM.render(
                     </Route>
                     <Route path='notifications' component={NotificationsContainer}/>
                     <Route path='appointment' component={AppointmentsContainer}/>
+                    <Route path='medical-record' component={MedicalRecordContainer}/>
                 </Route>
             </Route>
         </Router>

@@ -2,7 +2,7 @@
  * Created by faradj on 4/25/17.
  */
 const INITIAL_STATE = {
-    profileData: {},
+    profileData: {education:[{id: 0}]},
     specializations: [],
     hospitals: [],
     creating: false,
@@ -11,6 +11,7 @@ const INITIAL_STATE = {
 };
 
 export default function reducer (state=INITIAL_STATE, action) {
+    let updatedProfileData, education;
     switch (action.type){
         case 'CHANGE_PROFILE_DATA':
             const name = action.payload.target.name;
@@ -21,19 +22,23 @@ export default function reducer (state=INITIAL_STATE, action) {
             else{
                 value = action.payload.target.value;
             }
-            const updatedProfileData = Object.assign({}, state.profileData, {[name]: value});
+            updatedProfileData = Object.assign({}, state.profileData, {[name]: value});
+            return Object.assign({}, state, {profileData: updatedProfileData});
+            break;
+
+        case 'CHANGE_HOSPITALS_DATA':
+            updatedProfileData = Object.assign({}, state.profileData, {hospitals: action.payload});
             return Object.assign({}, state, {profileData: updatedProfileData});
             break;
 
         case 'CHANGE_EDUCATION_DATA':
             const payload = action.payload;
             const currentEducationArray = state.profileData.education.slice();
-            for (var i=0; i<state.profileData.education.length; i++){
-                const educationObj = currentEducationArray[i];
-                if (educationObj.id == payload.id)    {
-                    currentEducationArray[i] = Object.assign({}, educationObj, {[payload.name]: payload.value});
+            state.profileData.education.forEach((edu, i) => {
+                if (edu.id == payload.id)    {
+                    currentEducationArray[i] = Object.assign({}, edu, {[payload.name]: payload.value});
                 }
-            }
+            });
             const updatedEducationInProfile = Object.assign({}, state.profileData, {education: currentEducationArray});
             return Object.assign({}, state, {profileData: updatedEducationInProfile});
             break;
@@ -43,8 +48,8 @@ export default function reducer (state=INITIAL_STATE, action) {
             const lastIndex = educationArray.length - 1;
             let lastObjectId = educationArray[lastIndex].id;
             educationArray.push({id: ++lastObjectId});
-            const educationInProfile = Object.assign({}, state.profileData, {education: educationArray});
-            return Object.assign({}, state, {profileData: educationInProfile});
+            updatedProfileData = Object.assign({}, state.profileData, {education: educationArray});
+            return Object.assign({}, state, {profileData: updatedProfileData});
             break;
 
         case 'REMOVE_EDUCATION_ROW':
@@ -57,7 +62,6 @@ export default function reducer (state=INITIAL_STATE, action) {
 
         case 'RESET_PROFILE_DATA':
             const objectsToReset = Object.assign({}, state.profileData, {bio: ''});
-            console.log("ToReset", objectsToReset);
             return Object.assign({}, state, {profileData: objectsToReset});
             break;
 

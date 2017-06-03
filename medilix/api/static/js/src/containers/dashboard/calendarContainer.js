@@ -35,7 +35,12 @@ class CalendarContainer extends React.Component {
         const buttons = [
             <button key='1' className="btn btn-sm btn-primary" onClick={this.props.createNotification} type="button" data-dismiss="modal"><i className="fa fa-check"/> Submit</button>
         ];
-        const hospitalOptions = this.props.hospitals;
+        const hospitalOptions = [];
+        if (this.props.hospitals){
+            this.props.hospitals.forEach((hospital) => {
+                hospitalOptions.push({id: hospital.value, name: hospital.label});
+            });
+        }
         console.log("Hospitals", hospitalOptions);
         return (
             <div>
