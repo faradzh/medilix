@@ -38,7 +38,7 @@ class DoctorProfile(models.Model):
     gender = models.CharField(max_length=10, null=True)
     phone_number = models.CharField(max_length=255, null=True)
     experience = models.FloatField(null=True)
-    specialization = models.OneToOneField(Specialization, null=True)
+    specialization = models.ForeignKey(Specialization, null=True)
     hospitals = models.ManyToManyField(Hospital)
 
     def __str__(self):
