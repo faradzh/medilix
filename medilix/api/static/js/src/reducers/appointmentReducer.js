@@ -43,10 +43,12 @@ export default function reducer (state=INITIAL_STATE, action) {
             id = name.split('-')[1];
             name = name.split('-')[0];
             analyses.forEach((analysis, index) => {
-                if (analysis.id == id){
+                if (analysis.id == parseInt(id)){
+                    console.log("Here");
                     analyses[index] = Object.assign({}, analysis, {[name]: value})
                 }
                 else{
+                    console.log("There");
                     analyses[analyses.length-1][name] = value;
                 }
             });
@@ -81,7 +83,7 @@ export default function reducer (state=INITIAL_STATE, action) {
             name = name.split('-')[0];
 
             prescription.forEach((item, index) => {
-                if (item.id == id){
+                if (item.id == parseInt(id)){
                     prescription[index] = Object.assign({}, item, {[name]: value})
                 }
                 else{

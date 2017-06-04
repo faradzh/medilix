@@ -24,8 +24,8 @@ export default class Doctors extends React.Component {
             <div>
                 <div className="bg-primary-dark">
                     <section className="content content-full content-boxed">
-                        <div className="push-100-t push-50 text-center">
-                            <h1 className="h2 text-white push-10 animated fadeInDown" data-toggle="appear" data-class="animated fadeInDown">Search for a suitable doctor</h1>
+                        <div className="push-30-t push-10 text-center">
+                            <h1 className="h2 text-white push-10 animated fadeInDown" data-toggle="appear" data-class="animated fadeInDown">Найди подходящего врача!</h1>
                         </div>
                     </section>
                 </div>

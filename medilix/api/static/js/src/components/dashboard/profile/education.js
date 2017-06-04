@@ -28,11 +28,11 @@ export default class Education extends React.Component {
                         <div id="edu-buttons">
                             {
                                 education.length > 1 ? <button onClick={this.props.removeRow} className="btn btn-danger push-5-r push-5" type="button">
-                                    <i className="fa fa-times"/> Delete
+                                    <i className="fa fa-times"/> Удалить
                                 </button> : null
                             }
                             <button onClick={this.props.addRow} className="btn btn-success push-5-r push-5" type="button">
-                                    <i className="fa fa-plus"/> Add
+                                    <i className="fa fa-plus"/> Добавить
                             </button>
                         </div>
                     </div>

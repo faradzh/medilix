@@ -17,7 +17,7 @@ class ProfileHeader extends React.Component {
                         <h1 className="h3 text-black push-30-t animated zoomIn">{`${data.lastname} ${data.firstname} ${data.middlename}`}</h1>
                         <h2 className="h4 text-black-op animated zoomIn">{data.specializationName}</h2>
                         <Link to={`/app/doctors/${data.user_id}/timetable`}>
-                            <button id="timetable-button" className="btn btn-rounded btn-success push-30-t push-10" type="button"><i className="si si-calendar"/> Timetable</button>
+                            <button id="timetable-button" className="btn btn-rounded btn-success push-30-t push-10" type="button"><i className="si si-calendar"/> Расписание</button>
                         </Link>
                     </div>
                 </div>

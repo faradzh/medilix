@@ -46,12 +46,16 @@ export function setFeedback(payload) {
 export function submitFeedback(payload) {
     return (dispatch, getState) => {
         const feedback = getState().doctorReducer.feedback;
-        const userId = getState().userReducer.currentUser.id;
-        const userGroup = getState().userReducer.currentUser.group;
+        const userId = JSON.parse(localStorage.currentUser).id;
+        const userGroup = JSON.parse(localStorage.currentUser).group;
         const url = '/users/submit-feedback';
         const params = {
             doctorId: payload.id,
-            feedback: feedback,
+            content: feedback.content,
+            qualification: feedback.qualification,
+            attentiveness: feedback.attentiveness,
+            qualityToPrice: feedback.qualityToPrice,
+            recommendation: feedback.recommendation,
             userId: userId,
             userGroup: userGroup
         };
@@ -88,6 +92,38 @@ export function getPermissionForFeedback(doctorId) {
 function setFeedbackPermission(payload) {
     return {
         type: 'SET_FEEDBACK_PERMISSION',
+        payload: payload
+    }
+}
+
+export function fetchFeedbacks(doctorId) {
+    return (dispatch, getState) => {
+        const currentUserId = JSON.parse(localStorage.currentUser).id;
+        const url = '/users/get-feedbacks';
+        let user_id;
+        if (doctorId){
+            user_id = doctorId;
+        }
+        else{
+            user_id = currentUserId;
+        }
+        const params = {
+            user_id: user_id
+        };
+        jQuery.ajax({
+            url,
+            type: 'GET',
+            data: params,
+            success: (response) => {
+                dispatch(setFeedbacks(response));
+            }
+        })
+    }
+}
+
+function setFeedbacks(payload) {
+    return {
+        type: 'SET_FEEDBACKS',
         payload: payload
     }
 }

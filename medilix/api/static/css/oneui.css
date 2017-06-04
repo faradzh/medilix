@@ -11740,3 +11740,7 @@ div.tagsinput span.tag a:hover {
 .complete-blank-btns{
   float:right;
 }
+
+#header-navbar{
+  background-color: #3e4a59!important;
+}

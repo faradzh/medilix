@@ -16,13 +16,13 @@ export default class HomeHeader extends React.Component {
                             </button>
                         </li>
                         <li>
-                            <Link to="/app/signup">Sign Up</Link>
+                            <Link to="/app/signup">Регистрация</Link>
                         </li>
                         <li>
-                            <Link to="/app/login">Sign In</Link>
+                            <Link to="/app/login">Вход</Link>
                         </li>
                         <li>
-                            <Link to="/app/dashboard">Dashboard</Link>
+                            <Link to="/app/dashboard">Кабинет</Link>
                         </li>
                     </ul>
 

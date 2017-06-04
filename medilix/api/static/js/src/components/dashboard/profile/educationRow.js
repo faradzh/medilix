@@ -44,7 +44,7 @@ export default class EducationRow extends React.Component {
         return this.props.display ? (
             <div className="form-group">
                 <div className="col-xs-8">
-                    <label htmlFor="education-datarange">Education</label>
+                    <label htmlFor="education-datarange">Образование</label>
                     <div className="input-daterange input-group" data-date-format="mm/dd/yyyy">
                         <DatePicker className="form-control"
                                     showYearDropdown
@@ -74,7 +74,7 @@ export default class EducationRow extends React.Component {
                             inputPlaceholder="University"
                             inputClassName="form-control"
                             value={education ? education.entity : ''}>
-                    Entity
+                    ВУЗ
                 </InputField>
                 <InputField columnClassName="col-xs-12"
                             onChange={this.handleTextChange}
@@ -84,7 +84,7 @@ export default class EducationRow extends React.Component {
                             inputPlaceholder="Address"
                             inputClassName="form-control"
                             value={education ? education.address : ''}>
-                    Address
+                    Адрес
                 </InputField>
             </div>
         ) : null;

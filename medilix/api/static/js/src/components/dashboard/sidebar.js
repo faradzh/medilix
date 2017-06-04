@@ -12,38 +12,32 @@ export default class Sidebar extends React.Component {
         const currentUserGroup = this.props.currentUserGroup;
         const menuItems = {
             doctor: [<MenuItem link="/app" icon="si si-speedometer" className="sidebar-mini-hide">
-                        Dashboard
+                        Кабинет
                     </MenuItem>,
-                    <li className="nav-main-heading"><span className="sidebar-mini-hide">User Interface</span></li>,
+                    <li className="nav-main-heading"><span className="sidebar-mini-hide">Основное меню</span></li>,
                     <MenuItem link="/app/dashboard/timetable" icon="si si-calendar" className="nav-submenu">
-                        Timetable
+                        Расписание
                     </MenuItem>,
                     <MenuItem link="/app/dashboard/notifications" icon="si si-envelope" className="nav-submenu">
-                        Notifications
+                        Уведомления
                     </MenuItem>,
                     <MenuItem link="/app/dashboard/appointment" icon="fa fa-leanpub" className="nav-submenu">
-                        Appointment
-                    </MenuItem>,
-                    <MenuItem link="/app/dashboard/patients" icon="si si-users" className="nav-submenu">
-                        Patients
+                        Текущий прием
                     </MenuItem>
             ],
             patient: [
                 <MenuItem link="/app" icon="si si-speedometer" className="sidebar-mini-hide">
-                        Dashboard
+                        Кабинет
                     </MenuItem>,
-                    <li className="nav-main-heading"><span className="sidebar-mini-hide">User Interface</span></li>,
+                    <li className="nav-main-heading"><span className="sidebar-mini-hide">Основное меню</span></li>,
                     <MenuItem link="/app/dashboard/timetable" icon="si si-calendar" className="nav-submenu">
-                        Timetable
+                        Расписание
                     </MenuItem>,
                     <MenuItem link="/app/dashboard/notifications" icon="si si-envelope" className="nav-submenu">
-                        Notifications
-                    </MenuItem>,
-                    <MenuItem link="/app/dashboard/doctors" icon="si si-users" className="nav-submenu">
-                        Doctors
+                        Уведомления
                     </MenuItem>,
                     <MenuItem link="/app/dashboard/medical-record" icon="fa fa-id-card-o" className="nav-submenu">
-                        Medical Card
+                        Медицинская карта
                     </MenuItem>
             ]
         };

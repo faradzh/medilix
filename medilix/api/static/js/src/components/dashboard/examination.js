@@ -10,8 +10,8 @@ export default class Examination extends React.Component {
         console.log("LastData", this.props.data);
         const examinationRows = [];
         if (this.props.data){
-            this.props.data.forEach((analysis, index) => {
-                examinationRows.push(<Exam key={index} id={index} fill={this.props.fill} data={analysis}/>);
+            this.props.data.forEach((analysis) => {
+                examinationRows.push(<Exam key={analysis.id} id={analysis.id} fill={this.props.fill} data={analysis}/>);
             });
         }
 

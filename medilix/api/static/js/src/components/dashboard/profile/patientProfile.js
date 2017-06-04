@@ -20,26 +20,26 @@ export default class PatientProfile extends React.Component {
                 <div className="content">
                     <div className="row">
                         <div className="col-sm-8">
-                             <Block title="Personal Information">
+                             <Block title="Личные данные">
                                  <div className="row">
                                     <div className="col-sm-12">
                                         <div className="block">
                                             <div className="block-content block-content-narrow">
                                                 <div className="form-group">
                                                     <div className="col-sm-4">
-                                                        <label className="col-xs-12" htmlFor="blocks-username">Email</label>
+                                                        <label className="col-xs-12" htmlFor="blocks-username">Почта</label>
                                                         <div className="col-xs-12">
                                                             {data.email}
                                                         </div>
                                                     </div>
                                                     <div className="col-sm-4">
-                                                        <label className="col-xs-12" htmlFor="blocks-username">Age</label>
+                                                        <label className="col-xs-12" htmlFor="blocks-username">Возраст</label>
                                                         <div className="col-xs-12">
                                                             {data.age}
                                                         </div>
                                                     </div>
                                                     <div className="col-sm-4">
-                                                        <label className="col-xs-12" htmlFor="blocks-username">Phone number</label>
+                                                        <label className="col-xs-12" htmlFor="blocks-username">Мобильный номер</label>
                                                         <div className="col-xs-12">
                                                             {data.phoneNumber}
                                                         </div>
@@ -55,13 +55,13 @@ export default class PatientProfile extends React.Component {
                                             <div className="block-content block-content-narrow">
                                                 <div className="form-group">
                                                     <div className="col-sm-4">
-                                                        <label className="col-xs-12" htmlFor="blocks-username">Gender</label>
+                                                        <label className="col-xs-12" htmlFor="blocks-username">Род</label>
                                                         <div className="col-xs-12">
                                                             {data.gender}
                                                         </div>
                                                     </div>
                                                     <div className="col-sm-8">
-                                                        <label className="col-xs-12" htmlFor="blocks-username">Address</label>
+                                                        <label className="col-xs-12" htmlFor="blocks-username">Адрес</label>
                                                         <div className="col-xs-12">
                                                             {data.address}
                                                         </div>

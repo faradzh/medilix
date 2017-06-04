@@ -5,7 +5,7 @@ import 'jquery.appear/jquery.appear';
 import jQuery from 'jquery';
 import Testimonials from './components/home/testimonials';
 import InfoBlocks from './components/home/infoBlocks';
-import HomeHeader from './components/home/homeHeader';
+
 
 export default class Index extends React.Component {
     componentDidMount () {
@@ -31,7 +31,6 @@ export default class Index extends React.Component {
     render () {
         return (
             <div>
-                <HomeHeader />
                 <div className="bg-video" data-vide-bg="/static/videos/hero_tech" data-vide-options="posterType: jpg, position: 50% 75%">
                     <div className="bg-primary-dark-op">
                         <section className="content content-full content-boxed">

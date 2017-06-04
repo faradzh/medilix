@@ -259,6 +259,8 @@ def create_reappointment(notification):
     date_to = date_from + datetime.timedelta(hours=1)
     try:
         previous_appointment = Appointment.objects.get(doctor=doctor_profile, patient=patient_profile, status=status)
+        previous_appointment.status = 'completed'
+        previous_appointment.save()
         old_blank = previous_appointment.blank
         next_appointment = Appointment.objects.create(doctor=doctor_profile,
                                                       patient=patient_profile,
@@ -524,11 +526,16 @@ def submit_feedback(request):
         recommendation = request.POST.get('recommendation')
         doctor_id = request.POST.get('doctorId')
         user_id = request.POST.get('userId')
+
+        if recommendation == 'yes':
+            recommendation = True
+        else:
+            recommendation = False
         try:
-            doctor_profile = DoctorProfile.objects.get(pk=doctor_id)
-            patient_profile = DoctorProfile.objects.get(pk=user_id)
-            appointment = Appointment.objects.get(doctor_profile=doctor_profile, patient_profile=patient_profile)
-            if appointment.status == 'completed':
+            doctor_profile = DoctorProfile.objects.get(user_id=doctor_id)
+            patient_profile = PatientProfile.objects.get(user_id=user_id)
+            appointments = Appointment.objects.filter(doctor=doctor_profile, patient=patient_profile, status='completed')
+            if appointments:
                 Feedback.objects.create(content=content,
                                         attentiveness=attentiveness,
                                         qualification=qualification,
@@ -549,7 +556,7 @@ def get_permission_for_feedback(request):
         doctor_id = request.GET.get('doctorId')
         doctor = DoctorProfile.objects.get(user_id=doctor_id)
         try:
-            patient = PatientProfile.objects.get(pk=user_id)
+            patient = PatientProfile.objects.get(user_id=user_id)
             Appointment.objects.get(doctor=doctor, patient=patient, status='completed')
             allowed = True
         except (Appointment.DoesNotExist, PatientProfile.DoesNotExist):
@@ -593,3 +600,28 @@ def get_medical_records(request):
             })
 
         return JsonResponse(medical_records, safe=False)
+
+
+@csrf_exempt
+def get_feedbacks(request):
+    feedbacks_list = list()
+    if request.method == 'GET':
+        user_id = request.GET.get('user_id')
+        try:
+            doctor_profile = DoctorProfile.objects.get(user_id=user_id)
+            feedbacks = Feedback.objects.filter(doctor_profile=doctor_profile)
+            for feedback in feedbacks:
+                fullname = "%s %s %s" % (feedback.patient_profile.lastname, feedback.patient_profile.firstname, feedback.patient_profile.middlename)
+                feedbacks_list.append({
+                    "id": feedback.id,
+                    "content": feedback.content,
+                    "attentiveness": feedback.attentiveness,
+                    "qualification": feedback.qualification,
+                    "qualityToPrice": feedback.quality_to_price,
+                    "recommendation": feedback.recommendation,
+                    "patient_fullname": fullname
+                })
+        except (Feedback.DoesNotExist, DoctorProfile.DoesNotExist):
+            pass
+
+    return JsonResponse(feedbacks_list, status=200, safe=False)

@@ -28544,6 +28544,7 @@ exports.getDoctorsList = getDoctorsList;
 exports.setFeedback = setFeedback;
 exports.submitFeedback = submitFeedback;
 exports.getPermissionForFeedback = getPermissionForFeedback;
+exports.fetchFeedbacks = fetchFeedbacks;
 
 var _jquery = __webpack_require__(22);
 
@@ -28597,12 +28598,16 @@ function setFeedback(payload) {
 function submitFeedback(payload) {
     return function (dispatch, getState) {
         var feedback = getState().doctorReducer.feedback;
-        var userId = getState().userReducer.currentUser.id;
-        var userGroup = getState().userReducer.currentUser.group;
+        var userId = JSON.parse(localStorage.currentUser).id;
+        var userGroup = JSON.parse(localStorage.currentUser).group;
         var url = '/users/submit-feedback';
         var params = {
             doctorId: payload.id,
-            feedback: feedback,
+            content: feedback.content,
+            qualification: feedback.qualification,
+            attentiveness: feedback.attentiveness,
+            qualityToPrice: feedback.qualityToPrice,
+            recommendation: feedback.recommendation,
             userId: userId,
             userGroup: userGroup
         };
@@ -28639,6 +28644,37 @@ function getPermissionForFeedback(doctorId) {
 function setFeedbackPermission(payload) {
     return {
         type: 'SET_FEEDBACK_PERMISSION',
+        payload: payload
+    };
+}
+
+function fetchFeedbacks(doctorId) {
+    return function (dispatch, getState) {
+        var currentUserId = JSON.parse(localStorage.currentUser).id;
+        var url = '/users/get-feedbacks';
+        var user_id = void 0;
+        if (doctorId) {
+            user_id = doctorId;
+        } else {
+            user_id = currentUserId;
+        }
+        var params = {
+            user_id: user_id
+        };
+        _jquery2.default.ajax({
+            url: url,
+            type: 'GET',
+            data: params,
+            success: function success(response) {
+                dispatch(setFeedbacks(response));
+            }
+        });
+    };
+}
+
+function setFeedbacks(payload) {
+    return {
+        type: 'SET_FEEDBACKS',
         payload: payload
     };
 }
@@ -28999,8 +29035,8 @@ var Examination = function (_React$Component) {
             console.log("LastData", this.props.data);
             var examinationRows = [];
             if (this.props.data) {
-                this.props.data.forEach(function (analysis, index) {
-                    examinationRows.push(_react2.default.createElement(_exam2.default, { key: index, id: index, fill: _this2.props.fill, data: analysis }));
+                this.props.data.forEach(function (analysis) {
+                    examinationRows.push(_react2.default.createElement(_exam2.default, { key: analysis.id, id: analysis.id, fill: _this2.props.fill, data: analysis }));
                 });
             }
 
@@ -29183,7 +29219,7 @@ var ProfileStats = function (_React$Component) {
                         _react2.default.createElement(
                             "div",
                             { className: "font-w700 text-gray-darker animated fadeIn" },
-                            "Recommended by"
+                            "\u0420\u0435\u043A\u043E\u043C\u0435\u043D\u0434\u0443\u044E\u0442"
                         ),
                         _react2.default.createElement(
                             "a",
@@ -29197,7 +29233,7 @@ var ProfileStats = function (_React$Component) {
                         _react2.default.createElement(
                             "div",
                             { className: "font-w700 text-gray-darker animated fadeIn" },
-                            "Experience"
+                            "\u041E\u043F\u044B\u0442 \u0440\u0430\u0431\u043E\u0442\u044B"
                         ),
                         _react2.default.createElement(
                             "a",
@@ -29211,7 +29247,7 @@ var ProfileStats = function (_React$Component) {
                         _react2.default.createElement(
                             "div",
                             { className: "font-w700 text-gray-darker animated fadeIn" },
-                            "Patients"
+                            "\u041F\u0430\u0446\u0438\u0435\u043D\u0442\u044B"
                         ),
                         _react2.default.createElement(
                             "a",
@@ -29400,6 +29436,10 @@ var _radioButtonGroup = __webpack_require__(101);
 
 var _radioButtonGroup2 = _interopRequireDefault(_radioButtonGroup);
 
+var _feedbackRow = __webpack_require__(811);
+
+var _feedbackRow2 = _interopRequireDefault(_feedbackRow);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -29439,6 +29479,9 @@ var DoctorProfile = function (_React$Component) {
     _createClass(DoctorProfile, [{
         key: 'render',
         value: function render() {
+            var feedbackRows = this.props.feedbacks.map(function (feedback) {
+                return _react2.default.createElement(_feedbackRow2.default, { data: feedback });
+            });
             var data = this.props.data;
             var education = this.notEmpty(data) ? data.education : '';
             var hospitals = this.notEmpty(data) ? data.hospitals : '';
@@ -29834,134 +29877,7 @@ var DoctorProfile = function (_React$Component) {
                                 _react2.default.createElement(
                                     'div',
                                     { className: 'block-content' },
-                                    _react2.default.createElement(
-                                        'div',
-                                        { className: 'row' },
-                                        _react2.default.createElement(
-                                            'div',
-                                            { className: 'col-sm-7' },
-                                            _react2.default.createElement(
-                                                'ul',
-                                                { className: 'list list-simple' },
-                                                _react2.default.createElement(
-                                                    'li',
-                                                    null,
-                                                    _react2.default.createElement(
-                                                        'div',
-                                                        { className: 'push-5 clearfix' },
-                                                        _react2.default.createElement(
-                                                            'a',
-                                                            { className: 'font-w600', href: 'base_pages_profile.html' },
-                                                            'Eric Lawson'
-                                                        ),
-                                                        _react2.default.createElement('br', null),
-                                                        _react2.default.createElement('i', { className: 'fa fa-thumbs-o-up' }),
-                                                        ' \u0420\u0435\u043A\u043E\u043C\u0435\u043D\u0434\u0443\u0435\u0442'
-                                                    ),
-                                                    _react2.default.createElement(
-                                                        'div',
-                                                        { className: 'font-s13' },
-                                                        'Flawless design execution! I\'m really impressed with the product, it really helped me build my app so fast! Thank you!'
-                                                    )
-                                                )
-                                            )
-                                        ),
-                                        _react2.default.createElement(
-                                            'div',
-                                            { className: 'col-sm-5' },
-                                            _react2.default.createElement(
-                                                'div',
-                                                { className: 'row text-warning' },
-                                                _react2.default.createElement(
-                                                    'div',
-                                                    { className: 'col-xs-7' },
-                                                    _react2.default.createElement(
-                                                        'span',
-                                                        { style: { paddingRight: '15px', color: '#646464' } },
-                                                        _react2.default.createElement(
-                                                            'em',
-                                                            { 'class': 'text-muted' },
-                                                            _react2.default.createElement(
-                                                                'strong',
-                                                                null,
-                                                                '\u0412\u043D\u0438\u043C\u0430\u0442\u0435\u043B\u044C\u043D\u043E\u0441\u0442\u044C '
-                                                            )
-                                                        )
-                                                    )
-                                                ),
-                                                _react2.default.createElement(
-                                                    'div',
-                                                    { className: 'col-xs-5' },
-                                                    _react2.default.createElement('i', { className: 'fa fa-star' }),
-                                                    _react2.default.createElement('i', { className: 'fa fa-star' }),
-                                                    _react2.default.createElement('i', { className: 'fa fa-star' }),
-                                                    _react2.default.createElement('i', { className: 'fa fa-star' }),
-                                                    _react2.default.createElement('i', { className: 'fa fa-star' })
-                                                )
-                                            ),
-                                            _react2.default.createElement(
-                                                'div',
-                                                { className: 'row text-warning' },
-                                                _react2.default.createElement(
-                                                    'div',
-                                                    { className: 'col-xs-7' },
-                                                    _react2.default.createElement(
-                                                        'span',
-                                                        { style: { paddingRight: '15px', color: '#646464' } },
-                                                        _react2.default.createElement(
-                                                            'em',
-                                                            { 'class': 'text-muted' },
-                                                            _react2.default.createElement(
-                                                                'strong',
-                                                                null,
-                                                                '\u041A\u0432\u0430\u043B\u0438\u0444\u0438\u043A\u0430\u0446\u0438\u044F '
-                                                            )
-                                                        )
-                                                    )
-                                                ),
-                                                _react2.default.createElement(
-                                                    'div',
-                                                    { className: 'col-xs-5' },
-                                                    _react2.default.createElement('i', { className: 'fa fa-star' }),
-                                                    _react2.default.createElement('i', { className: 'fa fa-star' }),
-                                                    _react2.default.createElement('i', { className: 'fa fa-star' }),
-                                                    _react2.default.createElement('i', { className: 'fa fa-star' }),
-                                                    _react2.default.createElement('i', { className: 'fa fa-star' })
-                                                )
-                                            ),
-                                            _react2.default.createElement(
-                                                'div',
-                                                { className: 'row text-warning' },
-                                                _react2.default.createElement(
-                                                    'div',
-                                                    { className: 'col-xs-7' },
-                                                    _react2.default.createElement(
-                                                        'span',
-                                                        { style: { paddingRight: '15px', color: '#646464' } },
-                                                        _react2.default.createElement(
-                                                            'em',
-                                                            { 'class': 'text-muted' },
-                                                            _react2.default.createElement(
-                                                                'strong',
-                                                                null,
-                                                                '\u0426\u0435\u043D\u0430-\u043A\u0430\u0447\u0435\u0441\u0442\u0432\u043E '
-                                                            )
-                                                        )
-                                                    )
-                                                ),
-                                                _react2.default.createElement(
-                                                    'div',
-                                                    { className: 'col-xs-5' },
-                                                    _react2.default.createElement('i', { className: 'fa fa-star' }),
-                                                    _react2.default.createElement('i', { className: 'fa fa-star' }),
-                                                    _react2.default.createElement('i', { className: 'fa fa-star' }),
-                                                    _react2.default.createElement('i', { className: 'fa fa-star' }),
-                                                    _react2.default.createElement('i', { className: 'fa fa-star' })
-                                                )
-                                            ),
-                                            _react2.default.createElement('br', null)
-                                        )
-                                    ),
+                                    feedbackRows,
                                     this.props.feedbackPermission ? _react2.default.createElement(
                                         'div',
                                         { className: 'text-center push' },
@@ -49342,6 +49258,10 @@ var _react = __webpack_require__(0);
 
 var _react2 = _interopRequireDefault(_react);
 
+var _homeHeader = __webpack_require__(445);
+
+var _homeHeader2 = _interopRequireDefault(_homeHeader);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -49360,15 +49280,16 @@ var MainLayout = function (_React$Component) {
     }
 
     _createClass(MainLayout, [{
-        key: "render",
+        key: 'render',
         value: function render() {
             var children = this.props.children;
             return _react2.default.createElement(
-                "div",
-                { id: "page-container", className: "side-scroll header-navbar-fixed header-navbar-transparent" },
+                'div',
+                { id: 'page-container', className: 'side-scroll header-navbar-fixed header-navbar-transparent' },
+                _react2.default.createElement(_homeHeader2.default, null),
                 _react2.default.createElement(
-                    "main",
-                    { id: "main-container" },
+                    'main',
+                    { id: 'main-container' },
                     children
                 )
             );
@@ -49994,6 +49915,8 @@ var _doctorProfile2 = _interopRequireDefault(_doctorProfile);
 
 var _profileActions = __webpack_require__(99);
 
+var _doctorActions = __webpack_require__(161);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -50009,12 +49932,13 @@ var mapStateToProps = function mapStateToProps(state) {
     return {
         profileData: state.profileReducer.profileData,
         currentUserGroup: state.userReducer.currentUser.group,
-        currentUserId: state.userReducer.currentUser.id
+        currentUserId: state.userReducer.currentUser.id,
+        feedbacks: state.doctorReducer.feedbacks
     };
 };
 
 var matchDispatchToProps = function matchDispatchToProps(dispatch) {
-    return (0, _redux.bindActionCreators)({ getProfileData: _profileActions.getProfileData }, dispatch);
+    return (0, _redux.bindActionCreators)({ getProfileData: _profileActions.getProfileData, fetchFeedbacks: _doctorActions.fetchFeedbacks }, dispatch);
 };
 
 var profileTabs = [{
@@ -50040,13 +49964,14 @@ var ProfileContainer = function (_React$Component) {
         key: 'componentWillMount',
         value: function componentWillMount() {
             this.props.getProfileData();
+            this.props.fetchFeedbacks();
         }
     }, {
         key: 'render',
         value: function render() {
             var currentUserGroup = this.props.currentUserGroup;
             var patientComponent = !this.props.children ? _react2.default.createElement(_patientProfile2.default, { data: this.props.profileData, children: this.props.children }) : this.props.children;
-            var doctorComponent = !this.props.children ? _react2.default.createElement(_doctorProfile2.default, { data: this.props.profileData, children: this.props.children, profileTabs: profileTabs }) : this.props.children;
+            var doctorComponent = !this.props.children ? _react2.default.createElement(_doctorProfile2.default, { data: this.props.profileData, feedbacks: this.props.feedbacks, children: this.props.children, profileTabs: profileTabs }) : this.props.children;
             var profile = { patient: patientComponent, doctor: doctorComponent };
             return _react2.default.createElement(
                 'div',
@@ -50309,12 +50234,13 @@ var mapStateToProps = function mapStateToProps(state) {
         profileData: state.profileReducer.profileData,
         profileTabs: profileTabs,
         feedback: state.doctorReducer.feedback,
-        feedbackPermission: state.doctorReducer.feedbackPermission
+        feedbackPermission: state.doctorReducer.feedbackPermission,
+        feedbacks: state.doctorReducer.feedbacks
     };
 };
 
 var matchDispatchToProps = function matchDispatchToProps(dispatch) {
-    return (0, _redux.bindActionCreators)({ getProfileData: _profileActions.getProfileData, setFeedback: _doctorActions.setFeedback, submitFeedback: _doctorActions.submitFeedback, getPermissionForFeedback: _doctorActions.getPermissionForFeedback }, dispatch);
+    return (0, _redux.bindActionCreators)({ getProfileData: _profileActions.getProfileData, setFeedback: _doctorActions.setFeedback, submitFeedback: _doctorActions.submitFeedback, getPermissionForFeedback: _doctorActions.getPermissionForFeedback, fetchFeedbacks: _doctorActions.fetchFeedbacks }, dispatch);
 };
 
 var DoctorProfileContainer = function (_React$Component) {
@@ -50333,6 +50259,7 @@ var DoctorProfileContainer = function (_React$Component) {
             var userGroup = 'doctor';
             this.props.getProfileData(userId, userGroup);
             this.props.getPermissionForFeedback(this.props.params.id);
+            this.props.fetchFeedbacks(this.props.params.id);
         }
     }, {
         key: 'render',
@@ -50345,6 +50272,7 @@ var DoctorProfileContainer = function (_React$Component) {
                     children: this.props.children,
                     profileTabs: this.props.profileTabs,
                     feedback: this.props.feedback,
+                    feedbacks: this.props.feedbacks,
                     setFeedback: this.props.setFeedback,
                     submitFeedback: this.props.submitFeedback,
                     feedbackPermission: this.props.feedbackPermission,
@@ -50393,10 +50321,6 @@ var _infoBlocks = __webpack_require__(446);
 
 var _infoBlocks2 = _interopRequireDefault(_infoBlocks);
 
-var _homeHeader = __webpack_require__(445);
-
-var _homeHeader2 = _interopRequireDefault(_homeHeader);
-
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -50439,7 +50363,6 @@ var Index = function (_React$Component) {
             return _react2.default.createElement(
                 'div',
                 null,
-                _react2.default.createElement(_homeHeader2.default, null),
                 _react2.default.createElement(
                     'div',
                     { className: 'bg-video', 'data-vide-bg': '/static/videos/hero_tech', 'data-vide-options': 'posterType: jpg, position: 50% 75%' },
@@ -51557,7 +51480,7 @@ var Header = function (_React$Component) {
                                 _react2.default.createElement(
                                     'li',
                                     { className: 'dropdown-header' },
-                                    'Profile'
+                                    '\u041F\u0440\u043E\u0444\u0438\u043B\u044C'
                                 ),
                                 _react2.default.createElement(
                                     'li',
@@ -51566,7 +51489,7 @@ var Header = function (_React$Component) {
                                         _reactRouter.Link,
                                         { tabIndex: '-1', to: '/app/dashboard/profile/edit' },
                                         _react2.default.createElement('i', { className: 'si si-user pull-right' }),
-                                        'Edit Profile'
+                                        '\u0420\u0435\u0434\u0430\u043A\u0442\u0438\u0440\u043E\u0432\u0430\u0442\u044C'
                                     )
                                 ),
                                 _react2.default.createElement(
@@ -51576,34 +51499,14 @@ var Header = function (_React$Component) {
                                         _reactRouter.Link,
                                         { tabIndex: '-1', to: '/app/dashboard/profile' },
                                         _react2.default.createElement('i', { className: 'si si-user pull-right' }),
-                                        'Profile'
-                                    )
-                                ),
-                                _react2.default.createElement(
-                                    'li',
-                                    null,
-                                    _react2.default.createElement(
-                                        'a',
-                                        { tabIndex: '-1', href: 'javascript:void(0)' },
-                                        _react2.default.createElement('i', { className: 'si si-settings pull-right' }),
-                                        'Settings'
+                                        '\u041E\u0442\u043E\u0431\u0440\u0430\u0437\u0438\u0442\u044C'
                                     )
                                 ),
                                 _react2.default.createElement('li', { className: 'divider' }),
                                 _react2.default.createElement(
                                     'li',
                                     { className: 'dropdown-header' },
-                                    'Actions'
-                                ),
-                                _react2.default.createElement(
-                                    'li',
-                                    null,
-                                    _react2.default.createElement(
-                                        'a',
-                                        { tabIndex: '-1', href: 'base_pages_lock.html' },
-                                        _react2.default.createElement('i', { className: 'si si-lock pull-right' }),
-                                        'Lock Account'
-                                    )
+                                    '\u0414\u0435\u0439\u0441\u0442\u0432\u0438\u044F'
                                 ),
                                 _react2.default.createElement(
                                     'li',
@@ -51612,7 +51515,7 @@ var Header = function (_React$Component) {
                                         'a',
                                         { tabIndex: '-1', href: '', onClick: this.props.logout },
                                         _react2.default.createElement('i', { className: 'si si-logout pull-right' }),
-                                        'Log out'
+                                        '\u0412\u044B\u0439\u0442\u0438'
                                     )
                                 )
                             )
@@ -51638,42 +51541,6 @@ var Header = function (_React$Component) {
                             'button',
                             { className: 'btn btn-default', 'data-toggle': 'layout', 'data-action': 'sidebar_mini_toggle', type: 'button' },
                             _react2.default.createElement('i', { className: 'fa fa-ellipsis-v' })
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'li',
-                        null,
-                        _react2.default.createElement(
-                            'button',
-                            { className: 'btn btn-default pull-right', 'data-toggle': 'modal', 'data-target': '#apps-modal', type: 'button' },
-                            _react2.default.createElement('i', { className: 'si si-grid' })
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'li',
-                        { className: 'visible-xs' },
-                        _react2.default.createElement(
-                            'button',
-                            { className: 'btn btn-default', 'data-toggle': 'class-toggle', 'data-target': '.js-header-search', 'data-class': 'header-search-xs-visible', type: 'button' },
-                            _react2.default.createElement('i', { className: 'fa fa-search' })
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'li',
-                        { className: 'js-header-search header-search' },
-                        _react2.default.createElement(
-                            'form',
-                            { className: 'form-horizontal', action: 'base_pages_search.html', method: 'post' },
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'form-material form-material-primary input-group remove-margin-t remove-margin-b' },
-                                _react2.default.createElement('input', { className: 'form-control', type: 'text', id: 'base-material-text', name: 'base-material-text', placeholder: 'Search..' }),
-                                _react2.default.createElement(
-                                    'span',
-                                    { className: 'input-group-addon' },
-                                    _react2.default.createElement('i', { className: 'si si-magnifier' })
-                                )
-                            )
                         )
                     )
                 )
@@ -52579,13 +52446,13 @@ var Education = function (_React$Component) {
                             'button',
                             { onClick: this.props.removeRow, className: 'btn btn-danger push-5-r push-5', type: 'button' },
                             _react2.default.createElement('i', { className: 'fa fa-times' }),
-                            ' Delete'
+                            ' \u0423\u0434\u0430\u043B\u0438\u0442\u044C'
                         ) : null,
                         _react2.default.createElement(
                             'button',
                             { onClick: this.props.addRow, className: 'btn btn-success push-5-r push-5', type: 'button' },
                             _react2.default.createElement('i', { className: 'fa fa-plus' }),
-                            ' Add'
+                            ' \u0414\u043E\u0431\u0430\u0432\u0438\u0442\u044C'
                         )
                     )
                 )
@@ -52693,7 +52560,7 @@ var EducationRow = function (_React$Component) {
                     _react2.default.createElement(
                         'label',
                         { htmlFor: 'education-datarange' },
-                        'Education'
+                        '\u041E\u0431\u0440\u0430\u0437\u043E\u0432\u0430\u043D\u0438\u0435'
                     ),
                     _react2.default.createElement(
                         'div',
@@ -52732,7 +52599,7 @@ var EducationRow = function (_React$Component) {
                         inputPlaceholder: 'University',
                         inputClassName: 'form-control',
                         value: education ? education.entity : '' },
-                    'Entity'
+                    '\u0412\u0423\u0417'
                 ),
                 _react2.default.createElement(
                     _inputField2.default,
@@ -52744,7 +52611,7 @@ var EducationRow = function (_React$Component) {
                         inputPlaceholder: 'Address',
                         inputClassName: 'form-control',
                         value: education ? education.address : '' },
-                    'Address'
+                    '\u0410\u0434\u0440\u0435\u0441'
                 )
             ) : null;
         }
@@ -52833,7 +52700,7 @@ var PatientProfile = function (_React$Component) {
                             { className: 'col-sm-8' },
                             _react2.default.createElement(
                                 _block2.default,
-                                { title: 'Personal Information' },
+                                { title: '\u041B\u0438\u0447\u043D\u044B\u0435 \u0434\u0430\u043D\u043D\u044B\u0435' },
                                 _react2.default.createElement(
                                     'div',
                                     { className: 'row' },
@@ -52855,7 +52722,7 @@ var PatientProfile = function (_React$Component) {
                                                         _react2.default.createElement(
                                                             'label',
                                                             { className: 'col-xs-12', htmlFor: 'blocks-username' },
-                                                            'Email'
+                                                            '\u041F\u043E\u0447\u0442\u0430'
                                                         ),
                                                         _react2.default.createElement(
                                                             'div',
@@ -52869,7 +52736,7 @@ var PatientProfile = function (_React$Component) {
                                                         _react2.default.createElement(
                                                             'label',
                                                             { className: 'col-xs-12', htmlFor: 'blocks-username' },
-                                                            'Age'
+                                                            '\u0412\u043E\u0437\u0440\u0430\u0441\u0442'
                                                         ),
                                                         _react2.default.createElement(
                                                             'div',
@@ -52883,7 +52750,7 @@ var PatientProfile = function (_React$Component) {
                                                         _react2.default.createElement(
                                                             'label',
                                                             { className: 'col-xs-12', htmlFor: 'blocks-username' },
-                                                            'Phone number'
+                                                            '\u041C\u043E\u0431\u0438\u043B\u044C\u043D\u044B\u0439 \u043D\u043E\u043C\u0435\u0440'
                                                         ),
                                                         _react2.default.createElement(
                                                             'div',
@@ -52917,7 +52784,7 @@ var PatientProfile = function (_React$Component) {
                                                         _react2.default.createElement(
                                                             'label',
                                                             { className: 'col-xs-12', htmlFor: 'blocks-username' },
-                                                            'Gender'
+                                                            '\u0420\u043E\u0434'
                                                         ),
                                                         _react2.default.createElement(
                                                             'div',
@@ -52931,7 +52798,7 @@ var PatientProfile = function (_React$Component) {
                                                         _react2.default.createElement(
                                                             'label',
                                                             { className: 'col-xs-12', htmlFor: 'blocks-username' },
-                                                            'Address'
+                                                            '\u0410\u0434\u0440\u0435\u0441'
                                                         ),
                                                         _react2.default.createElement(
                                                             'div',
@@ -53191,7 +53058,7 @@ var UserProfileEdit = function (_React$Component) {
             //     }
             // }
 
-            var buttons = [{ id: 'male', text: 'Male' }, { id: 'female', text: 'Female' }];
+            var buttons = [{ id: 'мужской', text: 'Мужской' }, { id: 'женский', text: 'Женский' }];
             console.log("ProfileData", profileData);
             return _react2.default.createElement(
                 'div',
@@ -53222,7 +53089,7 @@ var UserProfileEdit = function (_React$Component) {
                                     'a',
                                     { href: '#tab-profile-personal' },
                                     _react2.default.createElement('i', { className: 'fa fa-fw fa-pencil' }),
-                                    ' Personal'
+                                    ' \u041B\u0438\u0447\u043D\u043E\u0435'
                                 )
                             ),
                             _react2.default.createElement(
@@ -53232,7 +53099,7 @@ var UserProfileEdit = function (_React$Component) {
                                     'a',
                                     { href: '#tab-profile-password' },
                                     _react2.default.createElement('i', { className: 'fa fa-fw fa-asterisk' }),
-                                    ' Password'
+                                    ' \u041F\u0430\u0440\u043E\u043B\u044C'
                                 )
                             ),
                             _react2.default.createElement(
@@ -53242,7 +53109,7 @@ var UserProfileEdit = function (_React$Component) {
                                     'a',
                                     { href: '#tab-profile-privacy' },
                                     _react2.default.createElement('i', { className: 'fa fa-fw fa-lock' }),
-                                    ' Privacy'
+                                    ' \u041F\u0440\u0438\u0432\u0430\u0442\u043D\u043E\u0441\u0442\u044C'
                                 )
                             )
                         ),
@@ -53267,7 +53134,7 @@ var UserProfileEdit = function (_React$Component) {
                                                 _react2.default.createElement(
                                                     'label',
                                                     null,
-                                                    'Username'
+                                                    '\u0418\u043C\u044F \u043F\u043E\u043B\u044C\u0437\u043E\u0432\u0430\u0442\u0435\u043B\u044F'
                                                 ),
                                                 _react2.default.createElement(
                                                     'div',
@@ -53290,8 +53157,8 @@ var UserProfileEdit = function (_React$Component) {
                                                     onChange: this.props.changeProfileData,
                                                     inputId: 'profile-email',
                                                     inputName: 'email',
-                                                    inputPlaceholder: 'Enter your email..' },
-                                                'Email'
+                                                    inputPlaceholder: '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u043F\u043E\u0447\u0442\u043E\u0432\u044B\u0439 \u0430\u0434\u0440\u0435\u0441..' },
+                                                '\u041F\u043E\u0447\u0442\u0430'
                                             )
                                         ),
                                         _react2.default.createElement(
@@ -53308,8 +53175,8 @@ var UserProfileEdit = function (_React$Component) {
                                                     onChange: this.props.changeProfileData,
                                                     inputId: 'profile-firstname',
                                                     inputName: 'firstname',
-                                                    inputPlaceholder: 'Enter your firstname..' },
-                                                'Firstname'
+                                                    inputPlaceholder: '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0432\u0430\u0448\u0435 \u0438\u043C\u044F..' },
+                                                '\u0418\u043C\u044F'
                                             ),
                                             _react2.default.createElement(
                                                 _inputField2.default,
@@ -53322,8 +53189,8 @@ var UserProfileEdit = function (_React$Component) {
                                                     onChange: this.props.changeProfileData,
                                                     inputId: 'profile-lastname',
                                                     inputName: 'lastname',
-                                                    inputPlaceholder: 'Enter your lastname..' },
-                                                'Lastname'
+                                                    inputPlaceholder: '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0432\u0430\u0448\u0443 \u0444\u0430\u043C\u0438\u043B\u0438\u044E..' },
+                                                '\u0424\u0430\u043C\u0438\u043B\u0438\u044F'
                                             )
                                         ),
                                         _react2.default.createElement(
@@ -53340,8 +53207,8 @@ var UserProfileEdit = function (_React$Component) {
                                                     onChange: this.props.changeProfileData,
                                                     inputId: 'profile-middlename',
                                                     inputName: 'middlename',
-                                                    inputPlaceholder: 'Enter your middlename..' },
-                                                'Middlename'
+                                                    inputPlaceholder: '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0432\u0430\u0448\u0435 \u043E\u0447\u0435\u0441\u0442\u0432\u043E..' },
+                                                '\u041E\u0442\u0447\u0435\u0441\u0442\u0432\u043E'
                                             ),
                                             _react2.default.createElement(
                                                 _inputField2.default,
@@ -53354,13 +53221,13 @@ var UserProfileEdit = function (_React$Component) {
                                                     onChange: this.props.changeProfileData,
                                                     inputId: 'profile-address',
                                                     inputName: 'address',
-                                                    inputPlaceholder: 'Enter your address..' },
-                                                'Address'
+                                                    inputPlaceholder: '\u0412\u0432\u0435\u0434\u0438\u0442\u0435 \u0432\u0430\u0448 \u0430\u0434\u0440\u0435\u0441..' },
+                                                '\u0410\u0434\u0440\u0435\u0441'
                                             ),
                                             _react2.default.createElement(
                                                 _selectField2.default,
                                                 { display: this.displayComponent('specialization'),
-                                                    initialOption: 'Choose specialization...',
+                                                    initialOption: '\u0412\u044B\u0431\u0435\u0440\u0438\u0442\u0435 \u0441\u043F\u0435\u0446\u0438\u0430\u043B\u0438\u0437\u0430\u0446\u0438\u044E...',
                                                     defaultOption: specializationId,
                                                     options: specializationOptions,
                                                     columnClassName: 'col-xs-6',
@@ -53369,7 +53236,7 @@ var UserProfileEdit = function (_React$Component) {
                                                     onChange: this.props.changeProfileData,
                                                     selectId: 'profile-specialization',
                                                     selectName: 'specializationId' },
-                                                'Specialization'
+                                                '\u0421\u043F\u0435\u0446\u0438\u0430\u043B\u0438\u0437\u0430\u0446\u0438\u044F'
                                             )
                                         ),
                                         _react2.default.createElement(
@@ -53380,7 +53247,7 @@ var UserProfileEdit = function (_React$Component) {
                                                 buttons: buttons,
                                                 columnClassName: 'col-xs-12',
                                                 mainLabelClassName: 'col-xs-12',
-                                                mainLabelText: 'Gender',
+                                                mainLabelText: '\u0420\u043E\u0434',
                                                 name: 'gender',
                                                 defaultValue: this.notEmpty(profileData) ? profileData.gender : '',
                                                 onChange: this.props.changeProfileData })
@@ -53398,8 +53265,8 @@ var UserProfileEdit = function (_React$Component) {
                                                     textareaId: 'profile-bio',
                                                     textareaName: 'bio',
                                                     textareaRows: '15',
-                                                    textareaPlaceholder: 'Enter a bit about yourself...' },
-                                                'Bio'
+                                                    textareaPlaceholder: '\u041D\u0430\u043F\u0438\u0448\u0438\u0442\u0435 \u0441\u0432\u043E\u044E \u0431\u0438\u043E\u0433\u0440\u0430\u0444\u0438\u044E...' },
+                                                '\u0411\u0438\u043E\u0433\u0440\u0430\u0444\u0438\u044F'
                                             )
                                         ),
                                         _react2.default.createElement(_education2.default, { data: this.props.profileData.education,
@@ -53413,7 +53280,7 @@ var UserProfileEdit = function (_React$Component) {
                                             _react2.default.createElement(
                                                 'label',
                                                 { htmlFor: 'hospitals' },
-                                                'Hospitals'
+                                                '\u0411\u043E\u043B\u044C\u043D\u0438\u0446\u044B'
                                             ),
                                             _react2.default.createElement(
                                                 _formGroup2.default,
@@ -53441,7 +53308,7 @@ var UserProfileEdit = function (_React$Component) {
                                                     inputId: 'profile-age',
                                                     inputName: 'age',
                                                     inputPlaceholder: '32' },
-                                                'Age'
+                                                '\u0412\u043E\u0437\u0440\u0430\u0441\u0442'
                                             ),
                                             _react2.default.createElement(
                                                 _inputField2.default,
@@ -53455,7 +53322,7 @@ var UserProfileEdit = function (_React$Component) {
                                                     inputId: 'profile-phone',
                                                     inputName: 'phoneNumber',
                                                     inputPlaceholder: '0777 399933' },
-                                                'Phone Number'
+                                                '\u041C\u043E\u0431\u0438\u043B\u044C\u043D\u044B\u0439 \u043D\u043E\u043C\u0435\u0440'
                                             ),
                                             _react2.default.createElement(
                                                 _inputField2.default,
@@ -53469,189 +53336,7 @@ var UserProfileEdit = function (_React$Component) {
                                                     inputId: 'profile-experience',
                                                     inputName: 'experience',
                                                     inputPlaceholder: 'years' },
-                                                'Experience'
-                                            )
-                                        )
-                                    )
-                                )
-                            ),
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'tab-pane fade', id: 'tab-profile-password' },
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'row items-push' },
-                                    _react2.default.createElement(
-                                        'div',
-                                        { className: 'col-sm-6 col-sm-offset-3 form-horizontal' },
-                                        _react2.default.createElement(
-                                            'div',
-                                            { className: 'form-group' },
-                                            _react2.default.createElement(
-                                                'div',
-                                                { className: 'col-xs-12' },
-                                                _react2.default.createElement(
-                                                    'label',
-                                                    { htmlFor: 'profile-password' },
-                                                    'Current Password'
-                                                ),
-                                                _react2.default.createElement('input', { className: 'form-control input-lg', type: 'password', id: 'profile-password', name: 'profile-password' })
-                                            )
-                                        ),
-                                        _react2.default.createElement('hr', null),
-                                        _react2.default.createElement(
-                                            'div',
-                                            { className: 'form-group' },
-                                            _react2.default.createElement(
-                                                'div',
-                                                { className: 'col-xs-12' },
-                                                _react2.default.createElement(
-                                                    'label',
-                                                    { htmlFor: 'profile-password-new' },
-                                                    'New Password'
-                                                ),
-                                                _react2.default.createElement('input', { className: 'form-control input-lg', type: 'password', id: 'profile-password-new', name: 'profile-password-new' })
-                                            )
-                                        ),
-                                        _react2.default.createElement(
-                                            'div',
-                                            { className: 'form-group' },
-                                            _react2.default.createElement(
-                                                'div',
-                                                { className: 'col-xs-12' },
-                                                _react2.default.createElement(
-                                                    'label',
-                                                    { htmlFor: 'profile-password-new-confirm' },
-                                                    'Confirm New Password'
-                                                ),
-                                                _react2.default.createElement('input', { className: 'form-control input-lg', type: 'password', id: 'profile-password-new-confirm', name: 'profile-password-new-confirm' })
-                                            )
-                                        )
-                                    )
-                                )
-                            ),
-                            _react2.default.createElement(
-                                'div',
-                                { className: 'tab-pane fade', id: 'tab-profile-privacy' },
-                                _react2.default.createElement(
-                                    'div',
-                                    { className: 'row items-push' },
-                                    _react2.default.createElement(
-                                        'div',
-                                        { className: 'col-sm-6 col-sm-offset-3 form-horizontal' },
-                                        _react2.default.createElement(
-                                            'div',
-                                            { className: 'form-group' },
-                                            _react2.default.createElement(
-                                                'div',
-                                                { className: 'col-xs-8' },
-                                                _react2.default.createElement(
-                                                    'div',
-                                                    { className: 'font-s13 font-w600' },
-                                                    'Online Status'
-                                                ),
-                                                _react2.default.createElement(
-                                                    'div',
-                                                    { className: 'font-s13 font-w400 text-muted' },
-                                                    'Show your status to all'
-                                                )
-                                            ),
-                                            _react2.default.createElement(
-                                                'div',
-                                                { className: 'col-xs-4 text-right' },
-                                                _react2.default.createElement(
-                                                    'label',
-                                                    { className: 'css-input switch switch-sm switch-primary push-10-t' },
-                                                    _react2.default.createElement('input', { type: 'checkbox' }),
-                                                    _react2.default.createElement('span', null)
-                                                )
-                                            )
-                                        ),
-                                        _react2.default.createElement('hr', null),
-                                        _react2.default.createElement(
-                                            'div',
-                                            { className: 'form-group' },
-                                            _react2.default.createElement(
-                                                'div',
-                                                { className: 'col-xs-8' },
-                                                _react2.default.createElement(
-                                                    'div',
-                                                    { className: 'font-s13 font-w600' },
-                                                    'Auto Updates'
-                                                ),
-                                                _react2.default.createElement(
-                                                    'div',
-                                                    { className: 'font-s13 font-w400 text-muted' },
-                                                    'Keep up to date'
-                                                )
-                                            ),
-                                            _react2.default.createElement(
-                                                'div',
-                                                { className: 'col-xs-4 text-right' },
-                                                _react2.default.createElement(
-                                                    'label',
-                                                    { className: 'css-input switch switch-sm switch-primary push-10-t' },
-                                                    _react2.default.createElement('input', { type: 'checkbox' }),
-                                                    _react2.default.createElement('span', null)
-                                                )
-                                            )
-                                        ),
-                                        _react2.default.createElement('hr', null),
-                                        _react2.default.createElement(
-                                            'div',
-                                            { className: 'form-group' },
-                                            _react2.default.createElement(
-                                                'div',
-                                                { className: 'col-xs-8' },
-                                                _react2.default.createElement(
-                                                    'div',
-                                                    { className: 'font-s13 font-w600' },
-                                                    'Notifications'
-                                                ),
-                                                _react2.default.createElement(
-                                                    'div',
-                                                    { className: 'font-s13 font-w400 text-muted' },
-                                                    'Do you need them?'
-                                                )
-                                            ),
-                                            _react2.default.createElement(
-                                                'div',
-                                                { className: 'col-xs-4 text-right' },
-                                                _react2.default.createElement(
-                                                    'label',
-                                                    { className: 'css-input switch switch-sm switch-primary push-10-t' },
-                                                    _react2.default.createElement('input', { type: 'checkbox', defaultChecked: true }),
-                                                    _react2.default.createElement('span', null)
-                                                )
-                                            )
-                                        ),
-                                        _react2.default.createElement('hr', null),
-                                        _react2.default.createElement(
-                                            'div',
-                                            { className: 'form-group' },
-                                            _react2.default.createElement(
-                                                'div',
-                                                { className: 'col-sm-8' },
-                                                _react2.default.createElement(
-                                                    'div',
-                                                    { className: 'font-s13 font-w600' },
-                                                    'API Access'
-                                                ),
-                                                _react2.default.createElement(
-                                                    'div',
-                                                    { className: 'font-s13 font-w400 text-muted' },
-                                                    'Enable/Disable access'
-                                                )
-                                            ),
-                                            _react2.default.createElement(
-                                                'div',
-                                                { className: 'col-sm-4 text-right' },
-                                                _react2.default.createElement(
-                                                    'label',
-                                                    { className: 'css-input switch switch-sm switch-primary push-10-t' },
-                                                    _react2.default.createElement('input', { type: 'checkbox', defaultChecked: true }),
-                                                    _react2.default.createElement('span', null)
-                                                )
+                                                '\u041E\u043F\u044B\u0442 \u0440\u0430\u0431\u043E\u0442\u044B'
                                             )
                                         )
                                     )
@@ -53665,13 +53350,7 @@ var UserProfileEdit = function (_React$Component) {
                                 'button',
                                 { className: 'btn btn-sm btn-primary', type: 'submit' },
                                 _react2.default.createElement('i', { className: 'fa fa-check push-5-r' }),
-                                ' Save Changes'
-                            ),
-                            _react2.default.createElement(
-                                'button',
-                                { className: 'btn btn-sm btn-warning', onClick: this.props.resetProfileData, type: 'reset' },
-                                _react2.default.createElement('i', { className: 'fa fa-refresh push-5-r' }),
-                                ' Reset'
+                                ' \u0421\u043E\u0445\u0440\u0430\u043D\u0438\u0442\u044C'
                             )
                         )
                     )
@@ -53682,21 +53361,6 @@ var UserProfileEdit = function (_React$Component) {
 
     return UserProfileEdit;
 }(_react2.default.Component);
-
-// <SelectField display={this.displayComponent('hospitals')}
-//                                                      defaultOption={hospitalIds}
-//                                                      options={hospitalOptions}
-//                                                      columnClassName="col-xs-12"
-//                                                      selectClassName="js-select2 form-control select2-hidden-accessible"
-//                                                      htmlFor="profile-hospitals"
-//                                                      selectId="hospitals"
-//                                                      selectName="hospitals"
-//                                                      style={{width: 100 + '%'}}
-//                                                      dataPlaceholder="Choose hospitals.."
-//                                                      multiple="multiple" tabIndex="-1" ariaHidden="true">
-//                                             Hospitals in which you work:
-//                                         </SelectField>
-
 
 exports.default = UserProfileEdit;
 
@@ -53779,7 +53443,7 @@ var ProfileHeader = function (_React$Component) {
                                 'button',
                                 { id: 'timetable-button', className: 'btn btn-rounded btn-success push-30-t push-10', type: 'button' },
                                 _react2.default.createElement('i', { className: 'si si-calendar' }),
-                                ' Timetable'
+                                ' \u0420\u0430\u0441\u043F\u0438\u0441\u0430\u043D\u0438\u0435'
                             )
                         )
                     )
@@ -53997,60 +53661,52 @@ var Sidebar = function (_React$Component) {
                 doctor: [_react2.default.createElement(
                     _menuItem2.default,
                     { link: '/app', icon: 'si si-speedometer', className: 'sidebar-mini-hide' },
-                    'Dashboard'
+                    '\u041A\u0430\u0431\u0438\u043D\u0435\u0442'
                 ), _react2.default.createElement(
                     'li',
                     { className: 'nav-main-heading' },
                     _react2.default.createElement(
                         'span',
                         { className: 'sidebar-mini-hide' },
-                        'User Interface'
+                        '\u041E\u0441\u043D\u043E\u0432\u043D\u043E\u0435 \u043C\u0435\u043D\u044E'
                     )
                 ), _react2.default.createElement(
                     _menuItem2.default,
                     { link: '/app/dashboard/timetable', icon: 'si si-calendar', className: 'nav-submenu' },
-                    'Timetable'
+                    '\u0420\u0430\u0441\u043F\u0438\u0441\u0430\u043D\u0438\u0435'
                 ), _react2.default.createElement(
                     _menuItem2.default,
                     { link: '/app/dashboard/notifications', icon: 'si si-envelope', className: 'nav-submenu' },
-                    'Notifications'
+                    '\u0423\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F'
                 ), _react2.default.createElement(
                     _menuItem2.default,
                     { link: '/app/dashboard/appointment', icon: 'fa fa-leanpub', className: 'nav-submenu' },
-                    'Appointment'
-                ), _react2.default.createElement(
-                    _menuItem2.default,
-                    { link: '/app/dashboard/patients', icon: 'si si-users', className: 'nav-submenu' },
-                    'Patients'
+                    '\u0422\u0435\u043A\u0443\u0449\u0438\u0439 \u043F\u0440\u0438\u0435\u043C'
                 )],
                 patient: [_react2.default.createElement(
                     _menuItem2.default,
                     { link: '/app', icon: 'si si-speedometer', className: 'sidebar-mini-hide' },
-                    'Dashboard'
+                    '\u041A\u0430\u0431\u0438\u043D\u0435\u0442'
                 ), _react2.default.createElement(
                     'li',
                     { className: 'nav-main-heading' },
                     _react2.default.createElement(
                         'span',
                         { className: 'sidebar-mini-hide' },
-                        'User Interface'
+                        '\u041E\u0441\u043D\u043E\u0432\u043D\u043E\u0435 \u043C\u0435\u043D\u044E'
                     )
                 ), _react2.default.createElement(
                     _menuItem2.default,
                     { link: '/app/dashboard/timetable', icon: 'si si-calendar', className: 'nav-submenu' },
-                    'Timetable'
+                    '\u0420\u0430\u0441\u043F\u0438\u0441\u0430\u043D\u0438\u0435'
                 ), _react2.default.createElement(
                     _menuItem2.default,
                     { link: '/app/dashboard/notifications', icon: 'si si-envelope', className: 'nav-submenu' },
-                    'Notifications'
-                ), _react2.default.createElement(
-                    _menuItem2.default,
-                    { link: '/app/dashboard/doctors', icon: 'si si-users', className: 'nav-submenu' },
-                    'Doctors'
+                    '\u0423\u0432\u0435\u0434\u043E\u043C\u043B\u0435\u043D\u0438\u044F'
                 ), _react2.default.createElement(
                     _menuItem2.default,
                     { link: '/app/dashboard/medical-record', icon: 'fa fa-id-card-o', className: 'nav-submenu' },
-                    'Medical Card'
+                    '\u041C\u0435\u0434\u0438\u0446\u0438\u043D\u0441\u043A\u0430\u044F \u043A\u0430\u0440\u0442\u0430'
                 )]
             };
             return _react2.default.createElement(
@@ -54472,18 +54128,18 @@ var DoctorCard = function (_React$Component) {
                             _react2.default.createElement(
                                 'li',
                                 { className: 'list-group-item' },
-                                'Experience: ' + experience + ' years'
+                                '\u041E\u043F\u044B\u0442 \u0440\u0430\u0431\u043E\u0442\u044B: ' + experience + ' \u043B\u0435\u0442'
                             ),
                             _react2.default.createElement(
                                 'li',
                                 { className: 'list-group-item' },
-                                'Hospital: ' + hospitals,
+                                '\u0411\u043E\u043B\u044C\u043D\u0438\u0446\u0430: ' + hospitals,
                                 _react2.default.createElement('i', { className: ' fa fa-map-marker pull-right' })
                             ),
                             _react2.default.createElement(
                                 'li',
                                 { className: 'list-group-item' },
-                                'Price per visit: ' + price + ' som'
+                                '\u0426\u0435\u043D\u0430 \u0437\u0430 \u043F\u043E\u0441\u0435\u0449\u0435\u043D\u0438\u0435: ' + price + ' \u0441\u043E\u043C'
                             )
                         ),
                         _react2.default.createElement(
@@ -54515,7 +54171,7 @@ var DoctorCard = function (_React$Component) {
                                         _react2.default.createElement(
                                             'a',
                                             { href: '#' },
-                                            numOfFeedbacks + ' feedbacks'
+                                            numOfFeedbacks + ' \u043E\u0442\u0437\u044B\u0432\u043E\u0432'
                                         )
                                     )
                                 ),
@@ -54528,7 +54184,7 @@ var DoctorCard = function (_React$Component) {
                                         _react2.default.createElement(
                                             'button',
                                             { id: 'appointment-button', className: 'btn btn-minw btn-success', type: 'button' },
-                                            'View'
+                                            '\u041F\u0440\u043E\u0444\u0438\u043B\u044C'
                                         )
                                     )
                                 )
@@ -54624,11 +54280,11 @@ var Doctors = function (_React$Component) {
                         { className: 'content content-full content-boxed' },
                         _react2.default.createElement(
                             'div',
-                            { className: 'push-100-t push-50 text-center' },
+                            { className: 'push-30-t push-10 text-center' },
                             _react2.default.createElement(
                                 'h1',
                                 { className: 'h2 text-white push-10 animated fadeInDown', 'data-toggle': 'appear', 'data-class': 'animated fadeInDown' },
-                                'Search for a suitable doctor'
+                                '\u041D\u0430\u0439\u0434\u0438 \u043F\u043E\u0434\u0445\u043E\u0434\u044F\u0449\u0435\u0433\u043E \u0432\u0440\u0430\u0447\u0430!'
                             )
                         )
                     )
@@ -54891,7 +54547,7 @@ var HomeHeader = function (_React$Component) {
                             _react2.default.createElement(
                                 _reactRouter.Link,
                                 { to: '/app/signup' },
-                                'Sign Up'
+                                '\u0420\u0435\u0433\u0438\u0441\u0442\u0440\u0430\u0446\u0438\u044F'
                             )
                         ),
                         _react2.default.createElement(
@@ -54900,7 +54556,7 @@ var HomeHeader = function (_React$Component) {
                             _react2.default.createElement(
                                 _reactRouter.Link,
                                 { to: '/app/login' },
-                                'Sign In'
+                                '\u0412\u0445\u043E\u0434'
                             )
                         ),
                         _react2.default.createElement(
@@ -54909,7 +54565,7 @@ var HomeHeader = function (_React$Component) {
                             _react2.default.createElement(
                                 _reactRouter.Link,
                                 { to: '/app/dashboard' },
-                                'Dashboard'
+                                '\u041A\u0430\u0431\u0438\u043D\u0435\u0442'
                             )
                         )
                     ),
@@ -55863,9 +55519,11 @@ function reducer() {
             id = name.split('-')[1];
             name = name.split('-')[0];
             analyses.forEach(function (analysis, index) {
-                if (analysis.id == id) {
+                if (analysis.id == parseInt(id)) {
+                    console.log("Here");
                     analyses[index] = Object.assign({}, analysis, _defineProperty({}, name, value));
                 } else {
+                    console.log("There");
                     analyses[analyses.length - 1][name] = value;
                 }
             });
@@ -55900,7 +55558,7 @@ function reducer() {
             name = name.split('-')[0];
 
             prescription.forEach(function (item, index) {
-                if (item.id == id) {
+                if (item.id == parseInt(id)) {
                     prescription[index] = Object.assign({}, item, _defineProperty({}, name, value));
                 } else {
                     prescription[prescription.length - 1][name] = value;
@@ -56008,7 +55666,7 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 /**
  * Created by faradj on 5/12/17.
  */
-var INITIAL_STATE = { doctors: [], doctorData: {}, feedback: {}, feedbackPermission: false };
+var INITIAL_STATE = { doctors: [], doctorData: {}, feedback: {}, feedbacks: [], feedbackPermission: false };
 
 function reducer() {
     var state = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : INITIAL_STATE;
@@ -56029,12 +55687,17 @@ function reducer() {
             if (name == 'recommendation') {
                 value = action.payload.target.id;
             }
+
             var updatedFeedback = Object.assign({}, state.feedback, _defineProperty({}, name, value));
             return Object.assign({}, state, { feedback: updatedFeedback });
             break;
 
         case 'SET_FEEDBACK_PERMISSION':
             return Object.assign({}, state, { feedbackPermission: action.payload });
+            break;
+
+        case 'SET_FEEDBACKS':
+            return Object.assign({}, state, { feedbacks: action.payload });
             break;
 
     }
@@ -88382,6 +88045,200 @@ _reactDom2.default.render(_react2.default.createElement(
         )
     )
 ), document.getElementById('root-container'));
+
+/***/ }),
+/* 811 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(0);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } /**
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                * Created by faradj on 6/4/17.
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                */
+
+
+var FeedbackRow = function (_React$Component) {
+    _inherits(FeedbackRow, _React$Component);
+
+    function FeedbackRow() {
+        _classCallCheck(this, FeedbackRow);
+
+        return _possibleConstructorReturn(this, (FeedbackRow.__proto__ || Object.getPrototypeOf(FeedbackRow)).apply(this, arguments));
+    }
+
+    _createClass(FeedbackRow, [{
+        key: "render",
+        value: function render() {
+            console.log("FeedbackData", this.props.data);
+            var _props$data = this.props.data,
+                fullname = _props$data.fullname,
+                content = _props$data.content,
+                attentiveness = _props$data.attentiveness,
+                qualification = _props$data.qualification,
+                qualityToPrice = _props$data.qualityToPrice,
+                recommendation = _props$data.recommendation;
+
+            var attentivenessStars = [];
+            var qualificationStars = [];
+            var qualityToPriceStars = [];
+            for (var i = 0; i < parseInt(attentiveness); i++) {
+                attentivenessStars.push(_react2.default.createElement("i", { className: "fa fa-star" }));
+            }
+            for (var _i = 0; _i < parseInt(qualification); _i++) {
+                qualificationStars.push(_react2.default.createElement("i", { className: "fa fa-star" }));
+            }
+            for (var _i2 = 0; _i2 < parseInt(qualityToPrice); _i2++) {
+                qualityToPriceStars.push(_react2.default.createElement("i", { className: "fa fa-star" }));
+            }
+            return _react2.default.createElement(
+                "div",
+                { className: "row" },
+                _react2.default.createElement(
+                    "div",
+                    { className: "col-sm-7" },
+                    _react2.default.createElement(
+                        "ul",
+                        { className: "list list-simple" },
+                        _react2.default.createElement(
+                            "li",
+                            null,
+                            _react2.default.createElement(
+                                "div",
+                                { className: "push-5 clearfix" },
+                                _react2.default.createElement(
+                                    "a",
+                                    { className: "font-w600", href: "base_pages_profile.html" },
+                                    fullname
+                                ),
+                                _react2.default.createElement("br", null),
+                                recommendation ? _react2.default.createElement(
+                                    "span",
+                                    null,
+                                    _react2.default.createElement("i", { className: "fa fa-thumbs-o-up" }),
+                                    " \u0420\u0435\u043A\u043E\u043C\u0435\u043D\u0434\u0443\u0435\u0442 "
+                                ) : _react2.default.createElement(
+                                    "span",
+                                    null,
+                                    _react2.default.createElement("i", { className: "fa fa-thumbs-o-down" }),
+                                    " \u041D\u0435 \u0440\u0435\u043A\u043E\u043C\u0435\u043D\u0434\u0443\u0435\u0442"
+                                )
+                            ),
+                            _react2.default.createElement(
+                                "div",
+                                { className: "font-s13" },
+                                content
+                            )
+                        )
+                    )
+                ),
+                _react2.default.createElement(
+                    "div",
+                    { className: "col-sm-5" },
+                    _react2.default.createElement(
+                        "div",
+                        { className: "row text-warning" },
+                        _react2.default.createElement(
+                            "div",
+                            { className: "col-xs-7" },
+                            _react2.default.createElement(
+                                "span",
+                                { style: { paddingRight: '15px', color: '#646464' } },
+                                _react2.default.createElement(
+                                    "em",
+                                    { "class": "text-muted" },
+                                    _react2.default.createElement(
+                                        "strong",
+                                        null,
+                                        "\u0412\u043D\u0438\u043C\u0430\u0442\u0435\u043B\u044C\u043D\u043E\u0441\u0442\u044C "
+                                    )
+                                )
+                            )
+                        ),
+                        _react2.default.createElement(
+                            "div",
+                            { className: "col-xs-5" },
+                            attentivenessStars
+                        )
+                    ),
+                    _react2.default.createElement(
+                        "div",
+                        { className: "row text-warning" },
+                        _react2.default.createElement(
+                            "div",
+                            { className: "col-xs-7" },
+                            _react2.default.createElement(
+                                "span",
+                                { style: { paddingRight: '15px', color: '#646464' } },
+                                _react2.default.createElement(
+                                    "em",
+                                    { "class": "text-muted" },
+                                    _react2.default.createElement(
+                                        "strong",
+                                        null,
+                                        "\u041A\u0432\u0430\u043B\u0438\u0444\u0438\u043A\u0430\u0446\u0438\u044F "
+                                    )
+                                )
+                            )
+                        ),
+                        _react2.default.createElement(
+                            "div",
+                            { className: "col-xs-5" },
+                            qualificationStars
+                        )
+                    ),
+                    _react2.default.createElement(
+                        "div",
+                        { className: "row text-warning" },
+                        _react2.default.createElement(
+                            "div",
+                            { className: "col-xs-7" },
+                            _react2.default.createElement(
+                                "span",
+                                { style: { paddingRight: '15px', color: '#646464' } },
+                                _react2.default.createElement(
+                                    "em",
+                                    { "class": "text-muted" },
+                                    _react2.default.createElement(
+                                        "strong",
+                                        null,
+                                        "\u0426\u0435\u043D\u0430-\u043A\u0430\u0447\u0435\u0441\u0442\u0432\u043E "
+                                    )
+                                )
+                            )
+                        ),
+                        _react2.default.createElement(
+                            "div",
+                            { className: "col-xs-5" },
+                            qualityToPriceStars
+                        )
+                    ),
+                    _react2.default.createElement("br", null)
+                )
+            );
+        }
+    }]);
+
+    return FeedbackRow;
+}(_react2.default.Component);
+
+exports.default = FeedbackRow;
 
 /***/ })
 /******/ ]);

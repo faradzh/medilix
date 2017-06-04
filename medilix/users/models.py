@@ -85,6 +85,9 @@ class PatientProfile(models.Model):
     gender = models.CharField(max_length=10, null=True)
     phone_number = models.CharField(max_length=20, null=True)
 
+    def __str__(self):
+        return '%s %s' % (self.firstname, self.lastname)
+
 
 class EventCard(models.Model):
     title = models.CharField(max_length=255)
@@ -99,6 +102,9 @@ class Appointment(models.Model):
     hospital = models.ForeignKey(Hospital, null=True)
     status = models.CharField(max_length=100, default='pending')
     visit_number = models.CharField(default=1, max_length=5)
+
+    def __str__(self):
+        return 'Between %s and %s' % (self.doctor.lastname, self.patient.lastname)
 
 
 class HospitalPrice(models.Model):
@@ -122,10 +128,9 @@ class Notification(models.Model):
 
 class Feedback(models.Model):
     content = models.TextField()
-    attentiveness = models.FloatField()
-    qualification = models.FloatField()
-    quality = models.FloatField()
-    qualityToPrice = models.FloatField()
+    attentiveness = models.CharField(max_length=5)
+    qualification = models.FloatField(max_length=5)
+    quality_to_price = models.FloatField(max_length=5, null=True)
     recommendation = models.BooleanField()
     doctor_profile = models.ForeignKey(DoctorProfile, on_delete=models.CASCADE)
     patient_profile = models.ForeignKey(PatientProfile, on_delete=models.CASCADE)

@@ -26,6 +26,7 @@ urlpatterns += [
     url(r'^get-specializations$', views.get_specializations),
     url(r'^get-hospitals$', views.get_hospitals),
     url(r'^submit-feedback$', views.submit_feedback),
+    url(r'^get-feedbacks$', views.get_feedbacks),
     url(r'^get-permission-for-feedback$', views.get_permission_for_feedback),
     url(r'^save-blank$', views.save_blank),
     url(r'^complete-appointment$', views.complete_appointment),

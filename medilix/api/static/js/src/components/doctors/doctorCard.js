@@ -27,11 +27,11 @@ export default class DoctorCard extends React.Component {
                     <div className="block-content block-content-full bg-image">
                         <img className="img-avatar img-avatar96 img-avatar-thumb" src={path + profileImageSrc} alt=""/>
                         <ul id="profile-card-list" className="list-group">
-                            <li className="list-group-item">{`Experience: ${experience} years`}</li>
-                            <li className="list-group-item">{`Hospital: ${hospitals}`}
+                            <li className="list-group-item">{`Опыт работы: ${experience} лет`}</li>
+                            <li className="list-group-item">{`Больница: ${hospitals}`}
                                 <i className=" fa fa-map-marker pull-right"/>
                             </li>
-                            <li className="list-group-item">{`Price per visit: ${price} som`}</li>
+                            <li className="list-group-item">{`Цена за посещение: ${price} сом`}</li>
                         </ul>
                         <div className="block-content">
                             <div className="row">
@@ -44,11 +44,11 @@ export default class DoctorCard extends React.Component {
                                         <i data-alt="5" className="fa fa-fw fa-heart text-gray" title="Gorgeous"/>
                                         <input name="score" type="hidden" value="3"/>
                                     </div>
-                                    <span id="num-of-feedbacks"><a href="#">{`${numOfFeedbacks} feedbacks`}</a></span>
+                                    <span id="num-of-feedbacks"><a href="#">{`${numOfFeedbacks} отзывов`}</a></span>
                                 </div>
                                 <div className="col-sm-8">
                                     <Link to={`/app/doctors/${userId}`}>
-                                        <button id="appointment-button" className="btn btn-minw btn-success" type="button">View</button>
+                                        <button id="appointment-button" className="btn btn-minw btn-success" type="button">Профиль</button>
                                     </Link>
                                 </div>
                             </div>

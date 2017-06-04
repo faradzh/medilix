@@ -86,7 +86,7 @@ export default class UserProfileEdit extends React.Component {
         //     }
         // }
 
-        const buttons = [{id: 'male', text: 'Male'}, {id: 'female', text: 'Female'}];
+        const buttons = [{id: 'мужской', text: 'Мужской'}, {id: 'женский', text: 'Женский'}];
         console.log("ProfileData", profileData);
         return (
             <div className="content content-boxed">
@@ -103,13 +103,13 @@ export default class UserProfileEdit extends React.Component {
                     <div className="block">
                         <ul className="nav nav-tabs nav-justified push-20" data-toggle="tabs">
                             <li className="active">
-                                <a href="#tab-profile-personal"><i className="fa fa-fw fa-pencil"/> Personal</a>
+                                <a href="#tab-profile-personal"><i className="fa fa-fw fa-pencil"/> Личное</a>
                             </li>
                             <li>
-                                <a href="#tab-profile-password"><i className="fa fa-fw fa-asterisk"/> Password</a>
+                                <a href="#tab-profile-password"><i className="fa fa-fw fa-asterisk"/> Пароль</a>
                             </li>
                             <li>
-                                <a href="#tab-profile-privacy"><i className="fa fa-fw fa-lock"/> Privacy</a>
+                                <a href="#tab-profile-privacy"><i className="fa fa-fw fa-lock"/> Приватность</a>
                             </li>
                         </ul>
                         <div className="block-content tab-content">
@@ -119,7 +119,7 @@ export default class UserProfileEdit extends React.Component {
                                     <div className="col-sm-6 col-sm-offset-3 form-horizontal">
                                         <div className="form-group">
                                             <div className="col-xs-6">
-                                                <label>Username</label>
+                                                <label>Имя пользователя</label>
                                                 <div className="form-control-static font-w700">{this.props.profileData.username}</div>
                                             </div>
                                         </div>
@@ -133,8 +133,8 @@ export default class UserProfileEdit extends React.Component {
                                                         onChange={this.props.changeProfileData}
                                                         inputId="profile-email"
                                                         inputName="email"
-                                                        inputPlaceholder="Enter your email..">
-                                                Email
+                                                        inputPlaceholder="Введите почтовый адрес..">
+                                                Почта
                                             </InputField>
                                         </FormGroup>
                                         <FormGroup>
@@ -147,8 +147,8 @@ export default class UserProfileEdit extends React.Component {
                                                         onChange={this.props.changeProfileData}
                                                         inputId="profile-firstname"
                                                         inputName="firstname"
-                                                        inputPlaceholder="Enter your firstname..">
-                                                Firstname
+                                                        inputPlaceholder="Введите ваше имя..">
+                                                Имя
                                             </InputField>
                                             <InputField display={this.displayComponent('lastname')}
                                                         value={this.props.profileData.lastname}
@@ -159,8 +159,8 @@ export default class UserProfileEdit extends React.Component {
                                                         onChange={this.props.changeProfileData}
                                                         inputId="profile-lastname"
                                                         inputName="lastname"
-                                                        inputPlaceholder="Enter your lastname..">
-                                                Lastname
+                                                        inputPlaceholder="Введите вашу фамилию..">
+                                                Фамилия
                                             </InputField>
                                         </FormGroup>
                                         <FormGroup>
@@ -173,8 +173,8 @@ export default class UserProfileEdit extends React.Component {
                                                         onChange={this.props.changeProfileData}
                                                         inputId="profile-middlename"
                                                         inputName="middlename"
-                                                        inputPlaceholder="Enter your middlename..">
-                                                Middlename
+                                                        inputPlaceholder="Введите ваше очество..">
+                                                Отчество
                                             </InputField>
                                             <InputField display={this.displayComponent('address')}
                                                         value={this.props.profileData.address}
@@ -185,11 +185,11 @@ export default class UserProfileEdit extends React.Component {
                                                         onChange={this.props.changeProfileData}
                                                         inputId="profile-address"
                                                         inputName="address"
-                                                        inputPlaceholder="Enter your address..">
-                                                Address
+                                                        inputPlaceholder="Введите ваш адрес..">
+                                                Адрес
                                             </InputField>
                                             <SelectField display={this.displayComponent('specialization')}
-                                                         initialOption='Choose specialization...'
+                                                         initialOption='Выберите специализацию...'
                                                          defaultOption={specializationId}
                                                          options={specializationOptions}
                                                          columnClassName="col-xs-6"
@@ -198,7 +198,7 @@ export default class UserProfileEdit extends React.Component {
                                                          onChange={this.props.changeProfileData}
                                                          selectId="profile-specialization"
                                                          selectName="specializationId">
-                                                Specialization
+                                                Специализация
                                             </SelectField>
                                         </FormGroup>
                                         <FormGroup>
@@ -207,7 +207,7 @@ export default class UserProfileEdit extends React.Component {
                                                 buttons={buttons}
                                                 columnClassName="col-xs-12"
                                                 mainLabelClassName="col-xs-12"
-                                                mainLabelText="Gender"
+                                                mainLabelText="Род"
                                                 name="gender"
                                                 defaultValue={this.notEmpty(profileData) ? profileData.gender : ''}
                                                 onChange={this.props.changeProfileData} />
@@ -221,8 +221,8 @@ export default class UserProfileEdit extends React.Component {
                                                            textareaId="profile-bio"
                                                            textareaName="bio"
                                                            textareaRows="15"
-                                                           textareaPlaceholder="Enter a bit about yourself...">
-                                                Bio
+                                                           textareaPlaceholder="Напишите свою биографию...">
+                                                Биография
                                             </TextareaField>
                                         </FormGroup>
 
@@ -235,7 +235,7 @@ export default class UserProfileEdit extends React.Component {
                                         {
                                             this.displayComponent('hospitals') ?
                                                 <div>
-                                                    <label htmlFor="hospitals">Hospitals</label>
+                                                    <label htmlFor="hospitals">Больницы</label>
                                                     <FormGroup>
                                                         <Select name="hospitals"
                                                                 multi={true}
@@ -257,7 +257,7 @@ export default class UserProfileEdit extends React.Component {
                                                         inputId="profile-age"
                                                         inputName="age"
                                                         inputPlaceholder="32">
-                                                Age
+                                                Возраст
                                             </InputField>
                                             <InputField display={this.displayComponent('phoneNumber')}
                                                         value={this.props.profileData.phoneNumber}
@@ -269,7 +269,7 @@ export default class UserProfileEdit extends React.Component {
                                                         inputId="profile-phone"
                                                         inputName="phoneNumber"
                                                         inputPlaceholder="0777 399933">
-                                                Phone Number
+                                                Мобильный номер
                                             </InputField>
                                             <InputField display={this.displayComponent('experience')}
                                                         value={this.props.profileData.experience}
@@ -281,97 +281,15 @@ export default class UserProfileEdit extends React.Component {
                                                         inputId="profile-experience"
                                                         inputName="experience"
                                                         inputPlaceholder="years">
-                                                Experience
+                                                Опыт работы
                                             </InputField>
                                         </FormGroup>
                                     </div>
                                 </div>
                             </div>
-
-                            <div className="tab-pane fade" id="tab-profile-password">
-                                <div className="row items-push">
-                                    <div className="col-sm-6 col-sm-offset-3 form-horizontal">
-                                        <div className="form-group">
-                                            <div className="col-xs-12">
-                                                <label htmlFor="profile-password">Current Password</label>
-                                                <input className="form-control input-lg" type="password" id="profile-password" name="profile-password"/>
-                                            </div>
-                                        </div>
-                                        <hr/>
-                                        <div className="form-group">
-                                            <div className="col-xs-12">
-                                                <label htmlFor="profile-password-new">New Password</label>
-                                                <input className="form-control input-lg" type="password" id="profile-password-new" name="profile-password-new"/>
-                                            </div>
-                                        </div>
-                                        <div className="form-group">
-                                            <div className="col-xs-12">
-                                                <label htmlFor="profile-password-new-confirm">Confirm New Password</label>
-                                                <input className="form-control input-lg" type="password" id="profile-password-new-confirm" name="profile-password-new-confirm"/>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-
-
-                            <div className="tab-pane fade" id="tab-profile-privacy">
-                                <div className="row items-push">
-                                    <div className="col-sm-6 col-sm-offset-3 form-horizontal">
-                                        <div className="form-group">
-                                            <div className="col-xs-8">
-                                                <div className="font-s13 font-w600">Online Status</div>
-                                                <div className="font-s13 font-w400 text-muted">Show your status to all</div>
-                                            </div>
-                                            <div className="col-xs-4 text-right">
-                                                <label className="css-input switch switch-sm switch-primary push-10-t">
-                                                    <input type="checkbox"/><span/>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <hr/>
-                                        <div className="form-group">
-                                            <div className="col-xs-8">
-                                                <div className="font-s13 font-w600">Auto Updates</div>
-                                                <div className="font-s13 font-w400 text-muted">Keep up to date</div>
-                                            </div>
-                                            <div className="col-xs-4 text-right">
-                                                <label className="css-input switch switch-sm switch-primary push-10-t">
-                                                    <input type="checkbox"/><span/>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <hr/>
-                                        <div className="form-group">
-                                            <div className="col-xs-8">
-                                                <div className="font-s13 font-w600">Notifications</div>
-                                                <div className="font-s13 font-w400 text-muted">Do you need them?</div>
-                                            </div>
-                                            <div className="col-xs-4 text-right">
-                                                <label className="css-input switch switch-sm switch-primary push-10-t">
-                                                    <input type="checkbox" defaultChecked/><span/>
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <hr/>
-                                        <div className="form-group">
-                                            <div className="col-sm-8">
-                                                <div className="font-s13 font-w600">API Access</div>
-                                                <div className="font-s13 font-w400 text-muted">Enable/Disable access</div>
-                                            </div>
-                                            <div className="col-sm-4 text-right">
-                                                <label className="css-input switch switch-sm switch-primary push-10-t">
-                                                    <input type="checkbox" defaultChecked/><span/>
-                                                </label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                         <div className="block-content block-content-full bg-gray-lighter text-center">
-                            <button className="btn btn-sm btn-primary" type="submit"><i className="fa fa-check push-5-r"/> Save Changes</button>
-                            <button className="btn btn-sm btn-warning" onClick={this.props.resetProfileData} type="reset"><i className="fa fa-refresh push-5-r"/> Reset</button>
+                            <button className="btn btn-sm btn-primary" type="submit"><i className="fa fa-check push-5-r"/> Сохранить</button>
                         </div>
                     </div>
                 </Form>
@@ -379,17 +297,3 @@ export default class UserProfileEdit extends React.Component {
         )
     }
 }
-
-// <SelectField display={this.displayComponent('hospitals')}
-//                                                      defaultOption={hospitalIds}
-//                                                      options={hospitalOptions}
-//                                                      columnClassName="col-xs-12"
-//                                                      selectClassName="js-select2 form-control select2-hidden-accessible"
-//                                                      htmlFor="profile-hospitals"
-//                                                      selectId="hospitals"
-//                                                      selectName="hospitals"
-//                                                      style={{width: 100 + '%'}}
-//                                                      dataPlaceholder="Choose hospitals.."
-//                                                      multiple="multiple" tabIndex="-1" ariaHidden="true">
-//                                             Hospitals in which you work:
-//                                         </SelectField>

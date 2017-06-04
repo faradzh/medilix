@@ -7,17 +7,19 @@ import { connect } from 'react-redux';
 import PatientProfile from '../../../components/dashboard/profile/patientProfile';
 import DoctorProfile from '../../../components/doctors/doctorProfile';
 import { getProfileData } from '../../../actions/profileActions';
+import { fetchFeedbacks } from '../../../actions/doctorActions';
 
 const mapStateToProps = (state) => {
     return {
         profileData: state.profileReducer.profileData,
         currentUserGroup: state.userReducer.currentUser.group,
-        currentUserId: state.userReducer.currentUser.id
+        currentUserId: state.userReducer.currentUser.id,
+        feedbacks: state.doctorReducer.feedbacks
     }
 };
 
 const matchDispatchToProps = (dispatch) => {
-    return bindActionCreators({getProfileData}, dispatch)
+    return bindActionCreators({getProfileData, fetchFeedbacks}, dispatch)
 };
 
 const profileTabs = [
@@ -37,12 +39,13 @@ class ProfileContainer extends React.Component {
 
     componentWillMount () {
         this.props.getProfileData();
+        this.props.fetchFeedbacks();
     }
 
     render () {
         const currentUserGroup = this.props.currentUserGroup;
         const patientComponent = !this.props.children ? <PatientProfile data={this.props.profileData} children={this.props.children}/> : this.props.children;
-        const doctorComponent = !this.props.children ? <DoctorProfile data={this.props.profileData} children={this.props.children} profileTabs={profileTabs} /> : this.props.children;
+        const doctorComponent = !this.props.children ? <DoctorProfile data={this.props.profileData} feedbacks={this.props.feedbacks} children={this.props.children} profileTabs={profileTabs} /> : this.props.children;
         const profile = {patient: patientComponent, doctor: doctorComponent};
         return (
             <div>

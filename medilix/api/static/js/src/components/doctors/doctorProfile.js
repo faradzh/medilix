@@ -11,6 +11,7 @@ import FormGroup from '../dashboard/profile/formGroup';
 import TextareaField from '../dashboard/profile/textAreaField';
 import InputField from '../dashboard/profile/inputField';
 import RadioButtonGroup from '../forms/radioButtonGroup';
+import FeedbackRow from '../dashboard/feedbackRow';
 
 const backgroundImageSrc = require('../../../../images/dashboard/profile/medical-biology.jpg');
 const profileImageSrc = require('../../../../images/dashboard/profile/kasimbekov.jpg');
@@ -26,6 +27,9 @@ export default class DoctorProfile extends React.Component {
     };
 
     render () {
+        const feedbackRows = this.props.feedbacks.map((feedback) => {
+            return <FeedbackRow data={feedback}/>
+        });
         const data = this.props.data;
         const education = this.notEmpty(data) ? data.education : '';
         const hospitals = this.notEmpty(data) ? data.hospitals : '';
@@ -219,64 +223,9 @@ export default class DoctorProfile extends React.Component {
 
                             <div className="block">
                                 <div className="block-content">
-                                    <div className="row">
-                                        <div className="col-sm-7">
-                                            <ul className="list list-simple">
-                                                <li>
-                                                    <div className="push-5 clearfix">
-                                                        <a className="font-w600" href="base_pages_profile.html">Eric Lawson</a><br/>
-                                                        <i className="fa fa-thumbs-o-up"/> Рекомендует
-                                                    </div>
-                                                    <div className="font-s13">Flawless design execution! I'm really impressed with the product, it really helped me build my app so fast! Thank you!</div>
-                                                </li>
-                                            </ul>
-                                        </div>
-                                        <div className="col-sm-5">
-                                            <div className="row text-warning">
-                                                <div className="col-xs-7">
-                                                    <span style={{paddingRight: '15px', color: '#646464'}}>
-                                                        <em class="text-muted"><strong>Внимательность </strong></em>
-                                                    </span>
-                                                </div>
-                                                <div className="col-xs-5">
-                                                    <i className="fa fa-star"/>
-                                                    <i className="fa fa-star"/>
-                                                    <i className="fa fa-star"/>
-                                                    <i className="fa fa-star"/>
-                                                    <i className="fa fa-star"/>
-                                                </div>
-                                            </div>
-                                            <div className="row text-warning">
-                                                <div className="col-xs-7">
-                                                    <span style={{paddingRight: '15px', color: '#646464'}}>
-                                                        <em class="text-muted"><strong>Квалификация </strong></em>
-                                                    </span>
-                                                </div>
-                                                <div className="col-xs-5">
-                                                    <i className="fa fa-star"/>
-                                                    <i className="fa fa-star"/>
-                                                    <i className="fa fa-star"/>
-                                                    <i className="fa fa-star"/>
-                                                    <i className="fa fa-star"/>
-                                                </div>
-                                            </div>
-                                            <div className="row text-warning">
-                                                <div className="col-xs-7">
-                                                    <span style={{paddingRight: '15px', color: '#646464'}}>
-                                                        <em class="text-muted"><strong>Цена-качество </strong></em>
-                                                    </span>
-                                                </div>
-                                                <div className="col-xs-5">
-                                                    <i className="fa fa-star"/>
-                                                    <i className="fa fa-star"/>
-                                                    <i className="fa fa-star"/>
-                                                    <i className="fa fa-star"/>
-                                                    <i className="fa fa-star"/>
-                                                </div>
-                                            </div>
-                                            <br />
-                                        </div>
-                                    </div>
+                                    {feedbackRows}
+
+                                    
                                     {
                                         this.props.feedbackPermission ?
                                             <div className="text-center push">
