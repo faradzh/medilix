@@ -555,11 +555,13 @@ def get_permission_for_feedback(request):
         user_id = request.GET.get('userId')
         doctor_id = request.GET.get('doctorId')
         doctor = DoctorProfile.objects.get(user_id=doctor_id)
+        allowed = False
         try:
             patient = PatientProfile.objects.get(user_id=user_id)
-            Appointment.objects.get(doctor=doctor, patient=patient, status='completed')
-            allowed = True
-        except (Appointment.DoesNotExist, PatientProfile.DoesNotExist):
+            appointments = Appointment.objects.filter(doctor=doctor, patient=patient, status='completed')
+            if appointments:
+                allowed = True
+        except PatientProfile.DoesNotExist:
             allowed = False
 
         return JsonResponse(allowed, status=200, safe=False)
