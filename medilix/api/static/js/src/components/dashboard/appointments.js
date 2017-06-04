@@ -6,6 +6,8 @@ import Table from '../tables/table';
 import Header from '../tables/header';
 import RowCell from '../tables/rowCell';
 import Blank from '../../components/dashboard/blank';
+const profileImageSrc = require('../../../../images/dashboard/profile/avatar.png');
+const path = '/static/js/dist/';
 
 export default class Appointments extends React.Component {
     componentWillMount () {
@@ -24,7 +26,7 @@ export default class Appointments extends React.Component {
                         {Object.keys(currentAppointment).length > 0 ?
                             <tr>
                                 <RowCell class="text-center">
-                                    <img className="img-avatar img-avatar48" src={''} alt=""/>
+                                    <img className="img-avatar img-avatar48" src={path + profileImageSrc} alt=""/>
                                 </RowCell>
                                 <RowCell class="">
                                     {currentAppointment.fullname}

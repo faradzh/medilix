@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router';
-const profileImageSrc = require('../../../../images/dashboard/profile/kasimbekov.jpg');
+const profileImageSrc = require('../../../../images/dashboard/profile/avatar.png');
 const path = '/static/js/dist/';
 
 export default class DoctorCard extends React.Component {

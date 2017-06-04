@@ -15,7 +15,7 @@ export default class Doctors extends React.Component {
                         hospitals={doctor.hospital}
                         price={300}
                         specialization={doctor.specialization}
-                        numOfFeedbacks={10}
+                        numOfFeedbacks={doctor.feedbacks}
                         bio={doctor.bio}
                         userId={doctor.user_id}/>
         });

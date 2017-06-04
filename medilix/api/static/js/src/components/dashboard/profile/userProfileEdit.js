@@ -17,6 +17,8 @@ import RadioButtonGroup from '../../forms/radioButtonGroup';
 import Education from '../../dashboard/profile/education';
 
 require('sweetalert/dist/sweetalert.css');
+const profileImageSrc = require('../../../../../images/dashboard/profile/avatar.png');
+const path = '/static/js/dist/';
 
 export default class UserProfileEdit extends React.Component {
 
@@ -91,7 +93,7 @@ export default class UserProfileEdit extends React.Component {
         return (
             <div className="content content-boxed">
                 <div className="block">
-                    <Title fullname={fullname} specialization={specializationName} />
+                    <Title src={profileImageSrc} path={path} fullname={fullname} specialization={specializationName} />
                     <ProfileStats display={this.displayComponent('infobox')}
                              recommendedNumber="20000"
                              experienceNumber={this.props.profileData.experience}

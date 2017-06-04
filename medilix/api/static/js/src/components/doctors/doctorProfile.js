@@ -14,7 +14,7 @@ import RadioButtonGroup from '../forms/radioButtonGroup';
 import FeedbackRow from '../dashboard/feedbackRow';
 
 const backgroundImageSrc = require('../../../../images/dashboard/profile/medical-biology.jpg');
-const profileImageSrc = require('../../../../images/dashboard/profile/kasimbekov.jpg');
+const profileImageSrc = require('../../../../images/dashboard/profile/avatar.png');
 const path = '/static/js/dist/';
 
 export default class DoctorProfile extends React.Component {
@@ -69,79 +69,12 @@ export default class DoctorProfile extends React.Component {
                                path={path}
                                data={data} />
                 
-                <ProfileStats recommendedNumber={30}
+                <ProfileStats recommendedNumber={data.recommendations}
                               experienceNumber={data.experience}
-                              patientsNumber={40}
+                              patientsNumber={data.patients}
                               ratingNumber={4.8}/>
                 <div className="row">
                     <div className="col-sm-5 col-sm-push-7 col-lg-4 col-lg-push-8">
-                        <div class="block">
-                            <div className="block-header bg-gray-lighter">
-                                <ul className="block-options">
-                                    <li>
-                                        <button type="button" data-toggle="block-option" data-action="refresh_toggle" data-action-mode="demo"><i className="si si-refresh"/></button>
-                                    </li>
-                                </ul>
-                                <h3 className="block-title"><i className="fa fa-fw fa-pencil"/> Топ отзывы</h3>
-                            </div>
-                            <div className="block-content">
-                                <ul className="list list-simple">
-                                    <li>
-                                        <div className="push-5 clearfix">
-                                            <div className="text-warning pull-right">
-                                                <i className="fa fa-star"/>
-                                                <i className="fa fa-star"/>
-                                                <i className="fa fa-star"/>
-                                                <i className="fa fa-star"/>
-                                                <i className="fa fa-star"/>
-                                            </div>
-                                            <a className="font-w600" href="base_pages_profile.html">Eric Lawson</a>
-                                            <span className="text-muted">(5/5)</span>
-                                        </div>
-                                        <div className="font-s13">Flawless design execution! I'm really impressed with the product, it really helped me build my app so fast! Thank you!</div>
-                                    </li>
-                                    <li>
-                                        <div className="push-5 clearfix">
-                                            <div className="text-warning pull-right">
-                                                <i className="fa fa-star"/>
-                                                <i className="fa fa-star"/>
-                                                <i className="fa fa-star"/>
-                                                <i className="fa fa-star"/>
-                                                <i className="fa fa-star"/>
-                                            </div>
-                                            <a className="font-w600" href="base_pages_profile.html">Joshua Munoz</a>
-                                            <span className="text-muted">(5/5)</span>
-                                        </div>
-                                        <div className="font-s13">Great value for money and awesome support! Would buy again and again! Thanks!</div>
-                                    </li>
-                                    <li>
-                                        <div className="push-5 clearfix">
-                                            <div className="text-warning pull-right">
-                                                <i className="fa fa-star"/>
-                                                <i className="fa fa-star"/>
-                                                <i className="fa fa-star"/>
-                                                <i className="fa fa-star"/>
-                                                <i className="fa fa-star"/>
-                                            </div>
-                                            <a className="font-w600" href="base_pages_profile.html">Sara Holland</a>
-                                            <span className="text-muted">(5/5)</span>
-                                        </div>
-                                        <div className="font-s13">Working great in all my devices, quality and quantity in a great package! Thank you!</div>
-                                    </li>
-                                </ul>
-                                <div className="text-center push">
-                                    <small><a href="javascript:void(0)">Read More..</a></small>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div className="block block-opt-refresh-icon6">
-                            <div className="block-header">
-                            </div>
-                            <div className="block-content">
-
-                            </div>
-                        </div>
                     </div>
                     <div className="col-sm-7 col-sm-pull-5 col-lg-8 col-lg-pull-4">
 

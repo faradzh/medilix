@@ -114,7 +114,8 @@ def get_doctors(request):
                 'phone_number': doctor.phone_number,
                 'experience': doctor.experience,
                 'specialization': specialization,
-                'hospital': hospital
+                'hospital': hospital,
+                'feedbacks': doctor.feedback_set.all().count()
             })
 
         return JsonResponse(doctors_list, status=200, safe=False)
@@ -159,6 +160,7 @@ def get_profile_data(request):
 
 
 def return_doctor_data(doctor, hospitals, education):
+    stats = calculate_stats(doctor)
     return {
             'username': doctor.user.username,
             'email': doctor.user.email,
@@ -174,8 +176,16 @@ def return_doctor_data(doctor, hospitals, education):
             'specializationId': doctor.specialization.id if doctor.specialization else None,
             'specializationName': doctor.specialization.name if doctor.specialization else None,
             'hospitals': hospitals,
-            'education': education
+            'education': education,
+            'recommendations': stats[0] if len(stats) > 1 else 0,
+            'patients': stats[1] if len(stats) > 1 else 0
     }
+
+
+def calculate_stats(doctor):
+    recommendations = Feedback.objects.filter(doctor_profile=doctor, recommendation=True).count()
+    appointments = Appointment.objects.filter(doctor=doctor, status='completed').count()
+    return [recommendations, appointments]
 
 
 def return_patient_data(patient):
