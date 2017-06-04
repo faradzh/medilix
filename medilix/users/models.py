@@ -106,6 +106,9 @@ class Appointment(models.Model):
     def __str__(self):
         return 'Between %s and %s' % (self.doctor.lastname, self.patient.lastname)
 
+    def __unicode__(self):
+        return 'Between %s and %s' % (self.doctor.lastname, self.patient.lastname)
+
 
 class HospitalPrice(models.Model):
     doctor = models.ForeignKey(DoctorProfile)
