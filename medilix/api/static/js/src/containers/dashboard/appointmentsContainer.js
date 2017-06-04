@@ -12,7 +12,11 @@ import {
     fillExamination,
     addExaminationRow,
     removeExaminationRow,
-    saveBlank
+    fillPrescription,
+    addPrescriptionRow,
+    removePrescriptionRow,
+    saveBlank,
+    completeAppointment
 } from '../../actions/appointmentActions';
 
 const headers = {
@@ -47,7 +51,11 @@ const matchDispatchToProps = (dispatch) => {
         fillExamination,
         addExaminationRow,
         removeExaminationRow,
-        saveBlank
+        fillPrescription,
+        addPrescriptionRow,
+        removePrescriptionRow,
+        saveBlank,
+        completeAppointment
     }, dispatch)
 };
 

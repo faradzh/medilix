@@ -33,7 +33,7 @@ class CalendarContainer extends React.Component {
 
     render () {
         const buttons = [
-            <button key='1' className="btn btn-sm btn-primary" onClick={this.props.createNotification} type="button" data-dismiss="modal"><i className="fa fa-check"/> Submit</button>
+            <button key='1' className="btn btn-sm btn-primary" onClick={this.props.createNotification} type="button" data-dismiss="modal"><i className="fa fa-check"/> Отправить</button>
         ];
         const hospitalOptions = [];
         if (this.props.hospitals){
@@ -56,13 +56,13 @@ class CalendarContainer extends React.Component {
                                       appointments={this.props.appointments}
                                       changeDate={this.props.changeDate}
                                       params={this.props.params} />
-                            <ModalWindow header="Enter your data:" buttons={buttons}>
+                            <ModalWindow header="Введите ваши данные:" buttons={buttons}>
                                 <div className="row">
                                     <FormGroup>
                                         <TextareaField onChange={this.props.changeNotificationData} display={true} columnNameClass="col-xs-12" htmlFor="complaints"
                                                        textareaClassName="form-control input-lg" textareaId="complaints"
-                                                       textareaName="complaints" textareaRows="8" textareaPlaceholder="Enter your complaints...">
-                                            Complaints
+                                                       textareaName="complaints" textareaRows="8" textareaPlaceholder="Введите ваши жалобы..">
+                                            Жалобы
                                         </TextareaField>
                                     </FormGroup>
                                 </div>
@@ -71,15 +71,15 @@ class CalendarContainer extends React.Component {
                                         <FormGroup>
                                             <SelectField onChange={this.props.changeNotificationData} display={true} options={hospitalOptions} columnClassName="col-xs-12" selectClassName="form-control"
                                             htmlFor="appointment-hospital" selectId="appointment-hospital" selectName="hospital" style={{width: 100 + '%'}}
-                                                         dataPlaceholder="Choose hospital.." tabIndex="-1" ariaHidden="true" initialOption="Select hospital...">
-                                                Hospital
+                                                         dataPlaceholder="Выберите больницу.." tabIndex="-1" ariaHidden="true" initialOption="Выберите больницу..">
+                                                Больница
                                             </SelectField>
                                         </FormGroup>
                                     </div>
                                     <div className="col-xs-6">
                                         <FormGroup>
-                                            <CheckboxField columnClassName="col-xs-6" className="css-input css-checkbox css-checkbox-primary">
-                                                Repeat visit?
+                                            <CheckboxField onChange={this.props.changeNotificationData} columnClassName="col-xs-12" className="css-input css-checkbox css-checkbox-primary">
+                                                Повторное посещение?
                                             </CheckboxField>
                                         </FormGroup>
                                     </div>

@@ -8,7 +8,13 @@ export default function reducer (state=INITIAL_STATE, action) {
     switch (action.type){
         case 'CHANGE_NOTIFICATION_DATA':
             const name = action.payload.target.name;
-            const value = action.payload.target.value;
+            let value;
+            if (name == 'repeatVisit'){
+                value = action.payload.target.checked;
+            }
+            else{
+                value = action.payload.target.value;
+            }
             const updatedNotificationData = Object.assign({}, state.notification, {[name]: value});
             return Object.assign({}, state, {notification: updatedNotificationData});
             break;

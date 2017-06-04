@@ -9,10 +9,12 @@ import InputField from '../../components/dashboard/profile/inputField';
 import Examination from '../../components/dashboard/examination';
 import Prescription from '../../components/dashboard/prescription';
 
-export default class Blank extends React.Component {
+export default class Record extends React.Component {
     render () {
         const data = this.props.data;
-        const prescription = this.props.data ? this.props.data.prescription : [];
+        console.log("InnerData", data);
+        const examinations = data ? data.examinations : [];
+        const prescription = data ? data.prescription : [];
         return (
             <Form onSubmit={''}>
                     <div className="block">
@@ -22,7 +24,7 @@ export default class Blank extends React.Component {
                                                    value={data.complaints}
                                                    columnClassName="col-xs-12" htmlFor="complaints"
                                                    textareaClassName="form-control input-lg"
-                                                   onChange={this.props.fill}
+                                                   onChange={''}
                                                    textareaId="complaints"
                                                    textareaName="complaints"
                                                    textareaRows="6"
@@ -37,7 +39,7 @@ export default class Blank extends React.Component {
                                             htmlFor="provDiagnosis"
                                             inputClassName="form-control input-lg"
                                             inputType="text"
-                                            onChange={this.props.fill}
+                                            onChange={''}
                                             inputId="provDiagnosis"
                                             inputName="provDiagnosis"
                                             inputPlaceholder="Введите начальный диагноз..">
@@ -45,17 +47,17 @@ export default class Blank extends React.Component {
                                 </InputField>
                             </FormGroup>
                             <Examination fill={this.props.fillExamination}
-                                         data={data.analyses}
+                                         data={examinations}
                                          addExaminationRow={this.props.addExaminationRow}
                                          removeExaminationRow={this.props.removeExaminationRow}/>
                             <FormGroup>
-                                <InputField display={true}
+                              <InputField display={true}
                                             value={data.finalDiagnosis}
                                             columnClassName="col-xs-12"
                                             htmlFor="finalDiagnosis"
                                             inputClassName="form-control input-lg"
                                             inputType="text"
-                                            onChange={this.props.fill}
+                                            onChange={''}
                                             inputId="finalDiagnosis"
                                             inputName="finalDiagnosis"
                                             inputPlaceholder="Введите финальный диагноз..">
@@ -63,22 +65,13 @@ export default class Blank extends React.Component {
                                 </InputField>
                             </FormGroup>
                             <Prescription data={prescription}
-                                          fillPrescription={this.props.fillPrescription}
+                                          fillPrescription={''}
                                           addPrescriptionRow={this.props.addPrescriptionRow}
                                           removePrescriptionRow={this.props.removePrescriptionRow}/>
-                            <div className="row">
-                                <div className="complete-blank-btns">
-                                    <button onClick={this.props.save} className="btn btn-primary push-15-t push-20-l push-10-b" type="button">
-                                        <i className="fa fa-save"/> Сохранить
-                                    </button>
-                                    <button onClick={this.props.complete} className="btn btn-success push-15-t push-20-l push-10-b" type="button">
-                                        <i className="fa fa-thumbs-up"/> Завершить
-                                    </button>
-                                </div>
-                            </div>
                         </div>
                     </div>
             </Form>
         )
     }
 }
+

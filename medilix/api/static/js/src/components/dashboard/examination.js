@@ -7,6 +7,7 @@ import Exam from './exam';
 export default class Examination extends React.Component {
 
     render () {
+        console.log("LastData", this.props.data);
         const examinationRows = [];
         if (this.props.data){
             this.props.data.forEach((analysis, index) => {

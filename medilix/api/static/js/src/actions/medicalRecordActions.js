@@ -22,3 +22,17 @@ function setMedicalRecords(payload) {
         payload: payload
     }
 }
+
+export function showRecord(payload) {
+    return {
+        type: 'SHOW_RECORD',
+        payload: payload
+    }
+}
+
+export function setRecordData(payload) {
+    return {
+        type: 'SET_RECORD_DATA',
+        payload: payload
+    }
+}

@@ -96,8 +96,9 @@ class Appointment(models.Model):
     doctor = models.ForeignKey(DoctorProfile)
     date_from = models.DateTimeField()
     date_to = models.DateTimeField()
-    hospital = models.OneToOneField(Hospital, null=True)
+    hospital = models.ForeignKey(Hospital, null=True)
     status = models.CharField(max_length=100, default='pending')
+    visit_number = models.CharField(default=1, max_length=5)
 
 
 class HospitalPrice(models.Model):
@@ -113,6 +114,7 @@ class Notification(models.Model):
     doctor_profile = models.ForeignKey(DoctorProfile, related_name='doctor_profile_id')
     hospital = models.ForeignKey(Hospital)
     status = models.CharField(max_length=100, default='pending')
+    visit_number = models.CharField(default=1, max_length=5)
 
     def __str__(self):
         return 'Between %s and %s' % (self.patient_profile.firstname, self.doctor_profile.firstname)

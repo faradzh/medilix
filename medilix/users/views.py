@@ -11,7 +11,7 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.response import Response
 from django.utils import timezone
 
-from health.models import Blank, MedicalRecord, Examination
+from health.models import Blank, MedicalRecord, Examination, Prescription, Medication, Dose
 from users.models import Hospital
 from users.models import EventCard, DoctorProfile, Notification, PatientProfile, Appointment, Specialization, Feedback
 from users.serializers import UserSerializer, DoctorProfileSerializer, PatientProfileSerializer, EventCardSerializer
@@ -200,7 +200,7 @@ def create_notification(request):
         complaints = request.POST.get('complaints')
         date = request.POST.get('date')
         hospital_id = request.POST.get('hospital_id')
-        repeat_visit = request.POST.get('repeatVisit')
+        repeat_visit = request.POST.get('repeat_visit')
 
         doctor_profile = DoctorProfile.objects.get(user_id=doctor_id)
         patient_profile = PatientProfile.objects.get(user_id=patient_id)
@@ -210,9 +210,12 @@ def create_notification(request):
         notification.patient_profile = patient_profile
         notification.doctor_profile = doctor_profile
         notification.hospital = hospital
+
+        if repeat_visit == 'true':
+            notification.visit_number = 2
         notification.save()
 
-    return JsonResponse({}, static=201)
+    return JsonResponse({"message": "OK"}, static=201)
 
 
 @csrf_exempt
@@ -223,8 +226,12 @@ def approve_notification(request):
         notification = Notification.objects.get(pk=notification_id)
 
         if notification.status != 'approved':
-            appointment = create_appointment(notification)
-            create_blank(notification, appointment)
+            if notification.visit_number == '2':
+                create_reappointment(notification)
+            else:
+                appointment = create_appointment(notification)
+                create_blank(notification, appointment)
+
             notification.status = 'approved'
             notification.save()
 
@@ -242,6 +249,36 @@ def decline_notification(request):
         notification.save()
 
     return JsonResponse(notification_id, status=201, safe=False)
+
+
+def create_reappointment(notification):
+    doctor_profile = notification.doctor_profile
+    patient_profile = notification.patient_profile
+    status = 'extra_exam'
+    date_from = notification.date
+    date_to = date_from + datetime.timedelta(hours=1)
+    try:
+        previous_appointment = Appointment.objects.get(doctor=doctor_profile, patient=patient_profile, status=status)
+        old_blank = previous_appointment.blank
+        next_appointment = Appointment.objects.create(doctor=doctor_profile,
+                                                      patient=patient_profile,
+                                                      status='pending',
+                                                      visit_number=2,
+                                                      date_from=date_from,
+                                                      date_to=date_to,
+                                                      hospital=notification.hospital)
+
+        new_blank = Blank.objects.create(complaints=old_blank.complaints,
+                                         prov_diagnosis=old_blank.prov_diagnosis,
+                                         appointment=next_appointment)
+        for exam in old_blank.examination_set.all():
+            new_blank.examination_set.add(exam)
+        next_appointment.blank = new_blank
+        next_appointment.blank.save()
+        next_appointment.save()
+    except Appointment.DoesNotExist:
+        next_appointment = None
+    return next_appointment
 
 
 def create_appointment(notification):
@@ -288,7 +325,8 @@ def get_notifications(request):
                     "complaints": notification.complaints,
                     "hospital": notification.hospital.name,
                     "date": notification.date,
-                    "status": notification.status
+                    "status": notification.status,
+                    "visitNumber": notification.visit_number
                 })
 
         if user_group == 'patient':
@@ -360,12 +398,21 @@ def get_current_appointment(request):
                 current_appointment["gender"] = appointment.patient.gender
                 current_appointment["age"] = appointment.patient.age
                 current_appointment["address"] = appointment.patient.address
-                current_appointment["visitNumber"] = 1
+                current_appointment["visitNumber"] = appointment.visit_number
                 current_appointment["status"] = appointment.status
                 blank["id"] = appointment.blank.id
                 blank["complaints"] = appointment.blank.complaints
-                blank["analyses"] = []
-                    # if not appointment.blank.examinations else appointment.blank.examinations
+                blank["provDiagnosis"] = appointment.blank.prov_diagnosis
+
+                examinations_list = []
+                for examination in appointment.blank.examination_set.all():
+                    examinations_list.append({
+                        "id": examination.id,
+                        "content": examination.content,
+                        "results": examination.results
+                    })
+                blank["analyses"] = examinations_list
+                blank["prescription"] = []
                 current_appointment["blank"] = blank
 
     return JsonResponse(current_appointment, status=200, safe=False)
@@ -389,6 +436,51 @@ def save_blank(request):
         blank = Blank.objects.get(pk=blank_id)
         blank.prov_diagnosis = prov_diagnosis
         blank.save()
+        appointment.status = 'extra_exam'
+        appointment.save()
+        MedicalRecord.objects.create(doctor_fullname=doctor_fullname,
+                                     date=appointment.date_from,
+                                     hospital_name=appointment.hospital.name,
+                                     blank=blank)
+        return JsonResponse({"message": "OK"}, status=201)
+
+
+@csrf_exempt
+def complete_appointment(request):
+    if request.method == 'POST':
+        blank_id = request.POST.get('blankId')
+        appointment_id = request.POST.get('appointmentId')
+        final_diagnosis = request.POST.get('finalDiagnosis')
+        examinations = request.POST.getlist('examinations[]')
+        prescription = request.POST.getlist('prescription[]')
+
+        appointment = Appointment.objects.get(pk=appointment_id)
+        doctor_fullname = '%s %s %s' % (appointment.doctor.lastname, appointment.doctor.firstname, appointment.doctor.middlename)
+
+        for examination in examinations:
+            native_object = json.loads(examination)
+            exam_id = native_object["id"]
+            examination = Examination.objects.get(pk=exam_id, blank_id=blank_id)
+            examination.results = native_object["results"]
+            examination.save()
+
+        for item in prescription:
+            native_object = json.loads(item)
+            medication = Medication.objects.create(name=native_object["medicine"])
+            dose = Dose.objects.create(dosage=native_object["dosage"],
+                                       timing=native_object["timing"],
+                                       limit=native_object["limit"])
+            Prescription.objects.create(blank_id=blank_id,
+                                        medication=medication,
+                                        dose=dose,
+                                        duration=native_object["duration"],
+                                        comment=native_object["comments"])
+
+        blank = Blank.objects.get(pk=blank_id)
+        blank.final_diagnosis = final_diagnosis
+        blank.save()
+        appointment.status = 'completed'
+        appointment.save()
         MedicalRecord.objects.create(doctor_fullname=doctor_fullname,
                                      date=appointment.date_from,
                                      hospital_name=appointment.hospital.name,
@@ -478,6 +570,7 @@ def get_medical_records(request):
             doctor_fullname = blank.medicalrecord.doctor_fullname
             date = appointment.date_from
             examinations = blank.examination_set.all()
+            prescription = blank.prescription_set.all()
             medical_records.append({
                 "id": blank.medicalrecord.id,
                 "doctorId": appointment.doctor.user.id,
@@ -485,9 +578,17 @@ def get_medical_records(request):
                 "provDiagnosis": blank.prov_diagnosis,
                 "finalDiagnosis": blank.final_diagnosis,
                 "date": date,
+                "complaints": blank.complaints,
                 "examinations": [{"id": exam.id,
                                   "content": exam.content,
                                   "results": exam.results} for exam in examinations],
+                "prescription": [{"id": item.id,
+                                  "medicine": item.medication.name,
+                                  "dosage": item.dose.dosage,
+                                  "timing": item.dose.timing,
+                                  "limit": item.dose.limit,
+                                  "duration": item.duration,
+                                  "comments": item.comment} for item in prescription],
                 "hospital": appointment.hospital.name
             })
 

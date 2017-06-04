@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import Sidebar from '../../components/dashboard/sidebar';
 
 const mapStateToProps = (state) => {
-    console.log("Wow", state.userReducer.currentUser.group);
     return {
         currentUserGroup: state.userReducer.currentUser.group
     }

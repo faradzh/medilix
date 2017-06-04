@@ -76,6 +76,25 @@ export function removeExaminationRow() {
     }
 }
 
+export function fillPrescription(payload) {
+    return {
+        type: 'FILL_PRESCRIPTION',
+        payload: payload
+    }
+}
+
+export function addPrescriptionRow() {
+    return {
+        type: 'ADD_PRESCRIPTION_ROW'
+    }
+}
+
+export function removePrescriptionRow() {
+    return {
+        type: 'REMOVE_PRESCRIPTION_ROW'
+    }
+}
+
 function stringifyObjects (list){
     let stringifiedList = [];
     list.forEach((exam) => {
@@ -104,3 +123,27 @@ export function saveBlank() {
         })
     }
 }
+
+
+export function completeAppointment() {
+    return (dispatch, getState) => {
+        const url = '/users/complete-appointment';
+        const params = {
+            blankId: getState().appointmentReducer.currentAppointment.blank.id,
+            appointmentId: getState().appointmentReducer.currentAppointment.id,
+            finalDiagnosis: getState().appointmentReducer.currentAppointment.blank.finalDiagnosis,
+            'examinations[]': stringifyObjects(getState().appointmentReducer.currentAppointment.blank.analyses),
+            'prescription[]': stringifyObjects(getState().appointmentReducer.currentAppointment.blank.prescription)
+        };
+        jQuery.ajax({
+            type: 'POST',
+            url,
+            data: params,
+            success: (response) => {
+                console.log("Response", response);
+                dispatch(showBlank(false))
+            }
+        })
+    }
+}
+

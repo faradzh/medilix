@@ -5,14 +5,15 @@ const INITIAL_STATE = {
     appointments: [],
     currentAppointment: {
         blank: {
-            analyses: []
+            analyses: [],
+            prescription: []
         }
     },
     showBlank: false
 };
 
 export default function reducer (state=INITIAL_STATE, action) {
-    let name, value, updatedBlank, updatedCurrentAppointment, analyses;
+    let name, value, updatedBlank, updatedCurrentAppointment, analyses, prescription, id;
     switch (action.type){
         case 'SET_APPOINTMENTS':
             return Object.assign({}, state, {appointments: action.payload});
@@ -39,19 +40,14 @@ export default function reducer (state=INITIAL_STATE, action) {
             value = action.payload.target.value;
             analyses = state.currentAppointment.blank.analyses.slice();
 
+            id = name.split('-')[1];
+            name = name.split('-')[0];
             analyses.forEach((analysis, index) => {
-                const id = name.split('-')[1];
-                const keys = Object.keys(analysis);
-                if (keys.length != 0){
-                    if (keys[0].split('-')[1] == id){
-                        analyses[index] = Object.assign({}, analysis, {[name]: value})
-                    }
-                    else{
-                        analyses[analyses.length-1][name] = value;
-                    }
+                if (analysis.id == id){
+                    analyses[index] = Object.assign({}, analysis, {[name]: value})
                 }
                 else{
-                    analyses[0] = {[name]: value};
+                    analyses[analyses.length-1][name] = value;
                 }
             });
 
@@ -72,6 +68,49 @@ export default function reducer (state=INITIAL_STATE, action) {
             analyses = state.currentAppointment.blank.analyses.slice();
             analyses.pop();
             updatedBlank = Object.assign({}, state.currentAppointment.blank, {analyses: analyses}) ;
+            updatedCurrentAppointment = Object.assign({}, state.currentAppointment, {blank: updatedBlank});
+            return Object.assign({}, state, {currentAppointment: updatedCurrentAppointment});
+            break;
+
+        case 'FILL_PRESCRIPTION':
+            name = action.payload.target.name;
+            value = action.payload.target.value;
+            prescription = state.currentAppointment.blank.prescription.slice();
+
+            id = name.split('-')[1];
+            name = name.split('-')[0];
+
+            prescription.forEach((item, index) => {
+                if (item.id == id){
+                    prescription[index] = Object.assign({}, item, {[name]: value})
+                }
+                else{
+                    prescription[prescription.length-1][name] = value;
+                }
+            });
+            updatedBlank = Object.assign({}, state.currentAppointment.blank, {prescription: prescription}) ;
+            updatedCurrentAppointment = Object.assign({}, state.currentAppointment, {blank: updatedBlank});
+            return Object.assign({}, state, {currentAppointment: updatedCurrentAppointment});
+            break;
+
+        case 'ADD_PRESCRIPTION_ROW':
+            prescription = state.currentAppointment.blank.prescription.slice();
+            if (prescription.length == 0){
+                prescription.push({id: 0});
+            }
+            else{
+                const lastObject = prescription[prescription.length-1];
+                prescription.push({id: lastObject.id + 1});
+            }
+            updatedBlank = Object.assign({}, state.currentAppointment.blank, {prescription: prescription}) ;
+            updatedCurrentAppointment = Object.assign({}, state.currentAppointment, {blank: updatedBlank});
+            return Object.assign({}, state, {currentAppointment: updatedCurrentAppointment});
+            break;
+
+        case 'REMOVE_PRESCRIPTION_ROW':
+            prescription = state.currentAppointment.blank.prescription.slice();
+            prescription.pop();
+            updatedBlank = Object.assign({}, state.currentAppointment.blank, {prescription: prescription}) ;
             updatedCurrentAppointment = Object.assign({}, state.currentAppointment, {blank: updatedBlank});
             return Object.assign({}, state, {currentAppointment: updatedCurrentAppointment});
             break;

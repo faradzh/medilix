@@ -6,13 +6,14 @@ import jQuery from 'jquery';
 
 export function createNotification() {
     return (dispatch, getState) => {
-        const currentUserId = getState().userReducer.currentUser.id;
+        const currentUserId = JSON.parse(localStorage.currentUser).id;
         const doctorId = getState().routing.locationBeforeTransitions.pathname.split('/')[3];
         const {
             complaints,
             date,
             status,
-            hospital
+            hospital,
+            repeatVisit
         } = getState().notificationReducer.notification;
 
         const form = new FormData();
@@ -20,6 +21,7 @@ export function createNotification() {
         form.append('date', date);
         form.append('status', status);
         form.append('hospital_id', hospital);
+        form.append('repeat_visit', repeatVisit);
         form.append('doctor_id', doctorId);
         form.append('patient_id', currentUserId);
 

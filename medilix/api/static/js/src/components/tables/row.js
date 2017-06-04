@@ -9,9 +9,6 @@ export default class NotificationRow extends React.Component {
         const cells = this.props.cells;
         return (
             <tr>
-                <RowCell className={cells.img.className}>
-                    <img className="img-avatar img-avatar48" src={cells.img.label} alt=""/>
-                </RowCell>
                 <RowCell className={cells.fullname.className}>
                     {cells.fullname.label}
                 </RowCell>
@@ -21,6 +18,9 @@ export default class NotificationRow extends React.Component {
                             {cells.complaints.label}
                         </RowCell> : null
                 }
+                <RowCell className={cells.visitNumber.className}>
+                    {cells.visitNumber.label}
+                </RowCell>
                 <RowCell className={cells.hospital.className}>
                     {cells.hospital.label}
                 </RowCell>

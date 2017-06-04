@@ -14,9 +14,9 @@ export default class Notifications extends React.Component {
     generateCells = (row) => {
          const cells = {
              doctor: {
-                 img: {label: 'avatar', className: 'text-center'},
                  fullname: {label: `${row.profile.lastname} ${row.profile.firstname}`, className: 'font-w600' },
                  complaints: {label: row.complaints, className: ''},
+                 visitNumber: {label: row.visitNumber, className: ''},
                  hospital: {label: row.hospital, className: ''},
                  date: {label: row.date, className: ''},
                  status: {label: row.status, className: ''},

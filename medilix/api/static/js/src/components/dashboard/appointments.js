@@ -16,6 +16,7 @@ export default class Appointments extends React.Component {
         const currentAppointment = this.props.currentAppointment;
         const blank = currentAppointment.blank;
         const headers = this.props.headers;
+        console.log("CurrentAppointment", currentAppointment);
         return (
             <div className="content">
                 <div className="block-content">
@@ -43,7 +44,7 @@ export default class Appointments extends React.Component {
                                 <RowCell class="">
                                     <span className="label label-warning">{currentAppointment.status}</span>
                                 </RowCell>
-                                <RowCell class="">
+                                <RowCell class="text-center">
                                     <a href="javascript:void(0)">
                                         <i style={{fontSize: '30px'}} onClick={this.props.showBlank} className="fa fa-file-text-o text-primary"/>
                                     </a>
@@ -59,7 +60,11 @@ export default class Appointments extends React.Component {
                         fillExamination={this.props.fillExamination}
                         addExaminationRow={this.props.addExaminationRow}
                         removeExaminationRow={this.props.removeExaminationRow}
-                        save={this.props.saveBlank}/> : null }
+                        fillPrescription={this.props.fillPrescription}
+                        addPrescriptionRow={this.props.addPrescriptionRow}
+                        removePrescriptionRow={this.props.removePrescriptionRow}
+                        save={this.props.saveBlank}
+                        complete={this.props.completeAppointment}/> : null }
                 </div>
             </div>
         )

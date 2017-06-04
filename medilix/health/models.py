@@ -4,7 +4,7 @@ from users.models import Appointment, PatientProfile, DoctorProfile
 
 class Dose(models.Model):
     dosage = models.CharField(max_length=255)
-    limit = models.IntegerField()
+    limit = models.CharField(max_length=255)
     timing = models.CharField(max_length=255)
 
 
@@ -23,8 +23,7 @@ class Blank(models.Model):
 class Prescription(models.Model):
     dose = models.OneToOneField(Dose)
     medication = models.ForeignKey(Medication)
-    from_date = models.DateField()
-    to_date = models.DateField()
+    duration = models.CharField(max_length=50, null=True)
     comment = models.TextField()
     blank = models.ForeignKey(Blank)
 

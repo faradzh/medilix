@@ -5,12 +5,12 @@ import React from 'react';
 
 export default class CheckboxField extends React.Component {
     render () {
-        const { className, columnClassName } = this.props;
+        const { className, columnClassName, onChange } = this.props;
         const title = this.props.children;
         return (
             <div className={columnClassName}>
                 <label className={className}>
-                    <input type="checkbox" /><span/> {title}
+                    <input type="checkbox" name="repeatVisit" onChange={onChange} /><span/> {title}
                 </label>
             </div>
         )

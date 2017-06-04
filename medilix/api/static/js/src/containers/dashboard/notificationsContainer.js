@@ -9,9 +9,9 @@ import Notifications from '../../components/dashboard/notifications';
 
 const headers = {
     doctor: [
-        {id: 1, className: "text-center", style: {width: '120px'}, children: [<i className="si si-user"/>]},
-        {id: 2, children: "Имя"},
-        {id: 3, style: {width: '25%'}, children: ["Жалобы"]},
+        {id: 1, children: "Имя"},
+        {id: 2, style: {width: '25%'}, children: ["Жалобы"]},
+        {id: 3, style: {width: '10%'}, children: ["Визит №"]},
         {id: 4, style: {width: '15%'}, children: ["Больница"]},
         {id: 5, style: {width: '10%'}, children: ["Дата"]},
         {id: 6, style: {width: '10%'}, children: ["Статус"]},

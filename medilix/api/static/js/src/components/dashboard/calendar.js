@@ -7,7 +7,6 @@ import moment from 'moment';
 
 require('react-big-calendar/lib/css/react-big-calendar.css');
 BigCalendar.momentLocalizer(moment);
-
 export default class Calendar extends React.Component {
     componentWillMount () {
         const userGroup = 'doctor';
@@ -33,6 +32,7 @@ export default class Calendar extends React.Component {
     };
 
     render () {
+        const months = ['Месяц', 'Неделя', 'День'];
         let events = [];
         if (this.props.appointments != undefined){
              events = this.props.appointments.map((appointment) => {
