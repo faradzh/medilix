@@ -18,9 +18,12 @@ export default class NotificationRow extends React.Component {
                             {cells.complaints.label}
                         </RowCell> : null
                 }
-                <RowCell className={cells.visitNumber.className}>
-                    {cells.visitNumber.label}
-                </RowCell>
+                {
+                    cells.visitNumber ? 
+                        <RowCell className={cells.visitNumber.className}>
+                            {cells.visitNumber.label}
+                        </RowCell> : null
+                }
                 <RowCell className={cells.hospital.className}>
                     {cells.hospital.label}
                 </RowCell>

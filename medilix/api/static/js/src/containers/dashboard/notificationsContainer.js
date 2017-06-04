@@ -18,7 +18,6 @@ const headers = {
         {id: 7, className: "text-center", style: {width: '100px'}, children: ["Действия"]}
     ],
     patient: [
-        {id: 1, className: "text-center", style: {width: '120px'}, children: [<i className="si si-user"/>]},
         {id: 2, children: "Имя"},
         {id: 3, style: {width: '15%'}, children: ["Больница"]},
         {id: 4, style: {width: '10%'}, children: ["Дата"]},

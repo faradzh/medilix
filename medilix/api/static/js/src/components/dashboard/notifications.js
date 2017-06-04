@@ -34,7 +34,6 @@ export default class Notifications extends React.Component {
                  ], className: 'text-center'}
              },
              patient: {
-                img: {label: 'avatar', className: 'text-center'},
                  fullname: {label: `${row.profile.lastname} ${row.profile.firstname}`, className: 'font-w600' },
                  hospital: {label: row.hospital, className: ''},
                  date: {label: row.date, className: ''},

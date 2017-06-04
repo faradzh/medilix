@@ -49943,7 +49943,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 
 var headers = {
     doctor: [{ id: 1, children: "Имя" }, { id: 2, style: { width: '25%' }, children: ["Жалобы"] }, { id: 3, style: { width: '10%' }, children: ["Визит №"] }, { id: 4, style: { width: '15%' }, children: ["Больница"] }, { id: 5, style: { width: '10%' }, children: ["Дата"] }, { id: 6, style: { width: '10%' }, children: ["Статус"] }, { id: 7, className: "text-center", style: { width: '100px' }, children: ["Действия"] }],
-    patient: [{ id: 1, className: "text-center", style: { width: '120px' }, children: [_react2.default.createElement('i', { className: 'si si-user' })] }, { id: 2, children: "Имя" }, { id: 3, style: { width: '15%' }, children: ["Больница"] }, { id: 4, style: { width: '10%' }, children: ["Дата"] }, { id: 5, style: { width: '10%' }, children: ["Статус"] }, { id: 6, className: "text-center", style: { width: '100px' }, children: ["Действия"] }]
+    patient: [{ id: 2, children: "Имя" }, { id: 3, style: { width: '15%' }, children: ["Больница"] }, { id: 4, style: { width: '10%' }, children: ["Дата"] }, { id: 5, style: { width: '10%' }, children: ["Статус"] }, { id: 6, className: "text-center", style: { width: '100px' }, children: ["Действия"] }]
 }; /**
     * Created by faradj on 5/13/17.
     */
@@ -52231,7 +52231,6 @@ var Notifications = function (_React$Component) {
                         }], className: 'text-center' }
                 },
                 patient: {
-                    img: { label: 'avatar', className: 'text-center' },
                     fullname: { label: row.profile.lastname + ' ' + row.profile.firstname, className: 'font-w600' },
                     hospital: { label: row.hospital, className: '' },
                     date: { label: row.date, className: '' },
@@ -55325,11 +55324,11 @@ var NotificationRow = function (_React$Component) {
                     { className: cells.complaints.className },
                     cells.complaints.label
                 ) : null,
-                _react2.default.createElement(
+                cells.visitNumber ? _react2.default.createElement(
                     _rowCell2.default,
                     { className: cells.visitNumber.className },
                     cells.visitNumber.label
-                ),
+                ) : null,
                 _react2.default.createElement(
                     _rowCell2.default,
                     { className: cells.hospital.className },
