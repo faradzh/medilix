@@ -104,10 +104,10 @@ class Appointment(models.Model):
     visit_number = models.CharField(default=1, max_length=5)
 
     def __str__(self):
-        return 'Between %s and %s' % (self.doctor.lastname, self.patient.lastname)
+        return u'Between %s and %s' % (self.doctor.lastname, self.patient.lastname)
 
     def __unicode__(self):
-        return 'Between %s and %s' % (self.doctor.lastname, self.patient.lastname)
+        return u'Between %s and %s' % (self.doctor.lastname, self.patient.lastname)
 
 
 class HospitalPrice(models.Model):
