@@ -1,6 +1,7 @@
 import React from 'react';
 import Block from '../../doctors/block';
 const backgroundImageSrc = require('../../../../../images/dashboard/profile/profile-background.jpg');
+const avatarSrc = require('../../../../../images/dashboard/profile/avatar.png');
 const path = '/static/js/dist/';
 
 export default class PatientProfile extends React.Component {
@@ -12,7 +13,7 @@ export default class PatientProfile extends React.Component {
                 <div className="content bg-image" style={{backgroundImage: `url(${path + backgroundImageSrc})`}}>
                     <div className="push-50-t push-15 clearfix">
                         <div className="push-15-r pull-left animated fadeIn">
-                            <img className="img-avatar img-avatar-thumb" src="assets/img/avatars/avatar13.jpg" alt=""/>
+                            <img className="img-avatar img-avatar-thumb" src={path + avatarSrc} alt=""/>
                         </div>
                         <h1 className="h2 text-white push-5-t animated zoomIn">{fullname}</h1>
                     </div>
